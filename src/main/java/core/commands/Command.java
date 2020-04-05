@@ -15,6 +15,7 @@ public abstract class Command extends ListenerAdapter {
 
     protected abstract void onCommand(MessageReceivedEvent mre, String[] args);
     protected abstract List<String> getAliases();
+    protected abstract boolean isDND();
     protected abstract String getDescription();
     protected abstract String getName();
     protected abstract List<String> getUsage();
@@ -32,7 +33,7 @@ public abstract class Command extends ListenerAdapter {
             return;
         }
         if(commandArgs(mre.getMessage())[0].contains(Main.config.getPrefix()) && containsCommand(mre.getMessage())) {
-            Logger.debug("Calling a command.", Constants.stageCommand);
+            Logger.info("Calling a command:");
             onCommand(mre, commandArgs(mre.getMessage()));
         }
 

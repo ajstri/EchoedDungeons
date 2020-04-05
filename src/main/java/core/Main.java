@@ -21,6 +21,8 @@ import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import config.Config;
 import core.commands.*;
+import core.commands.dnd.CallCommand;
+import core.commands.general.MathCommand;
 import core.listeners.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -186,8 +188,14 @@ public class Main {
     }
 
     private static void registerCommands() {
+        // Non-DND commands
         api.addEventListener(help.registerCommand(help));
         api.addEventListener(help.registerCommand(new PingCommand()));
+        api.addEventListener(help.registerCommand(new MathCommand()));
+
+        // DND commands
+        api.addEventListener(help.registerCommand(new RollCommand()));
+        api.addEventListener(help.registerCommand(new CallCommand()));
     }
 
     public static void shutdown(int status) {

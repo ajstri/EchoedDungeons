@@ -196,4 +196,23 @@ public class Config {
         return array.optString(Constants.TOKEN_KEY);
     }
 
+    /**
+     * Retrieves token for the Bot.
+     * @return token from Configuration
+     */
+    @SuppressWarnings("ConstantConditions")
+    public String getDebug() {
+        JSONArray object = getJSONFile();
+
+        if (object.equals(null)) {
+            Logger.error("Debug status is null. Continuing with default.", new Exception());
+            return Constants.DEBUG_VALUE;
+        }
+
+        JSONObject jsonObject = object.getJSONObject(0);
+        JSONObject array = (JSONObject)jsonObject.opt("bot");
+
+        return array.optString(Constants.DEBUG_KEY);
+    }
+
 }

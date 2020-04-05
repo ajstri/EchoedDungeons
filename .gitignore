@@ -85,3 +85,4 @@ fabric.properties
 *.DS_Store
 .idea/misc.xml
 .gitattributes
+.idea/discord.xml
