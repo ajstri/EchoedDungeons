@@ -3,7 +3,7 @@ Copyright 2020 EchoedAJ
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License at:
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,10 +19,22 @@ import com.google.code.chatterbotapi.ChatterBot;
 import com.google.code.chatterbotapi.ChatterBotFactory;
 import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import config.Config;
 import core.commands.*;
+import core.commands.admin.ShutdownCommand;
 import core.commands.dnd.CallCommand;
+import core.commands.dnd.FactCommand;
+import core.commands.general.HelpCommand;
 import core.commands.general.MathCommand;
+import core.commands.general.PingCommand;
+import core.commands.music.PauseCommand;
+import core.commands.music.PlayCommand;
+import core.commands.music.QueueCommand;
+import core.commands.music.SkipCommand;
 import core.listeners.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,21 +42,34 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import utils.Constants;
 import utils.Logger;
+import utils.music.GuildMusicManager;
+import utils.music.MusicUtils;
+import utils.music.TrackScheduler;
 
 import javax.security.auth.login.LoginException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
+    // jda specific
     public static JDA api;
     private static JDABuilder builder;
     public static String id;
 
+    // bot specific
     public static final Config config = new Config();
     public static ChatterBotSession bot1session;
     public static final HelpCommand help = new HelpCommand();
-
     private static long time = System.currentTimeMillis();
+
+    // LavaPlayer specific
+    public static AudioPlayerManager audioManager;
+    public static AudioPlayer player;
+    public static TrackScheduler trackScheduler;
+    public static MusicUtils utils;
+    public static Map<Long, GuildMusicManager> musicManagers;
 
     public static void main(String[] args) {
 
@@ -79,7 +104,7 @@ public class Main {
                         "                                                              \n"
         );
 
-        Logger.blank("", Constants.ANSI_CYAN, "A  J  S  T  R  I  B  O  T  --  V  E  R  S  I  O  N  " + Constants.VERSION);
+        Logger.blank("", Constants.ANSI_CYAN, "E  C  H  O  _  C  O  R  E  --  V  E  R  S  I  O  N  " + Constants.VERSION);
         Logger.blank("", Constants.ANSI_YELLOW, "\t\t\t\tVersion: \t" + Constants.VERSION);
         Logger.blank("", Constants.ANSI_YELLOW, "\t\t\t\tBuild: \t\t" + Constants.BUILD_NUMBER);
         Logger.blank("", Constants.ANSI_YELLOW, "\t\t\t\tJVM: \t\t" + Constants.JVM + "\n");
@@ -160,12 +185,15 @@ public class Main {
             bot1session = bot1.createSession();
         }
         catch (Exception e) {
-            Logger.warning("Unable to initialize Chatterbot.");
+            Logger.warning("Unable to initialize ChatterBot.");
         }
+
+        // Initialize audio portion
+        initMusicPlayer();
     }
 
     private static void debugOnlyInitialization() {
-        if (true) {
+        if (config.getDebug()) {
             Logger.debug("Welcome to EchoedDungeons! \n \n", Constants.stagePreInit);
             Logger.debug("Prefix: " + config.getPrefix(), Constants.stagePreInit);
             Logger.debug("Game Status: " + "config.getGameStatus()", Constants.stagePreInit);
@@ -196,6 +224,16 @@ public class Main {
         // DND commands
         api.addEventListener(help.registerCommand(new RollCommand()));
         api.addEventListener(help.registerCommand(new CallCommand()));
+        api.addEventListener(help.registerCommand(new FactCommand()));
+
+        // Music commands
+        api.addEventListener(help.registerCommand(new PlayCommand()));
+        api.addEventListener(help.registerCommand(new SkipCommand()));
+        api.addEventListener(help.registerCommand(new PauseCommand()));
+        api.addEventListener(help.registerCommand(new QueueCommand()));
+
+        // Admin commands
+        api.addEventListener(new ShutdownCommand());
     }
 
     public static void shutdown(int status) {
@@ -219,16 +257,26 @@ public class Main {
             TimeUnit.SECONDS.sleep(1);
         }
         catch (InterruptedException ie) {
-            Logger.debug("Ignored InterruptedException on shutdown.", Constants.stageShutdown);
+            Logger.debug("Ignored InterruptedException on shut down.", Constants.stageShutdown);
         }
 
-        if (status == Constants.STATUS_NO_JDA || status == Constants.STATUS_CONFIG_UNUSABLE || status == Constants.STATUS_UNABLE_TO_CONNECT) {
-            System.exit(status);
-        }
-        else {
+        if (status != Constants.STATUS_NO_JDA && status != Constants.STATUS_CONFIG_UNUSABLE && status != Constants.STATUS_UNABLE_TO_CONNECT) {
             api.shutdownNow();
-            System.exit(status);
         }
+        System.exit(status);
+    }
+
+    private static void initMusicPlayer() {
+        audioManager = new DefaultAudioPlayerManager();
+        AudioSourceManagers.registerRemoteSources(audioManager);
+        player = audioManager.createPlayer();
+
+        trackScheduler = new TrackScheduler(player);
+        player.addListener(trackScheduler);
+
+        musicManagers = new HashMap<>();
+        utils = new MusicUtils(musicManagers, Main.audioManager);
+
     }
 
 }

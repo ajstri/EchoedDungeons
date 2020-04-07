@@ -1,3 +1,18 @@
+/*
+Copyright 2020 EchoedAJ
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package core.commands;
 
 import core.Main;
@@ -6,26 +21,69 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.Constants;
 import utils.Logger;
 
 import java.util.List;
 
+/**
+ *  Command class of the EchoedDungeons project
+ *
+ *  All methods are explained here
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public abstract class Command extends ListenerAdapter {
 
+    /**
+     * Calls a command
+     * @param mre Event triggered
+     * @param args Arguments from event trigger
+     */
     protected abstract void onCommand(MessageReceivedEvent mre, String[] args);
-    protected abstract List<String> getAliases();
-    protected abstract boolean isDND();
-    protected abstract String getDescription();
-    protected abstract String getName();
-    protected abstract List<String> getUsage();
-    protected abstract boolean getDefaultPermission();
+
+    /**
+     * Returns a list of aliases that the command can be called by.
+     * The first one is it's "mainly" used alias.
+     * @return list of possible aliases.
+     */
+    public abstract List<String> getAliases();
+
+    /**
+     * Determine if the Command is part of the D&D module.
+     * @return true if its part of the D&D module, false if not.
+     */
+    public abstract boolean isDND();
+
+    /**
+     * Gets the description of the Command.
+     * @return description of the Command.
+     */
+    public abstract String getDescription();
+
+    /**
+     * Gets the name of the Command
+     * @return name of the Command
+     */
+    public abstract String getName();
+
+    /**
+     * Gets example usage for the Command
+     * @return example usage for the Command
+     */
+    public abstract List<String> getUsage();
+
+    /**
+     * Determines default permissions
+     * @return true if default, false if not
+     */
+    public abstract boolean getDefaultPermission();
 
     /**
      * Called when Message is received visible to the Bot.
      * Determines if there was a command called, and if so,
      * executes the command.
-     * @param mre Event triggered
+     * @param mre Event triggered.
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent mre) {
@@ -42,7 +100,7 @@ public abstract class Command extends ListenerAdapter {
     /**
      * Determines if the message contained a command.
      * @param message message to scan
-     * @return true if message contained command, false if not
+     * @return true if message contained command, false if not.
      */
     private boolean containsCommand(Message message) {
         return getAliases().contains(commandArgs(message)[0].replace(Main.config.getPrefix(), ""));
@@ -51,7 +109,7 @@ public abstract class Command extends ListenerAdapter {
     /**
      * Breaks up the message into String[].
      * @param message message to split
-     * @return String[] of the split message
+     * @return String[] of the split message.
      */
     private String[] commandArgs(Message message) {
         return commandArgs(message.getContentDisplay());
@@ -60,7 +118,7 @@ public abstract class Command extends ListenerAdapter {
     /**
      * Breaks up the message into String[].
      * @param string message to split
-     * @return String[] of the split message
+     * @return String[] of the split message.
      */
     private String[] commandArgs(String string) {
         return string.split(" ");
@@ -89,7 +147,7 @@ public abstract class Command extends ListenerAdapter {
      * @param message Message to send
      * @return message to send
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings("unused")
     Message sendMessage(MessageReceivedEvent mre, String message) {
         return sendMessage(mre, new MessageBuilder().append(message).build());
     }
@@ -97,7 +155,7 @@ public abstract class Command extends ListenerAdapter {
     /**
      * Determines if the Bot will respond to other Bots.
      * @return true if the Bot will respond to other Bots,
-     * false if not
+     * false if not.
      */
     @SuppressWarnings("SameReturnValue")
     private boolean respondToBots() {

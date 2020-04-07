@@ -1,6 +1,21 @@
-package core.commands;
+/*
+Copyright 2020 EchoedAJ
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */package core.commands.general;
 
 import core.Main;
+import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -14,6 +29,14 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ *  HelpCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class HelpCommand extends Command {
     private static final String NO_NAME = "No name provided for this command. Sorry!";
     private static final String NO_DESCRIPTION = "No description has been provided for this command. Sorry!";
@@ -21,6 +44,9 @@ public class HelpCommand extends Command {
 
     public final TreeMap<String, Command> commands;
 
+    /**
+     * Constructor for the HelpCommand
+     */
     public HelpCommand() {
         commands = new TreeMap<>();
     }
@@ -28,7 +54,7 @@ public class HelpCommand extends Command {
     /**
      * Adds command to TreeMap.
      * @param command command to add
-     * @return command added
+     * @return command added.
      */
     public Command registerCommand(Command command) {
         commands.put(command.getAliases().get(0), command);
@@ -40,24 +66,28 @@ public class HelpCommand extends Command {
         Logger.info("HELP");
         // Bypass sending message if it is already in a private message.
         String helpCommand = args[0];
-        if (helpCommand.toLowerCase().contains("dnd")) {
+        if (helpCommand.toLowerCase().contains("dndhelp")) {
             if(!mre.isFromType(ChannelType.PRIVATE)) {
+                // Send help message
                 mre.getTextChannel().sendMessage(new MessageBuilder()
                         .append("Hey, ")
                         .append(mre.getAuthor())
                         .append(": Help information was sent as a private message.")
                         .build()).queue();
             }
+            // Send help message
             sendPrivateDND(mre.getAuthor().openPrivateChannel().complete(), args);
         }
         else {
             if(!mre.isFromType(ChannelType.PRIVATE)) {
+                // Send help message
                 mre.getTextChannel().sendMessage(new MessageBuilder()
                         .append("Hey, ")
                         .append(mre.getAuthor())
                         .append(": Help information was sent as a private message.")
                         .build()).queue();
             }
+            // Send help message
             sendPrivateDefault(mre.getAuthor().openPrivateChannel().complete(), args);
         }
     }
@@ -68,7 +98,7 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    protected boolean isDND() {
+    public boolean isDND() {
         return false;
     }
 
@@ -93,14 +123,14 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    protected boolean getDefaultPermission() {
+    public boolean getDefaultPermission() {
         return true;
     }
 
     /**
      * Sends a message to a private channel.
      * @param channel channel to send to
-     * @param args arguments used to build message
+     * @param args arguments used to build the message.
      */
     private void sendPrivateDefault(PrivateChannel channel, String[] args) {
         if (args.length < 2) {
@@ -108,7 +138,7 @@ public class HelpCommand extends Command {
 
             EmbedUtils.addDefaults(embed);
 
-            // For each command, add its values to the embed.
+            // For each command, add its values to embed.
             for (Command c : commands.values()) {
                 if (!c.isDND()) {
                     String description = c.getDescription();
@@ -127,7 +157,7 @@ public class HelpCommand extends Command {
             EmbedUtils.addDefaults(embed);
 
             String command = args[1];
-            // Check each command. If it is the command searched for, build an embed.
+            // Check each command. If it is the command searched for, build embed.
             for (Command c : commands.values()) {
                 if (c.getAliases().contains(command)) {
                     // Define values.
@@ -150,13 +180,18 @@ public class HelpCommand extends Command {
         }
     }
 
+    /**
+     * Sends a message to private channel
+     * @param channel channel to send message
+     * @param args arguments used to build message
+     */
     private void sendPrivateDND(PrivateChannel channel, String[] args) {
         if (args.length < 2) {
             EmbedBuilder embed = new EmbedBuilder().setTitle("Commands Supported").setColor(Color.RED);
 
             EmbedUtils.addDefaults(embed);
 
-            // For each command, add its values to the embed.
+            // For each command, add its values to embed.
             for (Command c : commands.values()) {
                 if (c.isDND()) {
                     String description = c.getDescription();
@@ -175,7 +210,7 @@ public class HelpCommand extends Command {
             EmbedUtils.addDefaults(embed);
 
             String command = args[1];
-            // Check each command. If it is the command searched for, build an embed.
+            // Check each command. If it is the command searched for, build embed.
             for (Command c : commands.values()) {
                 if (c.getAliases().contains(command)) {
                     // Define values.
@@ -193,6 +228,11 @@ public class HelpCommand extends Command {
         }
     }
 
+    /**
+     * Sends a message telling the user their search doesn't exist
+     * @param channel channel to send message
+     * @param args arguments to build message
+     */
     private static void doesNotExist(PrivateChannel channel, String[] args) {
         // If it reaches this point, the command searched for does not exist.
         channel.sendMessage(new MessageBuilder()
@@ -204,6 +244,11 @@ public class HelpCommand extends Command {
                 .build()).queue();
     }
 
+    /**
+     * Add Commands to the embed
+     * @param embed embed to add Commands to
+     * @param c Command to add
+     */
     private void addCommandValues(EmbedBuilder embed, Command c) {
         String name = c.getName();
         String description = c.getDescription();

@@ -3,7 +3,7 @@ Copyright 2020 EchoedAJ
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License at:
 
     http://www.apache.org/licenses/LICENSE-2.0
 
@@ -19,13 +19,27 @@ import core.Main;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.*;
+import utils.exceptions.NoConfigurationFileException;
 
 import java.io.*;
 
+/**
+ *  Config class of the EchoedDungeons project
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class Config {
 
+    /**
+     * File name constants
+     */
     private final static String fileName = "config.json";
+    private final static String arrayName = "bot";
 
+    /**
+     * Constructor for the Config Class
+     */
     public Config() {
         // Check if Configuration File exists.
         File f = new File(fileName);
@@ -36,13 +50,16 @@ public class Config {
 
         // Check if Configuration File is usable.
         if(!checkConfigurationUsability()) {
-            Logger.error("Configuration File is not usable.", new Exception());
+            Logger.error("Configuration File is not usable.", new NoConfigurationFileException("Unusable configuration file."));
             Main.shutdown(Constants.STATUS_CONFIG_UNUSABLE);
         }
     }
 
+    /**
+     * Create the Configuration File from default keys and values.
+     */
     private void createConfigurationFile() {
-// Create Bot config options.
+        // Create Bot config options.
         JSONObject object = new JSONObject();
         JSONArray array = new JSONArray();
 
@@ -56,163 +73,98 @@ public class Config {
         array.put(object);
 
         JSONObject obj2 = new JSONObject();
-        obj2.put("bot", object);
+        obj2.put(arrayName, object);
 
         // Write to the file.
         if(writeToFile(obj2) < 0) {
-            Logger.error("Unable to create Configuration File.", new Exception());
+            Logger.error("Unable to create configuration file.", new NoConfigurationFileException("Unusable configuration file."));
             Main.shutdown(Constants.STATUS_NO_CONFIG);
         }
     }
 
+    /**
+     * Checks usability of Configuration file.
+     * @return true if usable, false if not.
+     */
     private boolean checkConfigurationUsability() {
-        // TODO config usability
+        // TODO Config usability
         return true;
     }
 
     /**
      * Adds a JSON Array to the Configuration File.
-     * @param object JSONObject to add to file
+     * @param object JSONObject to add to file.
      */
-    @SuppressWarnings("Duplicates")
+    @SuppressWarnings("unused")
     private int writeToFile(JSONArray object) {
         // Write to the file.
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            fileWriter.write(
-                    object.toString()
-                            .replace("[", "[\n")
-                            .replace("{", "{\n")
-                            .replace(",", ",\n")
-                            .replace("}", "\n}")
-                            .replace("]", "\n]")
-            );
-            fileWriter.flush();
-            fileWriter.close();
-            return 1;
-        }
-        catch (IOException ioe) {
-            Logger.error("Unable to write to file.", ioe);
-            return -1;
-        }
+        return FileUtils.writeToFile(object, fileName);
     }
 
     /**
      * Adds a JSON Object to the Configuration File.
-     * @param obj JSONObject to add to file
+     * @param obj JSONObject to add to file.
      */
     @SuppressWarnings("Duplicates")
     private int writeToFile(JSONObject obj) {
         // Write to the file.
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            fileWriter.write(
-                    obj.toString()
-                            .replace("[", "[\n")
-                            .replace("{", "{\n")
-                            .replace(",", ",\n")
-                            .replace("}", "\n}")
-                            .replace("]", "\n]")
-            );
-            fileWriter.flush();
-            fileWriter.close();
-            return 1;
-        }
-        catch (IOException ioe) {
-            Logger.error("Unable to write to file.", ioe);
-            return -1;
-        }
+        return FileUtils.writeToFile(obj, fileName);
     }
 
     /**
      * Retrieves the JSONObject to read the JSON File.
      * @return JSONObject
      */
+    @SuppressWarnings("unused")
     private JSONArray getJSONFile() {
-        JSONObject obj;
-        JSONArray array = new JSONArray();
-        StringBuilder sb = new StringBuilder();
-
-        try {
-            FileReader reader = new FileReader(fileName);
-
-            int i;
-            while ((i = reader.read()) != -1) {
-                sb.append((char) i);
-            }
-
-            obj = new JSONObject(sb.toString().replace("[", "").replace("]", ""));
-            array.put(obj);
-
-        }
-        catch (FileNotFoundException fnfe) {
-            Logger.error("Configuration File not found.", fnfe);
-            Main.shutdown(Constants.STATUS_NO_CONFIG);
-        }
-        catch (Exception e) {
-            Logger.error("Configuration File could not be read.", e);
-            Main.shutdown(Constants.STATUS_NO_CONFIG);
-        }
-
-        return array;
-
+        return FileUtils.getJSONFile(fileName);
     }
 
     /**
      * Retrieves prefix for the Bot.
-     * @return prefix from Configuration
+     * @return prefix from Configuration.
      */
-    @SuppressWarnings("ConstantConditions")
     public String getPrefix() {
-        JSONArray object = getJSONFile();
+        String prefix = FileUtils.getValueByKey(fileName, Constants.PREFIX_KEY, arrayName);
 
-        if (object.equals(null)) {
-            Logger.error("Prefix is null.", new Exception());
+        if (prefix.contains("" + Constants.STATUS_NO_CONFIG)) {
+            Logger.info("No need for a shutdown. Failed to grab prefix. Using default.");
             return Constants.PREFIX_VALUE;
         }
 
-        JSONObject jsonObject = object.getJSONObject(0);
-        JSONObject array = (JSONObject)jsonObject.opt("bot");
-
-        return array.optString(Constants.PREFIX_KEY);
+        return prefix;
     }
 
     /**
      * Retrieves token for the Bot.
-     * @return token from Configuration
+     * @return token from Configuration.
      */
-    @SuppressWarnings("ConstantConditions")
     public String getToken() {
-        JSONArray object = getJSONFile();
+        String token = FileUtils.getValueByKey(fileName, Constants.TOKEN_KEY, arrayName);
 
-        if (object.equals(null)) {
-            Logger.error("Configuration file is null.", new Exception());
+        if (token.contains("" + Constants.STATUS_NO_CONFIG)) {
+            Logger.info("No token found. Calling for shut down.");
+            Logger.error("No Token in Configuration File.", new NoConfigurationFileException("Unusable configuration file. No Token provided."));
             Main.shutdown(Constants.STATUS_NO_CONFIG);
+            //return Constants.TOKEN_VALUE; // no actual use
         }
 
-        JSONObject jsonObject = object.getJSONObject(0);
-        JSONObject array = (JSONObject)jsonObject.opt("bot");
-
-        return array.optString(Constants.TOKEN_KEY);
+        return token;
     }
 
     /**
-     * Retrieves token for the Bot.
-     * @return token from Configuration
+     * Retrieves debug status for the Bot.
+     * @return debug status from Configuration.
      */
-    @SuppressWarnings("ConstantConditions")
-    public String getDebug() {
-        JSONArray object = getJSONFile();
+    public boolean getDebug() {
+        String debug = FileUtils.getValueByKey(fileName, Constants.DEBUG_KEY, arrayName);
 
-        if (object.equals(null)) {
-            Logger.error("Debug status is null. Continuing with default.", new Exception());
-            return Constants.DEBUG_VALUE;
+        if (debug.contains("" + Constants.STATUS_NO_CONFIG)) {
+            Logger.info("Failed to grab debug. Using default.");
+            return Constants.DEBUG_VALUE.toLowerCase().contains("true");
         }
 
-        JSONObject jsonObject = object.getJSONObject(0);
-        JSONObject array = (JSONObject)jsonObject.opt("bot");
-
-        return array.optString(Constants.DEBUG_KEY);
+        return debug.toLowerCase().contains("true");
     }
 
 }

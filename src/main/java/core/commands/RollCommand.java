@@ -16,34 +16,34 @@ public class RollCommand extends Command {
     }
 
     @Override
-    protected List<String> getAliases() {
+    public List<String> getAliases() {
         return Arrays.asList("roll", "r");
     }
 
     @Override
-    protected boolean isDND() {
+    public boolean isDND() {
         return true;
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Roll any amount of dice plus a modifier!";
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Roll Command";
     }
 
     @Override
-    protected List<String> getUsage() {
+    public List<String> getUsage() {
         return Collections.singletonList(
                 Main.config.getPrefix() + "roll *<dice>*\n"
                         + "__Example:__ " + Main.config.getPrefix() + "roll 3d8+5");
     }
 
     @Override
-    protected boolean getDefaultPermission() {
+    public boolean getDefaultPermission() {
         return false;
     }
 }

@@ -1,3 +1,18 @@
+/*
+Copyright 2020 EchoedAJ
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package core.commands.general;
 
 import core.Main;
@@ -10,17 +25,28 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.Constants;
 import utils.EmbedUtils;
 import utils.Logger;
+import utils.exceptions.UnhandledMathException;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *  MathCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class MathCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         Logger.info("MATH");
 
+        // Check if they're asking for what functions it can handle
         if (args[1].contains("supported") || args[1].contains("functions")) {
+            // Make the functions embed
             EmbedBuilder embed = new EmbedBuilder().setTitle("Functions Supported").setColor(Color.RED);
             EmbedUtils.addDefaults(embed);
 
@@ -37,29 +63,35 @@ public class MathCommand extends Command {
 
             embed.addField("Roots", "Example: cbrt(8) or sqrt(4)", false);
 
+            // Bypass if already in a private channel
             if(!mre.isFromType(ChannelType.PRIVATE)) {
                 mre.getTextChannel().sendMessage(new MessageBuilder()
                         .append("Hey, ")
                         .append(mre.getAuthor())
-                        .append(": Help information was sent as a private message.")
+                        .append(": I sent you a private message.")
                         .build()).queue();
             }
+            // Send embed
             mre.getAuthor().openPrivateChannel().complete().sendMessage(embed.build()).queue();
         }
         else {
+            // Prepare the arguments for parsing
 
-            Logger.info("MATH");
             StringBuilder expression = new StringBuilder();
             for (String arg : args) {
                 expression.append(arg);
             }
+
+            // Replace possible escapes (when a user avoids markdown formatting)
             String input = expression.toString();
             input = input.replace(Main.config.getPrefix(), "").replace("\\", "");
 
+            // Erase command name
             for (String alias : getAliases()) {
                 input = input.replace(alias, "");
             }
 
+            // Evaluate and send the result
             double result = eval(input, mre.getChannel());
             Logger.debug("Result is " + result, Constants.stageCommand);
             mre.getChannel().sendMessage(Double.toString(result)).queue();
@@ -67,35 +99,52 @@ public class MathCommand extends Command {
     }
 
     @Override
-    protected List<String> getAliases() {
+    public List<String> getAliases() {
         return Arrays.asList("math", "eval", "m");
     }
 
     @Override
-    protected boolean isDND() {
+    public boolean isDND() {
         return false;
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Evaluates a mathematical expression.";
     }
 
     @Override
-    protected String getName() {
+    public String getName() {
         return "Math Command";
     }
 
     @Override
-    protected List<String> getUsage() {
+    public List<String> getUsage() {
         return null;
     }
 
     @Override
-    protected boolean getDefaultPermission() {
+    public boolean getDefaultPermission() {
         return false;
     }
 
+    /**
+     * A super overkill Math function
+     *
+     * This code is altered from a StackOverflow answer
+     * and is used from public domain.
+     * You can find the original code here:
+     * https://stackoverflow.com/a/26227947
+     *
+     * It has been adapted to work for a Discord bot and
+     * expanded to include more mathematical functions.
+     * It is a fully functional, dynamic-length math evaluation
+     * method.
+     *
+     * @param str mathematical expression to parse.
+     * @param c Channel that the expression is from.
+     * @return the answer to the expression.
+     */
     public static double eval(String str, MessageChannel c) {
         Logger.debug("Parsing: " + str, Constants.stageCommand);
         return new Object() {
@@ -166,7 +215,8 @@ public class MathCommand extends Command {
                 if (eat('(')) { // parentheses
                     x = parseExpression();
                     if (!eat(')')) {
-                        Logger.error("Missing closing parenthesis", new RuntimeException("Missing closing parenthesis"));
+                        Logger.error("Missing closing parenthesis", new UnhandledMathException("Missing closing parenthesis"));
+                        c.sendMessage("Missing closing parenthesis").queue();
                         return 0;
                     }
                 }
@@ -223,14 +273,24 @@ public class MathCommand extends Command {
                         case "log":
                             x = Math.log10(x);
                             break;
+                        case "cot":
+                            x = cot(x);
+                            break;
+                        case "csc":
+                            x = csc(x);
+                            break;
+                        case "sec":
+                            x = sec(x);
+                            break;
+
                         default:
-                            Logger.error("Unknown function: " + func, new RuntimeException("Unknown function: " + func));
+                            Logger.error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
                             c.sendMessage("Unknown function: " + func).queue();
                             return 0;
                     }
                 }
                 else {
-                    Logger.error("Unexpected: " + (char)ch, new RuntimeException("Unexpected: " + (char)ch));
+                    Logger.error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
                     c.sendMessage("Unexpected: " + (char)ch).queue();
                     return 0;
                 }
@@ -242,5 +302,17 @@ public class MathCommand extends Command {
                 return x;
             }
         }.parse();
+    }
+
+    private static double cot(Double x) {
+        return 1 / Math.tan(x);
+    }
+
+    private static double csc(Double x) {
+        return 1 / Math.sin(x);
+    }
+
+    private static double sec(Double x) {
+        return 1 / Math.cos(x);
     }
 }
