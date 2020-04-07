@@ -172,6 +172,7 @@ public class HelpCommand extends Command {
                         addCommandValues(embed, c);
                         channel.sendMessage(embed.build()).queue();
                         channel.sendMessage("Were you looking for more D&D commands? Try `" + Main.config.getPrefix() + "dndhelp` for more.").queue();
+                        return;
                     }
                 }
             }
