@@ -24,27 +24,19 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import config.Config;
-import core.commands.*;
-import core.commands.admin.ShutdownCommand;
-import core.commands.dnd.CallCommand;
-import core.commands.dnd.FactCommand;
-import core.commands.general.HelpCommand;
-import core.commands.general.MathCommand;
-import core.commands.general.PingCommand;
-import core.commands.music.PauseCommand;
-import core.commands.music.PlayCommand;
-import core.commands.music.QueueCommand;
-import core.commands.music.SkipCommand;
+import core.commands.admin.*;
+import core.commands.dnd.*;
+import core.commands.general.*;
+import core.commands.music.*;
 import core.listeners.*;
+import dndinfo.classes.*;
+import dndinfo.other.Features.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-import utils.Constants;
-import utils.Logger;
-import utils.music.GuildMusicManager;
-import utils.music.MusicUtils;
-import utils.music.TrackScheduler;
+import utils.*;
+import utils.music.*;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
@@ -63,6 +55,8 @@ public class Main {
     public static ChatterBotSession bot1session;
     public static final HelpCommand help = new HelpCommand();
     private static long time = System.currentTimeMillis();
+    public static final ClassCommand classes = new ClassCommand();
+    public static final FeatureCommand features = new FeatureCommand();
 
     // LavaPlayer specific
     public static AudioPlayerManager audioManager;
@@ -216,6 +210,9 @@ public class Main {
     }
 
     private static void registerCommands() {
+        // Register database
+        registerDNDDatabase();
+
         // Non-DND commands
         api.addEventListener(help.registerCommand(help));
         api.addEventListener(help.registerCommand(new PingCommand()));
@@ -226,6 +223,10 @@ public class Main {
         api.addEventListener(help.registerCommand(new CallCommand()));
         api.addEventListener(help.registerCommand(new FactCommand()));
 
+        // DND Database commands
+        api.addEventListener(help.registerCommand(classes));
+        api.addEventListener(help.registerCommand(features));
+
         // Music commands
         api.addEventListener(help.registerCommand(new PlayCommand()));
         api.addEventListener(help.registerCommand(new SkipCommand()));
@@ -234,6 +235,24 @@ public class Main {
 
         // Admin commands
         api.addEventListener(new ShutdownCommand());
+    }
+
+    private static void registerDNDDatabase() {
+        // Classes
+        classes.registerClass(new Artificer());
+        classes.registerClass(new Barbarian());
+        classes.registerClass(new Bard());
+
+        // Backgrounds
+
+
+        // Races
+
+
+        // Features
+        new ArtificerFeatures(features);
+        new BarbarianFeatures(features);
+        new BardFeatures(features);
     }
 
     public static void shutdown(int status) {

@@ -34,14 +34,16 @@ import java.util.List;
  */
 public class ShutdownCommand extends Command {
     @Override
+    @SuppressWarnings("ConstantConditions")
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         // Determine if the message came from the Owner, EchoedAJ#1840
-        if (mre.getMember().getId().contains(Constants.OWNER_ID)) {
+        String id = mre.getMember().getId();
+
+        if (id.contains(Constants.OWNER_ID)) {
             // Shutdown
-            mre.getChannel().sendMessage("Okay, AJ.").queue();
+            mre.getChannel().sendMessage("Okay, AJ.").complete();
             Main.shutdown(Constants.STATUS_FRIENDLY);
-        }
-        else {
+        } else {
             // Be offended, it's not AJ
             mre.getChannel().sendMessage("How dare you?").queue();
         }

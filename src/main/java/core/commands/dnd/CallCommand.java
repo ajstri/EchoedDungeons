@@ -37,6 +37,7 @@ import java.util.List;
  * @since April 2020
  */
 public class CallCommand extends Command {
+    // TODO : change all strings out for Proficiency variables
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
@@ -230,7 +231,7 @@ public class CallCommand extends Command {
      * @param target Target to tag
      */
     private void sendCallAttack(MessageChannel channel, String dm, User target) {
-        channel.sendMessage(target.getAsMention() + ", Roll `d20 + Attack Bonus` to see if you land your attack. " +
+        channel.sendMessage(target.getAsMention() + ", Roll `1d20+[Attack Bonus]` to see if you land your attack. " +
                 "If " + dm + " says you do, roll for damage").queue();
     }
 

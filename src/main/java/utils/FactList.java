@@ -1,7 +1,5 @@
 package utils;
 
-import java.lang.reflect.Array;
-
 public class FactList {
 
     public static String[] facts = new String[]{
@@ -14,7 +12,8 @@ public class FactList {
             "Cantrips do not use spell slots",
             "Not every situation has to be resolved through combat",
             "You can spend any amount of hit dice to regain HP during a short rest. They recharge every long rest",
-            "Your proficiency bonus doesn't stack with each new level."
+            "Your proficiency bonus doesn't stack with each new level.",
+            "Don't meta too much! Keep most of the puzzle solving and interactions in-character. Don't do stuff in-game that your characters wouldn't realistically know"
     };
 
 }

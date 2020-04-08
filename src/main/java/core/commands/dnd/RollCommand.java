@@ -1,6 +1,7 @@
-package core.commands;
+package core.commands.dnd;
 
 import core.Main;
+import core.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.DiceRoll;
 import utils.Logger;
@@ -18,6 +19,8 @@ public class RollCommand extends Command {
         String nat20Expression = "No";
         String nat1Expression = "No";
         StringBuilder rolled = new StringBuilder();
+        int total = 0;
+        List<Integer> results = new ArrayList<>();
 
         // Add the args together in order to get it ready to parse
         // Keep the pieces separate by " "
@@ -39,9 +42,6 @@ public class RollCommand extends Command {
 
         // Split into dice expressions
         String[] diceExpressions = input.split(" ");
-
-        int total = 0;
-        List<Integer> results = new ArrayList<>();
 
         for (String diceE : diceExpressions) {
             int result = 0;
@@ -92,10 +92,11 @@ public class RollCommand extends Command {
                     rolled.replace(0, 1, "-");
                 }
 
+                Collections.sort(results);
+
                 // DEBUG: Outputs sorted rolls.
                 if (Main.config.getDebug()) {
                     System.out.println("---");
-                    Collections.sort(results);
                     System.out.println("Sorted: ");
                     for (int result1 : results) {
                         System.out.print(result1 + " ");
@@ -104,7 +105,7 @@ public class RollCommand extends Command {
                 }
 
                 // Check for drops.
-                // kl | kh | dl |dh
+                // kl | kh | dl | dh
                 if (roller.dropWasSpecified()) {
                     if (roller.getDropLow() > 0) { // Drop lowest
                         for (int i = 0; i < roller.getDropLow(); i++) {
@@ -129,6 +130,7 @@ public class RollCommand extends Command {
                     System.out.println();
                 }
 
+                // Add rolls together
                 result = 0;
                 for (int rolls : results) {
                     result += rolls;
@@ -145,8 +147,6 @@ public class RollCommand extends Command {
                 Logger.error("Unable to parse dice expression.", ine);
                 mre.getChannel().sendMessage("Failed to parse your roll!").queue();
             }
-
-
             total += result;
         }
 
