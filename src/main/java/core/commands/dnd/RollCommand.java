@@ -2,8 +2,10 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.DiceRoll;
+import utils.EmbedUtils;
 import utils.Logger;
 import utils.exceptions.InvalidNotationException;
 
@@ -13,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RollCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("ROLL");
+        Logger.info("ROLL (called by " + mre.getAuthor().getAsTag() + ")");
         // *rolls into oblivion*
 
         String nat20Expression = "No";
@@ -40,6 +42,8 @@ public class RollCommand extends Command {
             input = input.replace(alias + " ", "");
         }
 
+        Logger.info("Rolling: " + input);
+
         // Split into dice expressions
         String[] diceExpressions = input.split(" ");
 
@@ -48,12 +52,24 @@ public class RollCommand extends Command {
             results.clear();
 
             try {
+                // add a 1 to the start if they did not
+                // themselves. aka: d20 into 1d20
+                if (diceE.toLowerCase().startsWith("d")) {
+                    diceE = "1" + diceE;
+                }
+
+                // check if it doesn't have a 1
+                // in the case they add an "s"
+                if (diceE.toLowerCase().startsWith("sd")) {
+                    diceE = diceE.replace("sd", "s1d");
+                }
+
                 // add A or S if adding or subtracting.
                 // this is given if the user starts the message
                 // with an "s"
                 // If it doesn't, add an "a" for our pattern so
                 // it can still read it.
-                if (!diceE.toLowerCase().contains("s")) {
+                if (!diceE.toLowerCase().contains("s") && !diceE.toLowerCase().contains("a")) {
                     diceE = "a" + diceE;
                 }
 
@@ -74,34 +90,35 @@ public class RollCommand extends Command {
                     }
 
                     // Add modifier
-                    result += roller.getModifier();
+                    // result += roller.getModifier();
 
                     // Add to array for this expression
                     results.add(result);
 
                 }
 
-                // Comment we rolled the expression
-                rolled.append(diceE).append(" ");
-
                 // Replace "a" and "s" with user-friendly syntax
-                if (rolled.toString().toLowerCase().startsWith("a")) {
-                    rolled.replace(0, 1, "");
+                if (diceE.toLowerCase().startsWith("a")) {
+                    diceE = diceE.replace("a", "");
                 }
-                if (rolled.toString().toLowerCase().startsWith("s")) {
-                    rolled.replace(0, 1, "-");
+                if (diceE.toLowerCase().startsWith("s")) {
+                    diceE = diceE.replace("s", "-");
                 }
+
+                // Comment we rolled the expression
+                rolled.append(", ").append(diceE);
 
                 Collections.sort(results);
 
                 // DEBUG: Outputs sorted rolls.
                 if (Main.config.getDebug()) {
                     System.out.println("---");
+                    System.out.println("Dice Expression: " + diceE);
                     System.out.println("Sorted: ");
                     for (int result1 : results) {
                         System.out.print(result1 + " ");
                     }
-                    System.out.println("\n---");
+                    System.out.println();
                 }
 
                 // Check for drops.
@@ -136,10 +153,21 @@ public class RollCommand extends Command {
                     result += rolls;
                 }
 
+                if (Main.config.getDebug()) {
+                    System.out.println("Total: " + result);
+                }
+
+                // Add modifier
+                result += roller.getModifier();
+
                 // If negative (AKA there is an "s")
                 // invert the result
                 if (roller.getNegative()) {
                     result = -result;
+                }
+
+                if (Main.config.getDebug()) {
+                    System.out.println("Total (after modifiers): " + result);
                 }
 
             }
@@ -150,10 +178,17 @@ public class RollCommand extends Command {
             total += result;
         }
 
-        StringBuilder builder = new StringBuilder();
+        if (Main.config.getDebug()) {
+            System.out.println("---");
+            System.out.println("Final Result: " + total);
+        }
 
-        builder.append(mre.getAuthor().getAsMention());
-        builder.append(" is rolling ").append(rolled.toString());
+        // Build & send message.
+        /*StringBuilder builder = new StringBuilder();
+
+        builder.append("```");
+        builder.append(mre.getAuthor().getAsTag());
+        builder.append(" is rolling ").append(rolled.toString()).replace(builder.length() - 2, builder.length(), "");
         builder.append("\n");
         if (!nat20Expression.toLowerCase().contains("no")) {
             builder.append("They rolled a nat 20 on ").append(nat20Expression).append("!");
@@ -164,8 +199,28 @@ public class RollCommand extends Command {
             builder.append("\n");
         }
         builder.append("They rolled a total of ").append(total);
+        builder.append("```");
 
         mre.getChannel().sendMessage(builder.toString()).queue();
+        mre.getMessage().delete().queue();*/
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("@" + mre.getAuthor().getAsTag() + "'s roll");
+        embed.setThumbnail(mre.getAuthor().getAvatarUrl());
+
+        embed.setFooter("EchoedDungeons by EchoedAJ#1840", null);
+        EmbedUtils.setTimestamp(embed);
+
+        if (!nat20Expression.toLowerCase().contains("no")) {
+            embed.addField("They rolled a nat 20 on " + nat20Expression.replace("a", "").replace("s", "") + "!", "", false);
+        }
+        if (!nat1Expression.toLowerCase().contains("no")) {
+            embed.addField("They rolled a nat 1 on " + nat1Expression.replace("a", "").replace("s", "") + "...", "", false);
+        }
+
+        embed.addField(rolled.toString().replaceFirst(", ", ""), "Total: " + total, false);
+
+        mre.getChannel().sendMessage(embed.build()).queue();
         mre.getMessage().delete().queue();
     }
 

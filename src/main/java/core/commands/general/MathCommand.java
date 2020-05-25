@@ -42,11 +42,13 @@ import java.util.List;
 public class MathCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("MATH");
+        Logger.info("MATH (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Check if they're asking for what functions it can handle
         if (args[1].contains("supported") || args[1].contains("functions")) {
             // Make the functions embed
+            Logger.debug("User asked for supported functions.", Constants.stageCommand);
+
             EmbedBuilder embed = new EmbedBuilder().setTitle("Functions Supported").setColor(Color.RED);
             EmbedUtils.addDefaults(embed);
 
@@ -58,6 +60,10 @@ public class MathCommand extends Command {
             embed.addField("Sine", "Example: sin(90), sinh(90), or asin(90)", false);
             embed.addField("Tangent", "Example: tan(90), tanh(90), or atan(90)", false);
             embed.addField("Cosine", "Example: cos(90), cosh(90), or acos(90)", false);
+
+            embed.addField("Cosecant", "Example: csc(90)", false);
+            embed.addField("Cotangent", "Example: cot(90)", false);
+            embed.addField("Secant", "Example: sec(90)", false);
 
             embed.addField("Logarithmic", "Example: ln(10) or log(10)", false);
 

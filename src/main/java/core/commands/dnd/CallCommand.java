@@ -44,7 +44,11 @@ public class CallCommand extends Command {
         MessageChannel c = mre.getChannel();
         Member dm = mre.getMember();
         String skill = args[1];
-        User target = mre.getMessage().getMentionedUsers().get(0);
+
+        // Define the target user
+        String target = "";
+        if (mre.getMessage().mentionsEveryone()) target = "Everyone";
+        else target = mre.getMessage().getMentionedUsers().get(0).getAsMention();
 
         if (dm != null) {
 
@@ -218,8 +222,8 @@ public class CallCommand extends Command {
      * @param mod Modifier for the skill
      * @param target Target to tag
      */
-    private void sendCallSkill(MessageChannel channel, String skill, String mod,  User target) {
-        channel.sendMessage(target.getAsMention() + ", Please roll for: `" + skill + "`." + "\n" +
+    private void sendCallSkill(MessageChannel channel, String skill, String mod,  String target) {
+        channel.sendMessage(target + ", Please roll for: `" + skill + "`." + "\n" +
                             "If you forgot, this is how: " + "\n" +
                             "`d20 + " + mod + "`").queue();
     }
@@ -230,8 +234,8 @@ public class CallCommand extends Command {
      * @param dm DM that called the attack
      * @param target Target to tag
      */
-    private void sendCallAttack(MessageChannel channel, String dm, User target) {
-        channel.sendMessage(target.getAsMention() + ", Roll `1d20+[Attack Bonus]` to see if you land your attack. " +
+    private void sendCallAttack(MessageChannel channel, String dm, String target) {
+        channel.sendMessage(target + ", Roll `1d20+[Attack Bonus]` to see if you land your attack. " +
                 "If " + dm + " says you do, roll for damage").queue();
     }
 
@@ -240,8 +244,8 @@ public class CallCommand extends Command {
      * @param channel Channel to send call to
      * @param target Target to tag
      */
-    private void sendCallInitiative(MessageChannel channel,  User target) {
-        channel.sendMessage(target.getAsMention() + ", Please roll for: `Initiative`." + "\n" +
+    private void sendCallInitiative(MessageChannel channel,  String target) {
+        channel.sendMessage(target + ", Please roll for: `Initiative`." + "\n" +
                 "If you forgot, this is how: " + "\n" +
                 "`d20 + " + DNDConstants.DEX_MOD + "`").queue();
     }
