@@ -19,6 +19,7 @@ import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.Constants;
+import utils.Logger;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,16 +35,16 @@ import java.util.List;
  */
 public class ShutdownCommand extends Command {
     @Override
-    @SuppressWarnings("ConstantConditions")
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Logger.info("SHUTDOWN (called by " + mre.getAuthor().getAsTag() + ")");
         // Determine if the message came from the Owner, EchoedAJ#1840
-        String id = mre.getMember().getId();
-
+        String id = mre.getAuthor().getId();
         if (id.contains(Constants.OWNER_ID)) {
             // Shutdown
             mre.getChannel().sendMessage("Okay, AJ.").complete();
             Main.shutdown(Constants.STATUS_FRIENDLY);
-        } else {
+        }
+        else {
             // Be offended, it's not AJ
             mre.getChannel().sendMessage("How dare you?").queue();
         }
@@ -55,8 +56,8 @@ public class ShutdownCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.ADMIN;
     }
 
     @Override

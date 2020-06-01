@@ -23,8 +23,8 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utils.Constants;
-import utils.EmbedUtils;
 import utils.Logger;
+import utils.MessageUtils;
 import utils.exceptions.UnhandledMathException;
 
 import java.awt.*;
@@ -50,7 +50,7 @@ public class MathCommand extends Command {
             Logger.debug("User asked for supported functions.", Constants.stageCommand);
 
             EmbedBuilder embed = new EmbedBuilder().setTitle("Functions Supported").setColor(Color.RED);
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
             embed.addField("Addition", "Example: 2 + 2", false);
             embed.addField("Subtraction", "Example: 2 - 2", false);
@@ -110,8 +110,8 @@ public class MathCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.GENERIC;
     }
 
     @Override

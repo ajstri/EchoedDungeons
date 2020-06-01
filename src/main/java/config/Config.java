@@ -87,8 +87,10 @@ public class Config {
      * @return true if usable, false if not.
      */
     private boolean checkConfigurationUsability() {
-        // TODO Config usability
-        return true;
+        // The only thing, so far, that would break
+        // the bot's functionality is the Token.
+        // Everything else can be set to default.
+        return !getToken().contains(Constants.TOKEN_VALUE);
     }
 
     /**
@@ -105,7 +107,6 @@ public class Config {
      * Adds a JSON Object to the Configuration File.
      * @param obj JSONObject to add to file.
      */
-    @SuppressWarnings("Duplicates")
     private int writeToFile(JSONObject obj) {
         // Write to the file.
         return FileUtils.writeToFile(obj, fileName);

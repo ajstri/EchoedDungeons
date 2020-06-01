@@ -1,7 +1,8 @@
 package dndinfo.other.proficiencylists;
 
 public class Proficiencies {
-
+// TODO javadoc
+    @SuppressWarnings("unused")
     public static class Armor {
         public static final String armor_light = "Light Armor";
         public static final String armor_heavy = "Heavy Armor";

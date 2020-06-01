@@ -30,7 +30,7 @@ import core.commands.general.*;
 import core.commands.music.*;
 import core.listeners.*;
 import dndinfo.classes.*;
-import dndinfo.other.Features.*;
+import dndinfo.other.features.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -57,6 +57,7 @@ public class Main {
     private static long time = System.currentTimeMillis();
     public static final ClassCommand classes = new ClassCommand();
     public static final FeatureCommand features = new FeatureCommand();
+    public static final LanguageCommand languages = new LanguageCommand();
 
     // LavaPlayer specific
     public static AudioPlayerManager audioManager;
@@ -215,7 +216,6 @@ public class Main {
 
         // Non-DND commands
         api.addEventListener(help.registerCommand(help));
-        api.addEventListener(help.registerCommand(new PingCommand()));
         api.addEventListener(help.registerCommand(new MathCommand()));
 
         // DND commands
@@ -226,6 +226,7 @@ public class Main {
         // DND Database commands
         api.addEventListener(help.registerCommand(classes));
         api.addEventListener(help.registerCommand(features));
+        api.addEventListener(help.registerCommand(languages));
 
         // Music commands
         api.addEventListener(help.registerCommand(new PlayCommand()));
@@ -250,9 +251,9 @@ public class Main {
 
 
         // Features
-        new ArtificerFeatures(features);
+        //new ArtificerFeatures(features);
         new BarbarianFeatures(features);
-        new BardFeatures(features);
+        //new BardFeatures(features);
     }
 
     public static void shutdown(int status) {

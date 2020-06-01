@@ -5,7 +5,7 @@ import utils.exceptions.InvalidNotationException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DiceRoll {
+public class DiceRoll { // TODO javadoc
 
     private int numDice;
     private int numSides;
@@ -42,10 +42,8 @@ public class DiceRoll {
         if (matcher.group("negative") == null) {
             negative = false;
         }
-        if (matcher.group("negative").toLowerCase().contains("s")) {
-            negative = true;
-        }
-        else negative = false;
+
+        negative = matcher.group("negative").toLowerCase().contains("s");
     }
 
     private void parseDropKeep(Matcher matcher) throws InvalidNotationException {

@@ -23,13 +23,13 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.managers.AudioManager;
 import utils.Constants;
-import utils.EmbedUtils;
+import utils.MessageUtils;
 
 import java.util.*;
 public class MusicUtils {
 
     private static Map<Long, GuildMusicManager> musicManagers;
-    private AudioPlayerManager playerManager;
+    private final AudioPlayerManager playerManager;
 
     /**
      * Constructor for the MusicUtils class.
@@ -175,7 +175,7 @@ public class MusicUtils {
 
         // Start embed
         EmbedBuilder embed = new EmbedBuilder();
-        EmbedUtils.addDefaults(embed);
+        MessageUtils.addDefaults(embed);
         embed.setTitle("Queue [10 Tracks] / Page " + page);
 
         musicManager.scheduler.getQueueAsList(list);

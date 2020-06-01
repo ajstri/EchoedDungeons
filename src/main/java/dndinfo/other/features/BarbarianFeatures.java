@@ -1,4 +1,4 @@
-package dndinfo.other.Features;
+package dndinfo.other.features;
 
 import core.commands.dnd.FeatureCommand;
 import dndinfo.other.DNDConstants;

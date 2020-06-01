@@ -65,4 +65,9 @@ public class Constants {
 
     public static final String OWNER_ID = "202422697173581824";
 
+    public static final String GENERIC = "generic";
+    public static final String ADMIN = "admin";
+    public static final String MUSIC = "music";
+    public static final String DND = "dnd";
+
 }

@@ -4,9 +4,10 @@ import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import utils.Constants;
 import utils.DiceRoll;
-import utils.EmbedUtils;
 import utils.Logger;
+import utils.MessageUtils;
 import utils.exceptions.InvalidNotationException;
 
 import java.util.*;
@@ -209,7 +210,7 @@ public class RollCommand extends Command {
         embed.setThumbnail(mre.getAuthor().getAvatarUrl());
 
         embed.setFooter("EchoedDungeons by EchoedAJ#1840", null);
-        EmbedUtils.setTimestamp(embed);
+        MessageUtils.setTimestamp(embed);
 
         if (!nat20Expression.toLowerCase().contains("no")) {
             embed.addField("They rolled a nat 20 on " + nat20Expression.replace("a", "").replace("s", "") + "!", "", false);
@@ -230,8 +231,8 @@ public class RollCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return true;
+    public String getModule() {
+        return Constants.DND;
     }
 
     @Override

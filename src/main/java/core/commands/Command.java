@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.Constants;
 import utils.Logger;
 
 import java.util.List;
@@ -33,6 +34,7 @@ import java.util.List;
  * @author EchoedAJ
  * @since April 2020
  */
+// TODO all commands: make sure all methods are fleshed out.
 public abstract class Command extends ListenerAdapter {
 
     /**
@@ -50,10 +52,10 @@ public abstract class Command extends ListenerAdapter {
     public abstract List<String> getAliases();
 
     /**
-     * Determine if the Command is part of the D&D module.
-     * @return true if its part of the D&D module, false if not.
+     * Gets the Module the Command is a part of.
+     * @return the Module
      */
-    public abstract boolean isDND();
+    public abstract String getModule();
 
     /**
      * Gets the description of the Command.
@@ -91,7 +93,10 @@ public abstract class Command extends ListenerAdapter {
             return;
         }
         if(commandArgs(mre.getMessage())[0].contains(Main.config.getPrefix()) && containsCommand(mre.getMessage())) {
-            Logger.info("Calling a command:");
+            Logger.info("Calling a command...");
+
+            String id = mre.getAuthor().getId();
+            if (!id.contains(Constants.OWNER_ID) && !getDefaultPermission()) return;
             onCommand(mre, commandArgs(mre.getMessage()));
         }
 

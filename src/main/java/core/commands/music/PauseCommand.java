@@ -19,6 +19,7 @@ import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import utils.Constants;
 import utils.Logger;
 
 import java.util.Arrays;
@@ -35,6 +36,8 @@ import java.util.List;
 public class PauseCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Logger.info("PAUSE (called by " + mre.getAuthor().getAsTag() + ")");
+
         Member author = mre.getMember();
         // Check if in a voice channel
         if (author != null) {
@@ -59,8 +62,8 @@ public class PauseCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.MUSIC;
     }
 
     @Override

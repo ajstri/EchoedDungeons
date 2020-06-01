@@ -23,14 +23,28 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import utils.Constants;
 
+/**
+ * MusicHandler class of the EchoedDungeons project
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class MusicHandler implements AudioLoadResultHandler {
 
-    private TextChannel channel;
-    private String trackUrl;
-    private Member author;
-    private MusicUtils utils;
-    private boolean first;
+    private final TextChannel channel;
+    private final String trackUrl;
+    private final Member author;
+    private final MusicUtils utils;
+    private final boolean first;
 
+    /**
+     * MusicHandler constructor
+     * @param channel Channel for the MusicHandler
+     * @param trackUrl URL to handle
+     * @param author Author of the initiation
+     * @param utils MusicUtils
+     * @param first if the Track will be first
+     */
     public MusicHandler(TextChannel channel, String trackUrl, Member author, MusicUtils utils, boolean first) {
         this.channel = channel;
         this.trackUrl = trackUrl;
@@ -39,6 +53,10 @@ public class MusicHandler implements AudioLoadResultHandler {
         this.first = first;
     }
 
+    /**
+     * On Track Load
+     * @param audioTrack Loaded track
+     */
     @Override
     public void trackLoaded(AudioTrack audioTrack) {
         if (utils.isInVoiceChannel(author)) {
@@ -56,6 +74,10 @@ public class MusicHandler implements AudioLoadResultHandler {
         }
     }
 
+    /**
+     * On Playlist Load
+     * @param playlist Loaded playlist
+     */
     @Override
     public void playlistLoaded(AudioPlaylist playlist) {
         AudioTrack firstTrack = playlist.getSelectedTrack();
@@ -73,11 +95,18 @@ public class MusicHandler implements AudioLoadResultHandler {
         }
     }
 
+    /**
+     * No Matches
+     */
     @Override
     public void noMatches() {
         channel.sendMessage("Nothing found by " + trackUrl).queue();
     }
 
+    /**
+     * On Load Failed
+     * @param e Exception of the fail
+     */
     @Override
     public void loadFailed(FriendlyException e) {
 

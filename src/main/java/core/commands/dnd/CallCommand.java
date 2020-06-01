@@ -18,11 +18,13 @@ package core.commands.dnd;
 import core.Main;
 import core.commands.Command;
 import dndinfo.other.DNDConstants;
+import dndinfo.other.proficiencylists.Proficiencies;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import utils.Constants;
+import utils.Logger;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,16 +39,17 @@ import java.util.List;
  * @since April 2020
  */
 public class CallCommand extends Command {
-    // TODO : change all strings out for Proficiency variables
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Logger.info("CALL (called by " + mre.getAuthor().getAsTag() + ")");
+
         MessageChannel c = mre.getChannel();
         Member dm = mre.getMember();
         String skill = args[1];
 
         // Define the target user
-        String target = "";
+        String target;
         if (mre.getMessage().mentionsEveryone()) target = "Everyone";
         else target = mre.getMessage().getMentionedUsers().get(0).getAsMention();
 
@@ -62,67 +65,67 @@ public class CallCommand extends Command {
                 }
 
                     // Check for STR skills
-                else if (skill.toLowerCase().contains("athletics")) {
-                    sendCallSkill(c, "Athletics", DNDConstants.STR_MOD + DNDConstants.PROF_BONUS, target);
+                else if (skill.toLowerCase().contains("athletic")) {
+                    sendCallSkill(c, Proficiencies.Skills.athletics, DNDConstants.STR_MOD + DNDConstants.PROF_BONUS, target);
                 }
 
                     // Check for DEX skills
                 else if (skill.toLowerCase().contains("acrobatics")) {
-                    sendCallSkill(c, "Acrobatics", DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.acrobatics, DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("sleight")) {
-                    sendCallSkill(c, "Sleight of Hand", DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.sleight, DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("stealth")) {
-                    sendCallSkill(c, "Stealth", DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.stealth, DNDConstants.DEX_MOD + DNDConstants.PROF_BONUS, target);
                 }
 
                     // Check for INT skills
                 else if (skill.toLowerCase().contains("arcana")) {
-                    sendCallSkill(c, "Arcana", DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.arcana, DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("history")) {
-                    sendCallSkill(c, "History", DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.history, DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("invest")) {
-                    sendCallSkill(c, "Investigation", DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.investigation, DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("nature")) {
-                    sendCallSkill(c, "Nature", DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.nature, DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("religion")) {
-                    sendCallSkill(c, "Religion", DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.religion, DNDConstants.INT_MOD + DNDConstants.PROF_BONUS, target);
                 }
 
                     // Check for WIS skills
                 else if (skill.toLowerCase().contains("animal")) {
-                    sendCallSkill(c, "Animal Handling", DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.animal_handling, DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("ins")) {
-                    sendCallSkill(c, "Insight", DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.insight, DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("med")) {
-                    sendCallSkill(c, "Medicine", DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.medicine, DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("perc")) {
-                    sendCallSkill(c, "Perception", DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.perception, DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("survival")) {
-                    sendCallSkill(c, "Survival", DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.survival, DNDConstants.WIS_MOD + DNDConstants.PROF_BONUS, target);
                 }
 
                     // Check for CHA skills
                 else if (skill.toLowerCase().contains("decep")) {
-                    sendCallSkill(c, "Deception", DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.deception, DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("intim")) {
-                    sendCallSkill(c, "Intimidation", DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.intimidation, DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("perf")) {
-                    sendCallSkill(c, "Performance", DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.performance, DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
                 }
                 else if (skill.toLowerCase().contains("pers")) {
-                    sendCallSkill(c, "Persuasion", DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
+                    sendCallSkill(c, Proficiencies.Skills.persuasion, DNDConstants.CHA_MOD + DNDConstants.PROF_BONUS, target);
                 }
 
                     // Check for saving throws
@@ -170,8 +173,8 @@ public class CallCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return true;
+    public String getModule() {
+        return Constants.DND;
     }
 
     @Override

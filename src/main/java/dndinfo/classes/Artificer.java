@@ -1,7 +1,7 @@
 package dndinfo.classes;
 
 import dndinfo.other.DNDConstants;
-import dndinfo.other.Features.Feature;
+import dndinfo.other.features.Feature;
 import dndinfo.other.proficiencylists.Proficiencies;
 
 import java.util.Arrays;

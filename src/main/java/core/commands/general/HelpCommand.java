@@ -18,12 +18,12 @@ import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
-import utils.EmbedUtils;
+import utils.Constants;
 import utils.Logger;
+import utils.MessageUtils;
 
 import java.awt.*;
 import java.util.*;
@@ -43,12 +43,14 @@ public class HelpCommand extends Command {
     private static final String NO_USAGE = "No usage instructions have been provided for this command. Sorry!";
 
     public final TreeMap<String, Command> commands;
+    public List<String> modules;
 
     /**
      * Constructor for the HelpCommand
      */
     public HelpCommand() {
         commands = new TreeMap<>();
+        registerModules();
     }
 
     /**
@@ -61,35 +63,24 @@ public class HelpCommand extends Command {
         return command;
     }
 
+    private void registerModules() {
+        modules = Arrays.asList(
+                Constants.ADMIN,
+                Constants.DND,
+                Constants.GENERIC,
+                Constants.MUSIC
+        );
+    }
+
     @Override
     public void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("HELP");
+        Logger.info("HELP (called by " + mre.getAuthor().getAsTag() + ")");
+
         // Bypass sending message if it is already in a private message.
-        String helpCommand = args[0];
-        if (helpCommand.toLowerCase().contains("dndhelp")) {
-            if(!mre.isFromType(ChannelType.PRIVATE)) {
-                // Send help message
-                mre.getTextChannel().sendMessage(new MessageBuilder()
-                        .append("Hey, ")
-                        .append(mre.getAuthor())
-                        .append(": Help information was sent as a private message.")
-                        .build()).queue();
-            }
-            // Send help message
-            sendPrivateDND(mre.getAuthor().openPrivateChannel().complete(), args);
-        }
-        else {
-            if(!mre.isFromType(ChannelType.PRIVATE)) {
-                // Send help message
-                mre.getTextChannel().sendMessage(new MessageBuilder()
-                        .append("Hey, ")
-                        .append(mre.getAuthor())
-                        .append(": Help information was sent as a private message.")
-                        .build()).queue();
-            }
-            // Send help message
-            sendPrivateDefault(mre.getAuthor().openPrivateChannel().complete(), args);
-        }
+        MessageUtils.sendIfNotPrivate(mre);
+        // Send help message
+        sendPrivateDefault(mre.getAuthor().openPrivateChannel().complete(), args);
+
     }
 
     @Override
@@ -98,8 +89,8 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.GENERIC;
     }
 
     @Override
@@ -136,16 +127,11 @@ public class HelpCommand extends Command {
         if (args.length < 2) {
             EmbedBuilder embed = new EmbedBuilder().setTitle("Commands Supported").setColor(Color.RED);
 
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
-            // For each command, add its values to embed.
-            for (Command c : commands.values()) {
-                if (!c.isDND()) {
-                    String description = c.getDescription();
-                    description = (description == null || description.isEmpty()) ? NO_DESCRIPTION : description;
-
-                    embed.addField(c.getAliases().get(0), description, false);
-                }
+            // For each module, add its values to embed.
+            for (String m : modules) {
+                embed.addField(m.toUpperCase(), "Commands In Module: " + commandsInModule(m), false);
             }
 
             // Send embed.
@@ -154,74 +140,35 @@ public class HelpCommand extends Command {
         else {
             EmbedBuilder embed = new EmbedBuilder();
 
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
             String command = args[1];
             // Check each command. If it is the command searched for, build embed.
             for (Command c : commands.values()) {
                 if (c.getAliases().contains(command)) {
                     // Define values.
-                    if (!c.isDND()) {
-                        addCommandValues(embed, c);
+                    addCommandValues(embed, c);
 
-                        // Send embed.
-                        channel.sendMessage(embed.build()).queue();
-                        return;
-                    }
-                    else {
-                        addCommandValues(embed, c);
-                        channel.sendMessage(embed.build()).queue();
-                        channel.sendMessage("Were you looking for more D&D commands? Try `" + Main.config.getPrefix() + "dndhelp` for more.").queue();
-                        return;
-                    }
+                    // Send embed.
+                    channel.sendMessage(embed.build()).queue();
+                    return;
                 }
             }
-            // If it reaches this point, the command searched for does not exist.
-            doesNotExist(channel, args);
-        }
-    }
-
-    /**
-     * Sends a message to private channel
-     * @param channel channel to send message
-     * @param args arguments used to build message
-     */
-    private void sendPrivateDND(PrivateChannel channel, String[] args) {
-        if (args.length < 2) {
-            EmbedBuilder embed = new EmbedBuilder().setTitle("Commands Supported").setColor(Color.RED);
-
-            EmbedUtils.addDefaults(embed);
-
-            // For each command, add its values to embed.
-            for (Command c : commands.values()) {
-                if (c.isDND()) {
-                    String description = c.getDescription();
-                    description = (description == null || description.isEmpty()) ? NO_DESCRIPTION : description;
-
-                    embed.addField(c.getAliases().get(0), description, false);
-                }
-            }
-
-            // Send embed.
-            channel.sendMessage(embed.build()).queue();
-        }
-        else {
-            EmbedBuilder embed = new EmbedBuilder();
-
-            EmbedUtils.addDefaults(embed);
-
-            String command = args[1];
-            // Check each command. If it is the command searched for, build embed.
-            for (Command c : commands.values()) {
-                if (c.getAliases().contains(command)) {
-                    // Define values.
-                    if (c.isDND()) {
-                        addCommandValues(embed, c);
-
-                        // Send embed.
-                        channel.sendMessage(embed.build()).queue();
-                        return;
+            // Check each module. If it is the module searched for, build embed.
+            boolean hasACommand = false;
+            for (String m : modules) {
+                if (m.contains(command)) {
+                    List<Command> commandsInModule = getCommandsInModule(m);
+                    for (Command c : commandsInModule) {
+                        // Define values.
+                        embed.addField(c.getName(), "", false);
+                        hasACommand = true;
                     }
+                }
+                // Send embed.
+                if (hasACommand) {
+                    channel.sendMessage(embed.build()).queue();
+                    return;
                 }
             }
             // If it reaches this point, the command searched for does not exist.
@@ -276,5 +223,33 @@ public class HelpCommand extends Command {
         for (int i = 1; i < usageInstructions.size(); i++) {
             embed.addField("", usageInstructions.get(i), false);
         }
+    }
+
+    /**
+     * Returns a list of Commands within a given module
+     *
+     * @param module Module to search in
+     * @return List of commands
+     */
+    private List<Command> getCommandsInModule(String module) {
+        List<Command> activeCommands = new ArrayList<>();
+
+        for (Command command : commands.values()) {
+            if (command.getModule().toLowerCase().contains(module)) {
+                activeCommands.add(command);
+            }
+        }
+
+        return activeCommands;
+    }
+
+    /**
+     * Returns the number of commands in a module
+     *
+     * @param module Module to search in
+     * @return Number of commands in Module
+     */
+    private int commandsInModule(String module) {
+        return getCommandsInModule(module).size();
     }
 }

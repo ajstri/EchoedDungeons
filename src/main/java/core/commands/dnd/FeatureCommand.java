@@ -1,14 +1,15 @@
 package core.commands.dnd;
 
+import core.Main;
 import core.commands.Command;
-import dndinfo.other.Features.Feature;
+import dndinfo.other.features.Feature;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utils.EmbedUtils;
+import utils.Constants;
 import utils.Logger;
+import utils.MessageUtils;
 
 import java.awt.*;
 import java.util.*;
@@ -33,17 +34,10 @@ public class FeatureCommand extends Command {
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         // If arg.length < 2 send classes list.
         // else find class in list.
-        Logger.info("FEATURE");
+        Logger.info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
-        if(!mre.isFromType(ChannelType.PRIVATE)) {
-            // Send help message
-            mre.getTextChannel().sendMessage(new MessageBuilder()
-                    .append("Hey, ")
-                    .append(mre.getAuthor())
-                    .append(": Help information was sent as a private message.")
-                    .build()).queue();
-        }
+        MessageUtils.sendIfNotPrivate(mre);
         // Send help message
         sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
     }
@@ -54,8 +48,8 @@ public class FeatureCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return true;
+    public String getModule() {
+        return Constants.DND;
     }
 
     @Override
@@ -85,12 +79,12 @@ public class FeatureCommand extends Command {
         // else find class in list.
         if (args.length < 2) { // No page number, show first 10
             EmbedBuilder embed = new EmbedBuilder().setTitle("Features Supported: Page 1").setColor(Color.RED);
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
             featuresListByPage(embed, page, channel);
         }
         else {
             EmbedBuilder embed = new EmbedBuilder();
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
             try {
                 page = Integer.parseInt(args[1]);
@@ -112,8 +106,25 @@ public class FeatureCommand extends Command {
                     }
                 }
             }
-            // TODO doesNotExist
+            // if it reaches this point, it does not exist
+            doesNotExist(channel, args);
         }
+    }
+
+    /**
+     * Sends a message telling the user their search doesn't exist
+     * @param channel channel to send message
+     * @param args arguments to build message
+     */
+    private static void doesNotExist(PrivateChannel channel, String[] args) {
+        // If it reaches this point, the command searched for does not exist.
+        channel.sendMessage(new MessageBuilder()
+                .append("The provided feature '**")
+                .append(args[1])
+                .append("**' does not exist. Use `")
+                .append(Main.config.getPrefix())
+                .append("feature` to list all features.")
+                .build()).queue();
     }
 
     private void addFeatureValues(EmbedBuilder embed, Feature f) {

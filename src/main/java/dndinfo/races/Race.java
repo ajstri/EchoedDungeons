@@ -2,6 +2,7 @@ package dndinfo.races;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public abstract class Race {
 
     // TODO: Implement Race Framework

@@ -48,7 +48,8 @@ public class FactCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("FACTS");
+        Logger.info("FACT (called by " + mre.getAuthor().getAsTag() + ")");
+
         factLength = FactList.facts.length;
 
         File f = new File(fileName);
@@ -67,8 +68,8 @@ public class FactCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.DND;
     }
 
     @Override

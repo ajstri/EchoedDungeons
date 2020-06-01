@@ -1,15 +1,16 @@
 package core.commands.dnd;
 
+import core.Main;
 import core.commands.Command;
 import dndinfo.classes.Class;
-import dndinfo.other.Features.Feature;
+import dndinfo.other.features.Feature;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utils.EmbedUtils;
+import utils.Constants;
 import utils.Logger;
+import utils.MessageUtils;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -35,17 +36,10 @@ public class ClassCommand extends Command {
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         // If arg.length < 2 send classes list.
         // else find class in list.
-        Logger.info("CLASS");
+        Logger.info("CLASS (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
-        if(!mre.isFromType(ChannelType.PRIVATE)) {
-            // Send help message
-            mre.getTextChannel().sendMessage(new MessageBuilder()
-                    .append("Hey, ")
-                    .append(mre.getAuthor())
-                    .append(": Help information was sent as a private message.")
-                    .build()).queue();
-        }
+        MessageUtils.sendIfNotPrivate(mre);
         // Send help message
         sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
 
@@ -57,8 +51,8 @@ public class ClassCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return true;
+    public String getModule() {
+        return Constants.DND;
     }
 
     @Override
@@ -87,7 +81,7 @@ public class ClassCommand extends Command {
         if (args.length < 2) {
             EmbedBuilder embed = new EmbedBuilder().setTitle("Classes Supported").setColor(Color.RED);
 
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
             String name;
             String wikiLink;
@@ -115,7 +109,7 @@ public class ClassCommand extends Command {
         else {
             EmbedBuilder embed = new EmbedBuilder();
 
-            EmbedUtils.addDefaults(embed);
+            MessageUtils.addDefaults(embed);
 
             String command = args[1];
             // Check each command. If it is the command searched for, build embed.
@@ -129,8 +123,25 @@ public class ClassCommand extends Command {
                     return;
                 }
             }
-            // TODO doesNotExist
+            // If it reaches this point, it does not exist.
+            doesNotExist(channel, args);
         }
+    }
+
+    /**
+     * Sends a message telling the user their search doesn't exist
+     * @param channel channel to send message
+     * @param args arguments to build message
+     */
+    private static void doesNotExist(PrivateChannel channel, String[] args) {
+        // If it reaches this point, the command searched for does not exist.
+        channel.sendMessage(new MessageBuilder()
+                .append("The provided class '**")
+                .append(args[1])
+                .append("**' does not exist. Use `")
+                .append(Main.config.getPrefix())
+                .append("class` to list all classes.")
+                .build()).queue();
     }
 
     private void addClassValues(EmbedBuilder embed, Class c) {
@@ -148,6 +159,8 @@ public class ClassCommand extends Command {
         List<String> equipment = c.getEquipment();
         List<String> subClasses = c.getSubClasses();
         List<Feature> featuresList = c.getFeaturesList();
+
+        String abilityIncrease = c.getAbilityScoreIncrease();
 
         // Null checks for the important bits to just define them a default value
         // Which is just name and wiki link, everything else can be skipped if null.
@@ -198,6 +211,7 @@ public class ClassCommand extends Command {
             embed.addField("Features", listFull.toString(), true);
         }
 
+        embed.addField("Ability Score Increases", abilityIncrease, false);
     }
 
     private void addEach (EmbedBuilder embed, String name, List<String> list, boolean inLine) {

@@ -1,10 +1,12 @@
 package dndinfo.classes;
 
-import dndinfo.other.Features.Feature;
+import dndinfo.other.features.Feature;
 
 import java.util.List;
 
 public abstract class Class {
+
+    // TODO javadoc
 
     public abstract String getName();
     public abstract String getWikiLink();

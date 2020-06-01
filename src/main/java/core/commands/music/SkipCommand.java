@@ -19,6 +19,7 @@ import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import utils.Constants;
 import utils.Logger;
 
 import java.util.Arrays;
@@ -35,6 +36,8 @@ import java.util.List;
 public class SkipCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Logger.info("SKIP (called by " + mre.getAuthor().getAsTag() + ")");
+
         Member author = mre.getMember();
         if (author != null) {
             if (Main.utils.isInVoiceChannel(mre.getMember())) {
@@ -58,8 +61,8 @@ public class SkipCommand extends Command {
     }
 
     @Override
-    public boolean isDND() {
-        return false;
+    public String getModule() {
+        return Constants.MUSIC;
     }
 
     @Override

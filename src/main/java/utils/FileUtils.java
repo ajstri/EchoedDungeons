@@ -9,6 +9,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * FileUtils class of the EchoedDungeons project
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class FileUtils {
 
     /**
@@ -65,6 +71,14 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Retrieves a value from a JSON file by it's key
+     * @param fileName Name of the file
+     * @param key Key to retrieve value of
+     * @param arrayLocation Array the key is within
+     * @return value of the key
+     */
+    @SuppressWarnings("ConstantConditions")
     public static String getValueByKey(String fileName, String key, String arrayLocation) {
         JSONArray object = getJSONFile(fileName);
 
@@ -98,7 +112,6 @@ public class FileUtils {
 
             obj = new JSONObject(sb.toString().replace("[", "").replace("]", ""));
             array.put(obj);
-
         }
         catch (FileNotFoundException fnfe) {
             Logger.error("File not found.", fnfe);

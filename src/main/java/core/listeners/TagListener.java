@@ -19,12 +19,13 @@ import core.Main;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.Logger;
 
 import javax.annotation.Nonnull;
 
 public class TagListener extends ListenerAdapter {
 
-    User botMention = Main.api.getSelfUser();
+    final User botMention = Main.api.getSelfUser();
     String args, reply;
 
     @Override
@@ -56,7 +57,7 @@ public class TagListener extends ListenerAdapter {
                         }
                     }
                     catch (Exception e) {
-                        // TODO when Logger is implemented
+                        Logger.error("Unable to create ChatterBot reply.", e);
                     }
                 }
             }
