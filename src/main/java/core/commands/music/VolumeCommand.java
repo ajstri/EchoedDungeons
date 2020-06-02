@@ -25,38 +25,43 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *  QueueCommand class of the EchoedDungeons project
+ *  VolumeCommand class of the EchoedCore project
+ *  On call, displays the current volume or changes it
  *
  *  All methods are explained in {@link Command}
  *
  * @author EchoedAJ
  * @since April 2020
  */
-public class QueueCommand extends Command {
+public class VolumeCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("QUEUE (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("VOLUME");
 
         Member author = mre.getMember();
+
         if (author != null) {
-            // Check if in a voice channel
             if (Main.getMusicUtils().isInVoiceChannel(author)) {
                 if (args.length == 1) {
-                    // No page number, display first
-                    Main.getLog().info("Displaying queue");
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), 1);
+                    // Just asking for current volume
+                    mre.getChannel().sendMessage("Volume: " + Main.getMusicUtils().getVolume(mre.getGuild())).queue();
                 }
-                else {
-                    int page = 1;
+                else if (args.length == 2) {
+                    // Setting new volume
+                    int newVolume;
                     try {
-                        // Set page to argument
-                        page = Integer.parseInt(args[1]);
+                        newVolume = Integer.parseInt(args[1]);
+                        if (newVolume < 0 || newVolume > 100) {
+                            mre.getChannel().sendMessage("Invalid Number. Please only use numbers 0-100").queue();
+                            return;
+                        }
                     }
-                    catch (NumberFormatException nfe) {
-                        mre.getChannel().sendMessage("If you want to visit a page in the queue, please use an integer.").queue();
+                    catch (NumberFormatException ex) {
+                        mre.getChannel().sendMessage("Invalid Number. Please only use numbers 0-100").queue();
+                        return;
                     }
-                    // Actually display queue
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), page);
+                    // Set volume
+                    Main.getMusicUtils().setVolume(mre.getGuild(), newVolume);
                 }
             }
             else {
@@ -64,38 +69,41 @@ public class QueueCommand extends Command {
             }
         }
         else {
-            // Author's member is null
-            mre.getChannel().sendMessage("Uh oh. Something went wrong.").queue();
+            // Member is null
+            mre.getChannel().sendMessage("Uh oh. Something went wrong!").queue();
         }
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("queue", "q");
+        return Arrays.asList("volume", "vol", "setvolume", "setvol");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Sends current volume settings or changes to a given volume";
+    }
+
+    @Override
+    public String getName() {
+        return "Volume Command";
+    }
+
+    @Override
+    public List<String> getUsage() {
+        return Arrays.asList(
+                "`" + Main.getConfig().getPrefix() + "volume` **OR** ",
+                "`" + Main.getConfig().getPrefix() + "volume`"
+        );
+    }
+
+    @Override
+    public boolean getDefaultPermission() {
+        return true;
     }
 
     @Override
     public String getModule() {
         return Constants.MUSIC;
-    }
-
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public List<String> getUsage() {
-        return null;
-    }
-
-    @Override
-    public boolean getDefaultPermission() {
-        return false;
     }
 }

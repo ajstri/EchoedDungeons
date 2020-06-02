@@ -1,18 +1,19 @@
 /*
-Copyright 2020 EchoedAJ
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
- */package core.commands.general;
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package core.commands.general;
 
 import core.Main;
 import core.commands.Command;
@@ -21,9 +22,8 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
-import utils.Constants;
-import utils.Logger;
-import utils.MessageUtils;
+import utilities.Constants;
+import utilities.MessageUtilities;
 
 import java.awt.*;
 import java.util.*;
@@ -74,10 +74,10 @@ public class HelpCommand extends Command {
 
     @Override
     public void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("HELP (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("HELP (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
-        MessageUtils.sendIfNotPrivate(mre);
+        MessageUtilities.sendIfNotPrivate(mre);
         // Send help message
         sendPrivateDefault(mre.getAuthor().openPrivateChannel().complete(), args);
 
@@ -106,11 +106,11 @@ public class HelpCommand extends Command {
     @Override
     public List<String> getUsage() {
         return Collections.singletonList(
-                Main.config.getPrefix() + "help   **OR**  " + Main.config.getPrefix() + "help *<command>*\n"
-                        + Main.config.getPrefix() + "help - returns the list of commands along with a simple description of each.\n"
-                        + Main.config.getPrefix() + "help <command> - returns the name, description, aliases and usage information of a command.\n"
+                Main.getConfig().getPrefix() + "help   **OR**  " + Main.getConfig().getPrefix() + "help *<command>*\n"
+                        + Main.getConfig().getPrefix() + "help - returns the list of commands along with a simple description of each.\n"
+                        + Main.getConfig().getPrefix() + "help <command> - returns the name, description, aliases and usage information of a command.\n"
                         + "   - This can use the aliases of a command as input as well.\n"
-                        + "__Example:__ " + Main.config.getPrefix() + "help ping");
+                        + "__Example:__ " + Main.getConfig().getPrefix() + "help ping");
     }
 
     @Override
@@ -127,7 +127,7 @@ public class HelpCommand extends Command {
         if (args.length < 2) {
             EmbedBuilder embed = new EmbedBuilder().setTitle("Commands Supported").setColor(Color.RED);
 
-            MessageUtils.addDefaults(embed);
+            MessageUtilities.addEmbedDefaults(embed);
 
             // For each module, add its values to embed.
             for (String m : modules) {
@@ -140,7 +140,7 @@ public class HelpCommand extends Command {
         else {
             EmbedBuilder embed = new EmbedBuilder();
 
-            MessageUtils.addDefaults(embed);
+            MessageUtilities.addEmbedDefaults(embed);
 
             String command = args[1];
             // Check each command. If it is the command searched for, build embed.
@@ -187,7 +187,7 @@ public class HelpCommand extends Command {
                 .append("The provided command '**")
                 .append(args[1])
                 .append("**' does not exist. Use ")
-                .append(Main.config.getPrefix())
+                .append(Main.getConfig().getPrefix())
                 .append("help to list all commands.")
                 .build()).queue();
     }

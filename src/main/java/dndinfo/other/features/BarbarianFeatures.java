@@ -1,3 +1,18 @@
+/*
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package dndinfo.other.features;
 
 import core.commands.dnd.FeatureCommand;
@@ -10,19 +25,19 @@ import java.util.List;
 public class BarbarianFeatures {
 
     public BarbarianFeatures(FeatureCommand features) {
-        features.registerFeature(new BarbarianFeatures.UnarmoredDefense());
-        features.registerFeature(new BarbarianFeatures.Rage());
-        features.registerFeature(new BarbarianFeatures.RecklessAttack());
-        features.registerFeature(new BarbarianFeatures.DangerSense());
-        features.registerFeature(new BarbarianFeatures.PrimalPath());
-        features.registerFeature(new BarbarianFeatures.ExtraAttack());
-        features.registerFeature(new BarbarianFeatures.FastMovement());
-        features.registerFeature(new BarbarianFeatures.FeralInstinct());
-        features.registerFeature(new BarbarianFeatures.BrutalCritical());
-        features.registerFeature(new BarbarianFeatures.RelentlessRage());
-        features.registerFeature(new BarbarianFeatures.PersistentRage());
-        features.registerFeature(new BarbarianFeatures.IndomitableMight());
-        features.registerFeature(new BarbarianFeatures.PrimalChampion());
+        features.registerFeature(new UnarmoredDefense());
+        features.registerFeature(new Rage());
+        features.registerFeature(new RecklessAttack());
+        features.registerFeature(new DangerSense());
+        features.registerFeature(new PrimalPath());
+        features.registerFeature(new ExtraAttack());
+        features.registerFeature(new FastMovement());
+        features.registerFeature(new FeralInstinct());
+        features.registerFeature(new BrutalCritical());
+        features.registerFeature(new RelentlessRage());
+        features.registerFeature(new PersistentRage());
+        features.registerFeature(new IndomitableMight());
+        features.registerFeature(new PrimalChampion());
     }
 
     public static class Rage extends Feature {

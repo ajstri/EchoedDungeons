@@ -1,25 +1,25 @@
 /*
-Copyright 2020 EchoedAJ
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 package config;
 
 import core.Main;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.*;
-import utils.exceptions.NoConfigurationFileException;
+import utilities.*;
+import utilities.exceptions.NoConfigurationFileException;
 
 import java.io.*;
 
@@ -30,6 +30,8 @@ import java.io.*;
  * @since April 2020
  */
 public class Config {
+    // TODO add Shards
+    // TODO add ALL setter methods
 
     /**
      * File name constants
@@ -50,7 +52,7 @@ public class Config {
 
         // Check if Configuration File is usable.
         if(!checkConfigurationUsability()) {
-            Logger.error("Configuration File is not usable.", new NoConfigurationFileException("Unusable configuration file."));
+            Main.getLog().error("Configuration File is not usable.", new NoConfigurationFileException("Unusable configuration file."));
             Main.shutdown(Constants.STATUS_CONFIG_UNUSABLE);
         }
     }
@@ -77,7 +79,7 @@ public class Config {
 
         // Write to the file.
         if(writeToFile(obj2) < 0) {
-            Logger.error("Unable to create configuration file.", new NoConfigurationFileException("Unusable configuration file."));
+            Main.getLog().error("Unable to create configuration file.", new NoConfigurationFileException("Unusable configuration file."));
             Main.shutdown(Constants.STATUS_NO_CONFIG);
         }
     }
@@ -100,7 +102,7 @@ public class Config {
     @SuppressWarnings("unused")
     private int writeToFile(JSONArray object) {
         // Write to the file.
-        return FileUtils.writeToFile(object, fileName);
+        return FileUtilities.writeToFile(object, fileName);
     }
 
     /**
@@ -109,7 +111,7 @@ public class Config {
      */
     private int writeToFile(JSONObject obj) {
         // Write to the file.
-        return FileUtils.writeToFile(obj, fileName);
+        return FileUtilities.writeToFile(obj, fileName);
     }
 
     /**
@@ -118,7 +120,7 @@ public class Config {
      */
     @SuppressWarnings("unused")
     private JSONArray getJSONFile() {
-        return FileUtils.getJSONFile(fileName);
+        return FileUtilities.getJSONFile(fileName);
     }
 
     /**
@@ -126,10 +128,10 @@ public class Config {
      * @return prefix from Configuration.
      */
     public String getPrefix() {
-        String prefix = FileUtils.getValueByKey(fileName, Constants.PREFIX_KEY, arrayName);
+        String prefix = FileUtilities.getValueByKey(fileName, Constants.PREFIX_KEY, arrayName);
 
         if (prefix.contains("" + Constants.STATUS_NO_CONFIG)) {
-            Logger.info("No need for a shutdown. Failed to grab prefix. Using default.");
+            Main.getLog().info("No need for a shutdown. Failed to grab prefix. Using default.");
             return Constants.PREFIX_VALUE;
         }
 
@@ -141,11 +143,11 @@ public class Config {
      * @return token from Configuration.
      */
     public String getToken() {
-        String token = FileUtils.getValueByKey(fileName, Constants.TOKEN_KEY, arrayName);
+        String token = FileUtilities.getValueByKey(fileName, Constants.TOKEN_KEY, arrayName);
 
         if (token.contains("" + Constants.STATUS_NO_CONFIG)) {
-            Logger.info("No token found. Calling for shut down.");
-            Logger.error("No Token in Configuration File.", new NoConfigurationFileException("Unusable configuration file. No Token provided."));
+            Main.getLog().info("No token found. Calling for shut down.");
+            Main.getLog().error("No Token in Configuration File.", new NoConfigurationFileException("Unusable configuration file. No Token provided."));
             Main.shutdown(Constants.STATUS_NO_CONFIG);
             //return Constants.TOKEN_VALUE; // no actual use
         }
@@ -158,10 +160,10 @@ public class Config {
      * @return debug status from Configuration.
      */
     public boolean getDebug() {
-        String debug = FileUtils.getValueByKey(fileName, Constants.DEBUG_KEY, arrayName);
+        String debug = FileUtilities.getValueByKey(fileName, Constants.DEBUG_KEY, arrayName);
 
         if (debug.contains("" + Constants.STATUS_NO_CONFIG)) {
-            Logger.info("Failed to grab debug. Using default.");
+            Main.getLog().info("Failed to grab debug. Using default.");
             return Constants.DEBUG_VALUE.toLowerCase().contains("true");
         }
 

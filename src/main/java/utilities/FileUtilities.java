@@ -1,4 +1,19 @@
-package utils;
+/*
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package utilities;
 
 import core.Main;
 import org.json.JSONArray;
@@ -15,7 +30,7 @@ import java.io.IOException;
  * @author EchoedAJ
  * @since April 2020
  */
-public class FileUtils {
+public class FileUtilities {
 
     /**
      * Adds a JSON Array to the Configuration File.
@@ -39,7 +54,7 @@ public class FileUtils {
             return Constants.WRITE_TO_FILE_SUCCESS;
         }
         catch (IOException ioe) {
-            Logger.error("Unable to write to file.", ioe);
+            Main.getLog().error("Unable to write to file.", ioe);
             return Constants.WRITE_TO_FILE_FAIL;
         }
     }
@@ -66,7 +81,7 @@ public class FileUtils {
             return Constants.WRITE_TO_FILE_SUCCESS;
         }
         catch (IOException ioe) {
-            Logger.error("Unable to write to file.", ioe);
+            Main.getLog().error("Unable to write to file.", ioe);
             return Constants.WRITE_TO_FILE_FAIL;
         }
     }
@@ -83,7 +98,7 @@ public class FileUtils {
         JSONArray object = getJSONFile(fileName);
 
         if (object.equals(null)) {
-            Logger.error(key + " is null.", new Exception("Failed to grab " + key));
+            Main.getLog().error(key + " is null.", new Exception("Failed to grab " + key));
             return  "" + Constants.STATUS_NO_CONFIG;
         }
 
@@ -114,11 +129,11 @@ public class FileUtils {
             array.put(obj);
         }
         catch (FileNotFoundException fnfe) {
-            Logger.error("File not found.", fnfe);
+            Main.getLog().error("File not found.", fnfe);
             Main.shutdown(Constants.STATUS_NO_CONFIG);
         }
         catch (Exception e) {
-            Logger.error("File could not be read.", e);
+            Main.getLog().error("File could not be read.", e);
             Main.shutdown(Constants.STATUS_NO_CONFIG);
         }
 

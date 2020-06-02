@@ -13,13 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package utilities.exceptions;
 
-//import core.commands.dnd.FeatureCommand;
-
-@SuppressWarnings("unused")
-public class BardFeatures { // TODO bard features
-    public BardFeatures(/*FeatureCommand features*/) {
-
+public class UnhandledMathException extends Exception {
+    public UnhandledMathException(String errorMessage) {
+        super(errorMessage);
     }
 }

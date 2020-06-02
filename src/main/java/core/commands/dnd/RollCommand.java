@@ -1,14 +1,28 @@
+/*
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utils.Constants;
-import utils.DiceRoll;
-import utils.Logger;
-import utils.MessageUtils;
-import utils.exceptions.InvalidNotationException;
+import utilities.Constants;
+import utilities.DiceRoll;
+import utilities.MessageUtilities;
+import utilities.exceptions.InvalidNotationException;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RollCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("ROLL (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("ROLL (called by " + mre.getAuthor().getAsTag() + ")");
         // *rolls into oblivion*
 
         String nat20Expression = "No";
@@ -34,7 +48,7 @@ public class RollCommand extends Command {
 
         // Replace possible escapes (when a user avoids markdown formatting)
         String input = expression.toString();
-        input = input.replace(Main.config.getPrefix(), "").replace("\\", "");
+        input = input.replace(Main.getConfig().getPrefix(), "").replace("\\", "");
 
         // Erase command name and space following it
         // The space following it was tricking the rolls into thinking there was
@@ -43,7 +57,7 @@ public class RollCommand extends Command {
             input = input.replace(alias + " ", "");
         }
 
-        Logger.info("Rolling: " + input);
+        Main.getLog().info("Rolling: " + input);
 
         // Split into dice expressions
         String[] diceExpressions = input.split(" ");
@@ -112,7 +126,7 @@ public class RollCommand extends Command {
                 Collections.sort(results);
 
                 // DEBUG: Outputs sorted rolls.
-                if (Main.config.getDebug()) {
+                if (Main.getConfig().getDebug()) {
                     System.out.println("---");
                     System.out.println("Dice Expression: " + diceE);
                     System.out.println("Sorted: ");
@@ -140,7 +154,7 @@ public class RollCommand extends Command {
                 }
 
                 // DEBUG: Outputs sorted rolls after drops.
-                if (Main.config.getDebug()) {
+                if (Main.getConfig().getDebug()) {
                     System.out.println("After drops: ");
                     for (int rolls : results) {
                         System.out.print(rolls + " ");
@@ -154,7 +168,7 @@ public class RollCommand extends Command {
                     result += rolls;
                 }
 
-                if (Main.config.getDebug()) {
+                if (Main.getConfig().getDebug()) {
                     System.out.println("Total: " + result);
                 }
 
@@ -167,19 +181,19 @@ public class RollCommand extends Command {
                     result = -result;
                 }
 
-                if (Main.config.getDebug()) {
+                if (Main.getConfig().getDebug()) {
                     System.out.println("Total (after modifiers): " + result);
                 }
 
             }
             catch (InvalidNotationException ine) {
-                Logger.error("Unable to parse dice expression.", ine);
+                Main.getLog().error("Unable to parse dice expression.", ine);
                 mre.getChannel().sendMessage("Failed to parse your roll!").queue();
             }
             total += result;
         }
 
-        if (Main.config.getDebug()) {
+        if (Main.getConfig().getDebug()) {
             System.out.println("---");
             System.out.println("Final Result: " + total);
         }
@@ -210,7 +224,7 @@ public class RollCommand extends Command {
         embed.setThumbnail(mre.getAuthor().getAvatarUrl());
 
         embed.setFooter("EchoedDungeons by EchoedAJ#1840", null);
-        MessageUtils.setTimestamp(embed);
+        MessageUtilities.setTimestamp(embed);
 
         if (!nat20Expression.toLowerCase().contains("no")) {
             embed.addField("They rolled a nat 20 on " + nat20Expression.replace("a", "").replace("s", "") + "!", "", false);
@@ -248,9 +262,9 @@ public class RollCommand extends Command {
     @Override
     public List<String> getUsage() {
         return Collections.singletonList(
-                Main.config.getPrefix() + "roll *<dice>*\n" +
-                "__Example:__ " + Main.config.getPrefix() + "roll 3d8+5\n" +
-                "Extended Syntax: \n`" + Main.config.getPrefix() +
+                Main.getConfig().getPrefix() + "roll *<dice>*\n" +
+                "__Example:__ " + Main.getConfig().getPrefix() + "roll 3d8+5\n" +
+                "Extended Syntax: \n`" + Main.getConfig().getPrefix() +
                 "roll (s)[AmountOfDice]d[SidesOfDice]([+|-][Modifier])(dl|kl|kh|dh)`\n" +
                 "`(optional) [required]`\n" +
                 "`s` - include if you want the roll negative\n" +

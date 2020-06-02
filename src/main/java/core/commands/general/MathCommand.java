@@ -1,17 +1,17 @@
 /*
-Copyright 2020 EchoedAJ
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+ *  Copyright 2020 EchoedAJ
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 package core.commands.general;
 
@@ -22,10 +22,9 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utils.Constants;
-import utils.Logger;
-import utils.MessageUtils;
-import utils.exceptions.UnhandledMathException;
+import utilities.Constants;
+import utilities.MessageUtilities;
+import utilities.exceptions.UnhandledMathException;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -42,15 +41,15 @@ import java.util.List;
 public class MathCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Logger.info("MATH (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("MATH (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Check if they're asking for what functions it can handle
         if (args[1].contains("supported") || args[1].contains("functions")) {
             // Make the functions embed
-            Logger.debug("User asked for supported functions.", Constants.stageCommand);
+            Main.getLog().debug("User asked for supported functions.", Constants.stageCommand);
 
             EmbedBuilder embed = new EmbedBuilder().setTitle("Functions Supported").setColor(Color.RED);
-            MessageUtils.addDefaults(embed);
+            MessageUtilities.addEmbedDefaults(embed);
 
             embed.addField("Addition", "Example: 2 + 2", false);
             embed.addField("Subtraction", "Example: 2 - 2", false);
@@ -90,7 +89,7 @@ public class MathCommand extends Command {
 
             // Replace possible escapes (when a user avoids markdown formatting)
             String input = expression.toString();
-            input = input.replace(Main.config.getPrefix(), "").replace("\\", "");
+            input = input.replace(Main.getConfig().getPrefix(), "").replace("\\", "");
 
             // Erase command name
             for (String alias : getAliases()) {
@@ -99,7 +98,7 @@ public class MathCommand extends Command {
 
             // Evaluate and send the result
             double result = eval(input, mre.getChannel());
-            Logger.debug("Result is " + result, Constants.stageCommand);
+            Main.getLog().debug("Result is " + result, Constants.stageCommand);
             mre.getChannel().sendMessage(Double.toString(result)).queue();
         }
     }
@@ -152,7 +151,7 @@ public class MathCommand extends Command {
      * @return the answer to the expression.
      */
     public static double eval(String str, MessageChannel c) {
-        Logger.debug("Parsing: " + str, Constants.stageCommand);
+        Main.getLog().debug("Parsing: " + str, Constants.stageCommand);
         return new Object() {
             int pos = -1, ch;
 
@@ -173,7 +172,7 @@ public class MathCommand extends Command {
                 nextChar();
                 double x = parseExpression();
                 if (pos < str.length()) {
-                    Logger.error("Unexpected: " + (char)ch, new RuntimeException("Unexpected: " + (char)ch));
+                    Main.getLog().error("Unexpected: " + (char)ch, new RuntimeException("Unexpected: " + (char)ch));
                     c.sendMessage("Unexpected: " + (char)ch).queue();
                     return 0;
                 }
@@ -221,7 +220,7 @@ public class MathCommand extends Command {
                 if (eat('(')) { // parentheses
                     x = parseExpression();
                     if (!eat(')')) {
-                        Logger.error("Missing closing parenthesis", new UnhandledMathException("Missing closing parenthesis"));
+                        Main.getLog().error("Missing closing parenthesis", new UnhandledMathException("Missing closing parenthesis"));
                         c.sendMessage("Missing closing parenthesis").queue();
                         return 0;
                     }
@@ -290,13 +289,13 @@ public class MathCommand extends Command {
                             break;
 
                         default:
-                            Logger.error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
+                            Main.getLog().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
                             c.sendMessage("Unknown function: " + func).queue();
                             return 0;
                     }
                 }
                 else {
-                    Logger.error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
+                    Main.getLog().error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
                     c.sendMessage("Unexpected: " + (char)ch).queue();
                     return 0;
                 }

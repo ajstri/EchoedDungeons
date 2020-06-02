@@ -22,80 +22,67 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *  QueueCommand class of the EchoedDungeons project
+ *  StopCommand class of the EchoedDungeons project
+ *  On call, stops the player completely
  *
  *  All methods are explained in {@link Command}
  *
  * @author EchoedAJ
- * @since April 2020
+ * @since June 2020
  */
-public class QueueCommand extends Command {
+public class StopCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("QUEUE (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("STOP");
 
         Member author = mre.getMember();
         if (author != null) {
             // Check if in a voice channel
-            if (Main.getMusicUtils().isInVoiceChannel(author)) {
-                if (args.length == 1) {
-                    // No page number, display first
-                    Main.getLog().info("Displaying queue");
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), 1);
-                }
-                else {
-                    int page = 1;
-                    try {
-                        // Set page to argument
-                        page = Integer.parseInt(args[1]);
-                    }
-                    catch (NumberFormatException nfe) {
-                        mre.getChannel().sendMessage("If you want to visit a page in the queue, please use an integer.").queue();
-                    }
-                    // Actually display queue
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), page);
-                }
+            if (Main.getMusicUtils().isInVoiceChannel(mre.getMember())) {
+                // Stop the player
+                Main.getMusicUtils().stopPlayer(mre.getGuild());
             }
             else {
                 mre.getChannel().sendMessage("You must be in a voice channel to use this command").queue();
             }
         }
         else {
-            // Author's member is null
-            mre.getChannel().sendMessage("Uh oh. Something went wrong.").queue();
+            // Member is null
+            mre.getChannel().sendMessage("Uh oh. Something went wrong!").queue();
         }
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("queue", "q");
+        return Arrays.asList("stop", "st", "leave");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Stops the player";
+    }
+
+    @Override
+    public String getName() {
+        return "Stop Command";
+    }
+
+    @Override
+    public List<String> getUsage() {
+        return Collections.singletonList(Main.getConfig().getPrefix() + "stop");
+    }
+
+    @Override
+    public boolean getDefaultPermission() {
+        return true;
     }
 
     @Override
     public String getModule() {
         return Constants.MUSIC;
-    }
-
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public List<String> getUsage() {
-        return null;
-    }
-
-    @Override
-    public boolean getDefaultPermission() {
-        return false;
     }
 }

@@ -13,13 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package utilities.exceptions;
 
-//import core.commands.dnd.FeatureCommand;
-
-@SuppressWarnings("unused")
-public class BardFeatures { // TODO bard features
-    public BardFeatures(/*FeatureCommand features*/) {
-
+public class InvalidNotationException extends Exception {
+    public InvalidNotationException(String errorMessage) {
+        // Checked.  Because it's probably gonna happen.
+        super(errorMessage);
     }
 }

@@ -22,80 +22,66 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *  QueueCommand class of the EchoedDungeons project
+ *  NowPlayingCommand class of the EchoedCore project
+ *  On call, displays the currently playing song
  *
  *  All methods are explained in {@link Command}
  *
  * @author EchoedAJ
- * @since April 2020
+ * @since June 2020
  */
-public class QueueCommand extends Command {
+public class NowPlayingCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("QUEUE (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getLog().info("NOW PLAYING");
 
         Member author = mre.getMember();
         if (author != null) {
-            // Check if in a voice channel
-            if (Main.getMusicUtils().isInVoiceChannel(author)) {
-                if (args.length == 1) {
-                    // No page number, display first
-                    Main.getLog().info("Displaying queue");
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), 1);
-                }
-                else {
-                    int page = 1;
-                    try {
-                        // Set page to argument
-                        page = Integer.parseInt(args[1]);
-                    }
-                    catch (NumberFormatException nfe) {
-                        mre.getChannel().sendMessage("If you want to visit a page in the queue, please use an integer.").queue();
-                    }
-                    // Actually display queue
-                    Main.getMusicUtils().displayQueue(mre.getTextChannel(), page);
-                }
+            if (Main.getMusicUtils().isInVoiceChannel(mre.getMember())) {
+                // Display song title
+                mre.getChannel().sendMessage("Now Playing: " + Main.getMusicUtils().getTrackTitle(mre.getGuild())).queue();
             }
             else {
                 mre.getChannel().sendMessage("You must be in a voice channel to use this command").queue();
             }
         }
         else {
-            // Author's member is null
-            mre.getChannel().sendMessage("Uh oh. Something went wrong.").queue();
+            // User is null
+            mre.getChannel().sendMessage("Uh oh. Something went wrong!").queue();
         }
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("queue", "q");
+        return Arrays.asList("nowplaying", "now", "np");
+    }
+
+    @Override
+    public String getDescription() {
+        return "Displays the currently playing song";
+    }
+
+    @Override
+    public String getName() {
+        return "Now Playing Command";
+    }
+
+    @Override
+    public List<String> getUsage() {
+        return Collections.singletonList(Main.getConfig().getPrefix() + "nowplaying");
+    }
+
+    @Override
+    public boolean getDefaultPermission() {
+        return true;
     }
 
     @Override
     public String getModule() {
         return Constants.MUSIC;
-    }
-
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public List<String> getUsage() {
-        return null;
-    }
-
-    @Override
-    public boolean getDefaultPermission() {
-        return false;
     }
 }

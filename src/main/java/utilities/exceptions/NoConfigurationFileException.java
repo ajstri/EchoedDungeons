@@ -13,13 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package utilities.exceptions;
 
-//import core.commands.dnd.FeatureCommand;
-
-@SuppressWarnings("unused")
-public class BardFeatures { // TODO bard features
-    public BardFeatures(/*FeatureCommand features*/) {
-
+/**
+ * NoConfigurationFileException class of the EchoedDungeons project
+ *
+ * Simple exception to note that the Configuration File is not usable
+ * in its current state.
+ */
+public class NoConfigurationFileException extends Exception {
+    public NoConfigurationFileException (String errorMessage) {
+        super(errorMessage);
     }
 }
