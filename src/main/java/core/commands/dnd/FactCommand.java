@@ -25,6 +25,7 @@ import utilities.FileUtilities;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -97,12 +98,12 @@ public class FactCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "fact");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     /**

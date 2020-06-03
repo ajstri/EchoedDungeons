@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,21 +82,21 @@ public class QueueCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Displays the queue of the music player";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Queue Command";
     }
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "queue (page number)`");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 }

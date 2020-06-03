@@ -26,6 +26,7 @@ import utilities.Constants;
 import utilities.MessageUtilities;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class LanguageCommand extends Command {
@@ -138,7 +139,7 @@ public class LanguageCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "";
+        return "Displays a list of supported languages";
     }
 
     @Override
@@ -148,7 +149,7 @@ public class LanguageCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "language [language name]");
     }
 
     @Override

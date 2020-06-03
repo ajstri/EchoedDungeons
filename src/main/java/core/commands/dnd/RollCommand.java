@@ -97,10 +97,10 @@ public class RollCommand extends Command {
                     result = ThreadLocalRandom.current().nextInt(1, roller.getNumSides() + 1);
 
                     // Note the NATs
-                    if (result == 20) {
+                    if (result == 20 && roller.getNumSides() == 20) {
                         nat20Expression = diceE;
                     }
-                    if (result == 1) {
+                    if (result == 1 && roller.getNumSides() == 20) {
                         nat1Expression = diceE;
                     }
 

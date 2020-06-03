@@ -68,7 +68,7 @@ public class FeatureCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Displays a list of supported features.";
     }
 
     @Override
@@ -78,12 +78,12 @@ public class FeatureCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "feature [feature name]");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {

@@ -28,6 +28,7 @@ import utilities.exceptions.UnhandledMathException;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -125,12 +126,12 @@ public class MathCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "math [math expression]");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     /**

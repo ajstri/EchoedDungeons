@@ -98,6 +98,6 @@ public class PlayCommand extends Command {
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 }

@@ -197,7 +197,7 @@ public class CallCommand extends Command {
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     /**
