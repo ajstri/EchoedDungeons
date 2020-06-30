@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -66,21 +67,21 @@ public class SkipCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Skips the currently playing song";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Skip Command";
     }
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "skip`");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 }

@@ -28,6 +28,7 @@ import utilities.MessageUtilities;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -81,7 +82,7 @@ public class ClassCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "class [class name]`");
     }
 
     @Override

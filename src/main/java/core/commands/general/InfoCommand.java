@@ -44,7 +44,7 @@ public class InfoCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Returns information about the Bot.";
     }
 
     @Override
@@ -54,7 +54,7 @@ public class InfoCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "info`");
     }
 
     @Override

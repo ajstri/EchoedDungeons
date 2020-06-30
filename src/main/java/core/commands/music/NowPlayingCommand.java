@@ -72,7 +72,7 @@ public class    NowPlayingCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList(Main.getConfig().getPrefix() + "nowplaying");
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "nowplaying`");
     }
 
     @Override

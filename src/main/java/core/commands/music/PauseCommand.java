@@ -22,6 +22,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,21 +68,21 @@ public class PauseCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Pauses the music player";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "Pause Command";
     }
 
     @Override
     public List<String> getUsage() {
-        return null;
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "pause`");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 }
