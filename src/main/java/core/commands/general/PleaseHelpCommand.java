@@ -7,6 +7,7 @@ import utilities.Constants;
 import java.util.Collections;
 import java.util.List;
 
+// jokes
 public class PleaseHelpCommand extends Command {
     @java.lang.Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {

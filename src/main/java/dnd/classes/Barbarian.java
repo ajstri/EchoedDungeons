@@ -13,12 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.classes;
+package dnd.classes;
 
-import dndinfo.other.DNDConstants;
-import dndinfo.other.features.BarbarianFeatures;
-import dndinfo.other.features.Feature;
-import dndinfo.other.proficiencylists.Proficiencies;
+import dnd.DNDConstants;
+import dnd.other.features.BarbarianFeatures;
+import dnd.other.features.Feature;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,17 +50,12 @@ public class Barbarian extends Class {
     @Override
     public List<String> getArmorProficiencies() {
         return Arrays.asList(
-                Proficiencies.Armor.armor_light,
-                Proficiencies.Armor.armor_medium,
-                Proficiencies.Armor.shields
         );
     }
 
     @Override
     public List<String> getWeaponProficiencies() {
         return Arrays.asList(
-                Proficiencies.Weapons.weapons_simple,
-                Proficiencies.Weapons.weapons_martial
         );
     }
 
@@ -83,13 +77,7 @@ public class Barbarian extends Class {
     public List<String> getSkillProficiencies() {
         // Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival
         return Arrays.asList(
-                "Choose two from: ",
-                Proficiencies.Skills.animal_handling,
-                Proficiencies.Skills.athletics,
-                Proficiencies.Skills.intimidation,
-                Proficiencies.Skills.nature,
-                Proficiencies.Skills.perception,
-                Proficiencies.Skills.survival
+                "Choose two from: "
         );
     }
 

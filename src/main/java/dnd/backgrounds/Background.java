@@ -13,16 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package dnd.backgrounds;
 
-import java.util.List;
+@SuppressWarnings("unused")
+public abstract class Background {
 
-public abstract class Feature {
-
-    // TODO javadoc
-
-    public abstract String getName();
-    public abstract int getLevel();
-    public abstract List<String> getInfo();
-
+    // TODO: Implement Background Framework
 }

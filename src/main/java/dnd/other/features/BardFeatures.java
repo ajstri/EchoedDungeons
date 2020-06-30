@@ -13,14 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo;
-/*
+package dnd.other.features;
 
-This section of the Bot is purely to hold and get information.
-If I were to hold them in the files they were used in, it would get really
-clogged up, really quickly, and for no good reason.
+//import core.commands.dnd.FeatureCommand;
 
-In order to prevent that, they are held here, as variables, that can be
-accessed by the classes that need them.
+@SuppressWarnings("unused")
+public class BardFeatures { // TODO bard features
+    public BardFeatures(/*FeatureCommand features*/) {
 
- */
+    }
+}

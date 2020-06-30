@@ -27,6 +27,14 @@ import utilities.exceptions.InvalidNotationException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ *  RollCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class RollCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {

@@ -30,15 +30,10 @@ import config.Config;
 import core.commands.admin.*;
 import core.commands.dnd.*;
 import core.commands.general.*;
-import core.commands.math.MathCommand;
 import core.commands.math.*;
 import core.commands.music.*;
 
 import core.listeners.*;
-
-import dndinfo.DatabaseManager;
-import dndinfo.classes.*;
-import dndinfo.other.features.*;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -54,6 +49,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *  Main class of the EchoedDungeons project
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class Main {
 
     // jda specific
@@ -66,18 +67,20 @@ public class Main {
     private static ChatterBotSession chatSession;
     private static final HelpCommand help = new HelpCommand();
     private static long time = System.currentTimeMillis();
-
-    // database - temporary
-    private static final DatabaseManager database = new DatabaseManager();
-    private static final Logger log = new Logger();
-
     private static final Trigonometry trig = new Trigonometry();
+    private static final Logger log = new Logger();
 
     // LavaPlayer specific
     private static AudioPlayerManager audioManager;
     private static MusicUtilities musicUtils;
     private static final Map<Long, GuildMusicManager> musicManagers = new HashMap<>();
 
+    /**
+     * Main Method of the EchoedDungeons project.
+     * Everything starts here. It is it's own patient zero.
+     *
+     * @param args args
+     */
     public static void main(String[] args) {
         debugOnlyInitialization();
 
@@ -88,6 +91,9 @@ public class Main {
 
     // ----- Initialization -----
 
+    /**
+     * Initialization run only when Debug is active.
+     */
     private static void debugOnlyInitialization() {
         if (getConfig().getDebug()) {
             getLog().debug("Welcome to EchoedDungeons! \n \n", Constants.stagePreInit);
@@ -98,6 +104,10 @@ public class Main {
         }
     }
 
+    /**
+     * Pre-Initialization
+     * Sets start time, begins building the JDA instance
+     */
     private static void preInitialization() {
         getLog().debug("Beginning Pre-Initialization.", Constants.stagePreInit);
 
@@ -110,6 +120,10 @@ public class Main {
                 .setAutoReconnect(true);
     }
 
+    /**
+     * Initialization
+     * Defines the JDA instance, shard if applicable
+     */
     private static void initialization() {
         getLog().debug("Beginning initialization.", Constants.stageInit);
         // Define the JDA Instance.
@@ -148,6 +162,10 @@ public class Main {
 
     }
 
+    /**
+     * Post-Initialization
+     * Set ID, register commands, start ChatterBot, start Audio Player
+     */
     private static void postInitialization() {
         getLog().debug("Beginning post-initialization.", Constants.stagePostInit);
 
@@ -197,10 +215,10 @@ public class Main {
         }
     }
 
+    /**
+     * Registers commands.
+     */
     private static void registerCommands() {
-        // Register database
-        registerDNDDatabase();
-
         // Generic Commands
         getApi().addEventListener(help.registerCommand(help));
         getApi().addEventListener(help.registerCommand(new InfoCommand()));
@@ -216,9 +234,9 @@ public class Main {
         getApi().addEventListener(help.registerCommand(new FactCommand()));
 
         // DND Database commands
-        getApi().addEventListener(help.registerCommand(database.getClasses()));
-        getApi().addEventListener(help.registerCommand(database.getFeatures()));
-        getApi().addEventListener(help.registerCommand(database.getLanguages()));
+        getApi().addEventListener(help.registerCommand(new ClassCommand()));
+        getApi().addEventListener(help.registerCommand(new FeatureCommand()));
+        getApi().addEventListener(help.registerCommand(new LanguageCommand()));
 
         // Music commands
         getApi().addEventListener(help.registerCommand(new PlayCommand()));
@@ -227,29 +245,15 @@ public class Main {
         getApi().addEventListener(help.registerCommand(new QueueCommand()));
         getApi().addEventListener(help.registerCommand(new StopCommand()));
         getApi().addEventListener(help.registerCommand(new NowPlayingCommand()));
+        getApi().addEventListener(help.registerCommand(new VolumeCommand()));
 
         // Admin commands
-        getApi().addEventListener(new ShutdownCommand());
+        getApi().addEventListener(help.registerCommand(new ShutdownCommand()));
     }
 
-    private static void registerDNDDatabase() {
-        // Classes
-        database.getClasses().registerClass(new Artificer());
-        database.getClasses().registerClass(new Barbarian());
-        database.getClasses().registerClass(new Bard());
-
-        // Backgrounds
-
-
-        // Races
-
-
-        // Features
-        new ArtificerFeatures(database.getFeatures());
-        new BarbarianFeatures(database.getFeatures());
-        //new BardFeatures(features);
-    }
-
+    /**
+     * Initialize music player.
+     */
     private static void initMusicPlayer() {
         audioManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(audioManager);
@@ -261,6 +265,10 @@ public class Main {
         musicUtils = new MusicUtilities();
     }
 
+    /**
+     * Shuts down the bot.
+     * @param status status under which the bot shut down
+     */
     public static void shutdown(int status) {
         System.exit(status);
 
@@ -293,38 +301,74 @@ public class Main {
 
     // ----- Getter & Setter Methods -----
 
+    /**
+     * Returns the API
+     * @return the API
+     */
     public static JDA getApi() {
         return api;
     }
 
+    /**
+     * Returns the bot's ID
+     * @return the bot's ID
+     */
     public static String getId() {
         return id;
     }
 
+    /**
+     * Returns the Logger instance
+     * @return the Logger instance
+     */
     public static Logger getLog() {
         return log;
     }
 
+    /**
+     * Returns the Configuration instance
+     * @return the Configuration instance
+     */
     public static Config getConfig() {
         return config;
     }
 
+    /**
+     * Returns the Music Utilities Instance
+     * @return the Music Utilities Instance
+     */
     public static MusicUtilities getMusicUtils() {
         return musicUtils;
     }
 
+    /**
+     * Returns the ChatterBot Session
+     * @return the ChatterBot Session
+     */
     public static ChatterBotSession getChatterBotSession() {
         return chatSession;
     }
 
+    /**
+     * Returns the Audio Player Manager
+     * @return the Audio Player Manager
+     */
     public static AudioPlayerManager getAudioManager() {
         return audioManager;
     }
 
+    /**
+     * Returns the Music Managers
+     * @return the Music Managers
+     */
     public static Map<Long, GuildMusicManager> getMusicManagers() {
         return musicManagers;
     }
 
+    /**
+     * Returns the Trigonometry Instance
+     * @return the Trigonometry Instance
+     */
     public static Trigonometry getTrig() {
         return trig;
     }

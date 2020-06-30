@@ -17,7 +17,7 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dndinfo.other.DNDConstants;
+import dnd.DNDConstants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -29,6 +29,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *  LanguageCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class LanguageCommand extends Command {
 
     private static String[][] languages;
@@ -37,6 +45,9 @@ public class LanguageCommand extends Command {
         registerLanguages();
     }
 
+    /**
+     * Adds languages to an array for easy access.
+     */
     private static void registerLanguages() {
         String[] common = new String[] { DNDConstants.COMMON, "Humans", DNDConstants.COMMON_SCRIPT };
         String[] dwarvish = new String[] { DNDConstants.DWARVISH, "Dwarves", DNDConstants.ELVISH_SCRIPT };
@@ -76,6 +87,11 @@ public class LanguageCommand extends Command {
         sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
     }
 
+    /**
+     * Sends a message to a private channel.
+     * @param channel channel to send to
+     * @param args arguments used to build the message.
+     */
     private static void sendPrivateMessage(PrivateChannel channel, String[] args) {
         if (args.length < 2) {
             // ie. just language, no args

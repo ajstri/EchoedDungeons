@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  *  PauseCommand class of the EchoedDungeons project
+ *  On call, pauses the player
  *
  *  All methods are explained in {@link Command}
  *

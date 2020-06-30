@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  *  QueueCommand class of the EchoedDungeons project
+ *  On call, displays the song queue
  *
  *  All methods are explained in {@link Command}
  *

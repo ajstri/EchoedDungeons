@@ -24,6 +24,14 @@ import utilities.MessageUtilities;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *  InfoCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class InfoCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {

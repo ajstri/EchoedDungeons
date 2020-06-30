@@ -13,13 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package dnd.other.features;
 
-//import core.commands.dnd.FeatureCommand;
+import java.util.List;
 
-@SuppressWarnings("unused")
-public class BardFeatures { // TODO bard features
-    public BardFeatures(/*FeatureCommand features*/) {
+public abstract class Feature {
 
-    }
+    // TODO javadoc
+
+    public abstract String getName();
+    public abstract int getLevel();
+    public abstract List<String> getInfo();
+
 }

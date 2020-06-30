@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.classes;
+package dnd.classes;
 
-import dndinfo.other.features.Feature;
+import dnd.other.features.Feature;
 
 import java.util.List;
 

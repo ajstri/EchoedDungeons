@@ -17,7 +17,7 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dndinfo.other.features.Feature;
+import dnd.other.features.Feature;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -29,6 +29,14 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ *  FeatureCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since April 2020
+ */
 public class FeatureCommand extends Command {
 
     private static final String DEFAULT_NAME = "No name has been provided. Sorry!";
@@ -86,6 +94,11 @@ public class FeatureCommand extends Command {
         return true;
     }
 
+    /**
+     * Sends a message to a private channel.
+     * @param channel channel to send to
+     * @param args arguments used to build the message.
+     */
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {
         int page = 1;
 
@@ -141,6 +154,11 @@ public class FeatureCommand extends Command {
                 .build()).queue();
     }
 
+    /**
+     * Adds feature values to the embed.
+     * @param embed embed to add values to
+     * @param f feature to add
+     */
     private void addFeatureValues(EmbedBuilder embed, Feature f) {
         String info;
         String name;
@@ -166,6 +184,12 @@ public class FeatureCommand extends Command {
         embed.setTitle("Feature: " + name);
     }
 
+    /**
+     * Lists features by page.
+     * @param embed embed to build
+     * @param page page to list
+     * @param channel channel to send to
+     */
     private void featuresListByPage (EmbedBuilder embed, int page, PrivateChannel channel) {
         boolean sendEmbed = true;
         String name;

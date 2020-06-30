@@ -16,6 +16,7 @@
 package core.listeners;
 
 import core.Main;
+import core.commands.Command;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -23,6 +24,12 @@ import utilities.MessageUtilities;
 
 import javax.annotation.Nonnull;
 
+/**
+ *  TagListener class of the EchoedDungeons project
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class TagListener extends ListenerAdapter {
 
     final User botMention = Main.getApi().getSelfUser();

@@ -260,6 +260,7 @@ public class MathCommand extends Command {
                     x = parseFactor();
 
                     x = parseFunction(x, func, c);
+                    if (x == -99999) return 0;
                 }
                 else {
                     Main.getLog().error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
@@ -276,6 +277,13 @@ public class MathCommand extends Command {
         }.parse();
     }
 
+    /**
+     * Checks for a supported function. If there is none, send a message and quit.
+     * @param x parameter for function
+     * @param func function to check for
+     * @param c channel to send message to
+     * @return result of function
+     */
     private static double parseFunction(double x, String func, MessageChannel c) {
         switch (func) {
             // Roots
@@ -386,7 +394,7 @@ public class MathCommand extends Command {
             default:
                 Main.getLog().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
                 c.sendMessage("Unknown function: " + func).queue();
-                return 0;
+                return -99999;
         }
 
         return x;

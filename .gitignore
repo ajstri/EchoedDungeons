@@ -87,5 +87,4 @@ fabric.properties
 .gitattributes
 .idea/discord.xml
 facts.json
-*.json
 .idea/workspace-AJSSURFACE.xml

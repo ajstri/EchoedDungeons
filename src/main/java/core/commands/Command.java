@@ -33,7 +33,6 @@ import java.util.List;
  * @author EchoedAJ
  * @since April 2020
  */
-// TODO all commands: make sure all methods are fleshed out.
 public abstract class Command extends ListenerAdapter {
 
     /**

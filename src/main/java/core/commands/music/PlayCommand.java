@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  *  PlayCommand class of the EchoedDungeons project
+ *  On call, plays a song or playlist
  *
  *  All methods are explained in {@link Command}
  *

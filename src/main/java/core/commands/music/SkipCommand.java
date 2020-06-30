@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  *  SkipCommand class of the EchoedDungeons project
+ *  On call, skips the current song
  *
  *  All methods are explained in {@link Command}
  *

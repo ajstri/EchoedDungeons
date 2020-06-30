@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *  NowPlayingCommand class of the EchoedCore project
+ *  NowPlayingCommand class of the EchoedDungeons project
  *  On call, displays the currently playing song
  *
  *  All methods are explained in {@link Command}
@@ -34,7 +34,7 @@ import java.util.List;
  * @author EchoedAJ
  * @since June 2020
  */
-public class    NowPlayingCommand extends Command {
+public class NowPlayingCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         Main.getLog().info("NOW PLAYING");

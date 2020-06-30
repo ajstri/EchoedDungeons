@@ -8,9 +8,19 @@ import utilities.Constants;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *  SetModeCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class SetModeCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Main.getLog().debug("SETMODE (called by " + mre.getAuthor().getAsTag() + ")", Constants.stageCommand);
+
         switch (args[1].toLowerCase()) {
             case "degrees":
             case "degree":

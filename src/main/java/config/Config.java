@@ -31,7 +31,6 @@ import java.io.*;
  */
 public class Config {
     // TODO add Shards
-    // TODO add ALL setter methods
 
     /**
      * File name constants
@@ -120,7 +119,7 @@ public class Config {
      */
     @SuppressWarnings("unused")
     private JSONArray getJSONFile() {
-        return FileUtilities.getJSONFile(fileName);
+        return FileUtilities.getJSONFileArray(fileName);
     }
 
     /**

@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.other.features;
+package dnd.other.features;
 
 import core.commands.dnd.FeatureCommand;
-import dndinfo.other.DNDConstants;
+import dnd.DNDConstants;
 
 import java.util.Arrays;
 import java.util.Collections;

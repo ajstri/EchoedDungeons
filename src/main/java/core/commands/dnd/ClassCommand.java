@@ -17,35 +17,29 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dndinfo.classes.Class;
-import dndinfo.other.features.Feature;
+import dnd.DatabaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
+import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.TreeMap;
 
+/**
+ *  ClassCommand class of the EchoedDungeons project
+ *
+ *  All methods are explained in {@link Command}
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class ClassCommand extends Command {
-
-    private final String DEFAULT_NAME = "No name provided. Sorry!";
-    private final String DEFAULT_WIKI = "No wiki link provided. Sorry!";
-
-    public final TreeMap<String, Class> classes;
-
-    public ClassCommand() {
-        classes = new TreeMap<>();
-    }
-
-    public void registerClass(Class classToRegister) {
-        classes.put(classToRegister.getName(), classToRegister);
-    }
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
@@ -102,19 +96,9 @@ public class ClassCommand extends Command {
             String wikiLink;
 
             // For each command, add its values to embed.
-            for (Class c : classes.values()) {
-                if (c.getName() == null) {
-                    name = DEFAULT_NAME;
-                }
-                else {
-                    name = c.getName();
-                }
-                if (c.getWikiLink() == null) {
-                    wikiLink = DEFAULT_WIKI;
-                }
-                else {
-                    wikiLink = c.getWikiLink();
-                }
+            for (String classSupported : DatabaseManager.getSupportedClasses()) {
+                name = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "name", classSupported);
+                wikiLink = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "wiki link", classSupported);
                 embed.addField(name, wikiLink, false);
             }
 
@@ -126,12 +110,13 @@ public class ClassCommand extends Command {
 
             MessageUtilities.addEmbedDefaults(embed);
 
-            String command = args[1];
+            String command = args[1].toLowerCase();
             // Check each command. If it is the command searched for, build embed.
-            for (Class c : classes.values()) {
-                if (c.getName().toLowerCase().contains(command)) {
+            for (String classSupported : DatabaseManager.getSupportedClasses()) {
+                String name = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "name", classSupported);
+                if (name.toLowerCase().contains(command)) {
                     // Define values.
-                    addClassValues(embed, c);
+                    DatabaseManager.addClassValues(embed, name.toLowerCase());
 
                     // Send embed.
                     channel.sendMessage(embed.build()).queue();
@@ -144,7 +129,7 @@ public class ClassCommand extends Command {
     }
 
     /**
-     * Sends a message telling the user their search doesn't exist
+     * Sends a message telling the user their search doesn't e@xexist
      * @param channel channel to send message
      * @param args arguments to build message
      */
@@ -157,85 +142,5 @@ public class ClassCommand extends Command {
                 .append(Main.getConfig().getPrefix())
                 .append("class` to list all classes.")
                 .build()).queue();
-    }
-
-    private void addClassValues(EmbedBuilder embed, Class c) {
-        String name = c.getName();
-        String wikiLink = c.getWikiLink();
-        String hitDice = c.getHitDice();
-        List<String> hitPoints = c.getHitPoints();
-
-        List<String> armorProf = c.getArmorProficiencies();
-        List<String> weaponProf = c.getWeaponProficiencies();
-        List<String> toolProf = c.getToolProficiencies();
-        List<String> savingThrows = c.getSavingThrowProficiencies();
-        List<String> skillProf = c.getSkillProficiencies();
-
-        List<String> equipment = c.getEquipment();
-        List<String> subClasses = c.getSubClasses();
-        List<Feature> featuresList = c.getFeaturesList();
-
-        String abilityIncrease = c.getAbilityScoreIncrease();
-
-        // Null checks for the important bits to just define them a default value
-        // Which is just name and wiki link, everything else can be skipped if null.
-        if (name == null) name = DEFAULT_NAME;
-        if (wikiLink == null) wikiLink = DEFAULT_WIKI;
-
-        // Build embed, finally
-        embed.setTitle(name);
-        embed.addField("Wiki Link", wikiLink, false);
-
-        // Hit dice
-        if (hitDice != null) {
-            embed.addField("Hit Dice", hitDice, false);
-        }
-        // Hit points
-        if (hitPoints != null) {
-            addEach(embed,"Hit Points", hitPoints, false);
-        }
-
-        // Here we start lists
-        if (armorProf != null) { // armor
-            addEach(embed, "Armor Proficiencies", armorProf, true);
-        }
-        if (weaponProf != null) { // weapons
-            addEach(embed, "Weapon Proficiencies", weaponProf, true);
-        }
-        if (toolProf != null) { // tools
-            addEach(embed, "Tool Proficiencies", toolProf, true);
-        }
-        if (skillProf != null) { // skills
-            addEach(embed, "Skill Proficiencies", skillProf, true);
-        }
-        if (savingThrows != null) { // saving throws
-            addEach(embed, "Saving Throws Proficiencies", savingThrows, true);
-        }
-        if (equipment != null) { // equipment
-            addEach(embed, "Equipment", equipment, true);
-        }
-        if (subClasses != null) { // sub classes
-            addEach(embed, "Sub Classes", subClasses, true);
-        }
-        if (featuresList != null) { // features
-            StringBuilder listFull = new StringBuilder();
-            for (Feature listItem : featuresList) {
-                String temp = listItem.getName();
-                listFull.append(temp).append("\n");
-            }
-            embed.addField("Features", listFull.toString(), true);
-        }
-
-        embed.addField("Ability Score Increases", abilityIncrease, false);
-    }
-
-    private void addEach (EmbedBuilder embed, String name, List<String> list, boolean inLine) {
-        StringBuilder listFull = new StringBuilder();
-
-        for (String listItem : list) {
-            listFull.append(listItem).append("\n");
-        }
-
-        embed.addField(name, listFull.toString(), inLine);
     }
 }

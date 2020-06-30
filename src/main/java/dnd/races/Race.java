@@ -1,4 +1,4 @@
-package dndinfo.races;
+package dnd.races;
 
 import java.util.List;
 

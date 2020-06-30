@@ -95,7 +95,7 @@ public class FileUtilities {
      */
     @SuppressWarnings("ConstantConditions")
     public static String getValueByKey(String fileName, String key, String arrayLocation) {
-        JSONArray object = getJSONFile(fileName);
+        JSONArray object = getJSONFileArray(fileName);
 
         if (object.equals(null)) {
             Main.getLog().error(key + " is null.", new Exception("Failed to grab " + key));
@@ -112,7 +112,7 @@ public class FileUtilities {
      * Retrieves the JSONObject to read the JSON File.
      * @return JSONObject
      */
-    public static JSONArray getJSONFile(String fileName) {
+    public static JSONArray getJSONFileArray(String fileName) {
         JSONObject obj;
         JSONArray array = new JSONArray();
         StringBuilder sb = new StringBuilder();
@@ -139,6 +139,34 @@ public class FileUtilities {
 
         return array;
 
+    }
+
+    public static JSONObject getJSONFileObject(String fileName) {
+        JSONObject obj;
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            FileReader reader = new FileReader(fileName);
+
+            int i;
+            while ((i = reader.read()) != -1) {
+                sb.append((char) i);
+            }
+
+            obj = new JSONObject(sb.toString().replace("[", "").replace("]", ""));
+
+            return obj;
+        }
+        catch (FileNotFoundException fnfe) {
+            Main.getLog().error("File not found.", fnfe);
+            Main.shutdown(Constants.STATUS_NO_CONFIG);
+        }
+        catch (Exception e) {
+            Main.getLog().error("File could not be read.", e);
+            Main.shutdown(Constants.STATUS_NO_CONFIG);
+        }
+
+        return null;
     }
 
 }

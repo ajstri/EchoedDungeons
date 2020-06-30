@@ -13,11 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dndinfo.classes;
+package dnd.classes;
 
-import dndinfo.other.DNDConstants;
-import dndinfo.other.features.Feature;
-import dndinfo.other.proficiencylists.Proficiencies;
+import dnd.DNDConstants;
+import dnd.other.features.Feature;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,19 +48,14 @@ public class Bard extends Class {
 
     @Override
     public List<String> getArmorProficiencies() {
-        return Collections.singletonList(
-                Proficiencies.Armor.armor_light
+        return Collections.singletonList(""
         );
     }
 
     @Override
     public List<String> getWeaponProficiencies() {
         return Arrays.asList(
-                Proficiencies.Weapons.weapons_simple,
-                Proficiencies.Weapons.hand_crossbows,
-                Proficiencies.Weapons.longswords,
-                Proficiencies.Weapons.rapiers,
-                Proficiencies.Weapons.shortswords
+
         );
     }
 
