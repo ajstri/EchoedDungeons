@@ -275,7 +275,7 @@ public class RollCommand extends Command {
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
 }

@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package core.commands.general;
+package core.commands.math;
 
 import core.Main;
 import core.commands.Command;
@@ -25,6 +25,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 import utilities.MessageUtilities;
 import utilities.exceptions.UnhandledMathException;
+import utilities.math.Logarithmic;
+import utilities.math.MathConstants;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -56,17 +58,19 @@ public class MathCommand extends Command {
             embed.addField("Multiplication", "Example: 2 * 2", false);
             embed.addField("Division", "Example: 2 / 2", false);
 
-            embed.addField("Sine", "Example: sin(90), sinh(90), or asin(90)", false);
-            embed.addField("Tangent", "Example: tan(90), tanh(90), or atan(90)", false);
-            embed.addField("Cosine", "Example: cos(90), cosh(90), or acos(90)", false);
+            embed.addField("Sine", "Example: sin(90), sinh(90), asin(90), or asinh(90)", false);
+            embed.addField("Tangent", "Example: tan(90), tanh(90), atan(90), or atanh(90)", false);
+            embed.addField("Cosine", "Example: cos(90), cosh(90), acos(90), or acosh(90)", false);
 
-            embed.addField("Cosecant", "Example: csc(90)", false);
-            embed.addField("Cotangent", "Example: cot(90)", false);
-            embed.addField("Secant", "Example: sec(90)", false);
+            embed.addField("Cosecant", "Example: csc(90), csch(90), acsc(90), or acsch(90)", false);
+            embed.addField("Cotangent", "Example: cot(90), coth(90), acot(90), or acoth(90)", false);
+            embed.addField("Secant", "Example: sec(90), sech(90), asec(90), or asech(90)", false);
 
             embed.addField("Logarithmic", "Example: ln(10) or log(10)", false);
 
             embed.addField("Roots", "Example: cbrt(8) or sqrt(4)", false);
+
+            embed.addField("Absolute Value", "Example: abs(-90)", false);
 
             // Bypass if already in a private channel
             if(!mre.isFromType(ChannelType.PRIVATE)) {
@@ -80,6 +84,7 @@ public class MathCommand extends Command {
             mre.getAuthor().openPrivateChannel().complete().sendMessage(embed.build()).queue();
         }
         else {
+            String finalExpression;
             // Prepare the arguments for parsing
 
             StringBuilder expression = new StringBuilder();
@@ -89,17 +94,34 @@ public class MathCommand extends Command {
 
             // Replace possible escapes (when a user avoids markdown formatting)
             String input = expression.toString();
-            input = input.replace(Main.getConfig().getPrefix(), "").replace("\\", "");
+            input = input.replace("\\", "");
 
             // Erase command name
+            input = input.replace(Main.getConfig().getPrefix(), "");
             for (String alias : getAliases()) {
                 input = input.replace(alias, "");
             }
 
+            finalExpression = input + " = ";
+
+            // Replace "pi" with constant, Pi
+            input = input.replace("pi", "" + MathConstants.PI);
+
             // Evaluate and send the result
             double result = eval(input, mre.getChannel());
-            Main.getLog().debug("Result is " + result, Constants.stageCommand);
-            mre.getChannel().sendMessage(Double.toString(result)).queue();
+            Main.getLog().debug("Result is " + (result + "").replace("E", " * 10^"), Constants.stageCommand);
+
+            // Prepare embed.
+            EmbedBuilder embed = new EmbedBuilder();
+            MessageUtilities.addEmbedDefaults(embed);
+
+            String mode = Main.getTrig().isDegrees() ? "Degrees" : "Radians";
+
+            embed.setTitle("Mode: " + mode);
+            embed.addField(finalExpression + ("" + result).replace("E", " * 10^"), "",false);
+
+            mre.getChannel().sendMessage(embed.build()).queue();
+            mre.getMessage().delete().queue();
         }
     }
 
@@ -110,7 +132,7 @@ public class MathCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.GENERIC;
+        return Constants.MATH;
     }
 
     @Override
@@ -130,7 +152,7 @@ public class MathCommand extends Command {
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     /**
@@ -235,64 +257,8 @@ public class MathCommand extends Command {
                     while (ch >= 'a' && ch <= 'z') nextChar();
                     String func = str.substring(startPos, this.pos);
                     x = parseFactor();
-                    switch (func) {
-                        case "sqrt":
-                            x = Math.sqrt(x);
-                            break;
-                        case "cbrt":
-                            x = Math.cbrt(x);
-                            break;
-                        case "sin":
-                            x = Math.sin(Math.toRadians(x));
-                            break;
-                        case "cos":
-                            x = Math.cos(Math.toRadians(x));
-                            break;
-                        case "tan":
-                            x = Math.tan(Math.toRadians(x));
-                            break;
-                        case "sinh":
-                            x = Math.sinh(Math.toRadians(x));
-                            break;
-                        case "cosh":
-                            x = Math.cosh(Math.toRadians(x));
-                            break;
-                        case "tanh":
-                            x = Math.tanh(Math.toRadians(x));
-                            break;
-                        case "asin":
-                            x = Math.asin(Math.toRadians(x));
-                            break;
-                        case "acos":
-                            x = Math.acos(Math.toRadians(x));
-                            break;
-                        case "atan":
-                            x = Math.atan(Math.toRadians(x));
-                            break;
-                        case "abs":
-                            x = Math.abs(x);
-                            break;
-                        case "ln":
-                            x = Math.log(x);
-                            break;
-                        case "log":
-                            x = Math.log10(x);
-                            break;
-                        case "cot":
-                            x = cot(x);
-                            break;
-                        case "csc":
-                            x = csc(x);
-                            break;
-                        case "sec":
-                            x = sec(x);
-                            break;
 
-                        default:
-                            Main.getLog().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
-                            c.sendMessage("Unknown function: " + func).queue();
-                            return 0;
-                    }
+                    x = parseFunction(x, func, c);
                 }
                 else {
                     Main.getLog().error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
@@ -309,15 +275,119 @@ public class MathCommand extends Command {
         }.parse();
     }
 
-    private static double cot(Double x) {
-        return 1 / Math.tan(x);
-    }
+    private static double parseFunction(double x, String func, MessageChannel c) {
+        switch (func) {
+            // Roots
+            case "sqrt":
+                x = Math.sqrt(x);
+                break;
+            case "cbrt":
+                x = Math.cbrt(x);
+                break;
 
-    private static double csc(Double x) {
-        return 1 / Math.sin(x);
-    }
+            // Basic Trig
+            case "sin":
+                x = Main.getTrig().sin(x);
+                break;
+            case "cos":
+                x = Main.getTrig().cos(x);
+                break;
+            case "tan":
+                x = Main.getTrig().tan(x);
+                break;
 
-    private static double sec(Double x) {
-        return 1 / Math.cos(x);
+            case "csc":
+                x = Main.getTrig().csc(x);
+                break;
+            case "sec":
+                x = Main.getTrig().sec(x);
+                break;
+            case "cot":
+                x = Main.getTrig().cot(x);
+                break;
+
+            // Hyperbolic Trig
+            case "sinh":
+                x = Main.getTrig().sinh(x);
+                break;
+            case "cosh":
+                x = Main.getTrig().cosh(x);
+                break;
+            case "tanh":
+                x = Main.getTrig().tanh(x);
+                break;
+
+            case "csch":
+                x = Main.getTrig().csch(x);
+                break;
+            case "sech":
+                x = Main.getTrig().sech(x);
+                break;
+            case "coth":
+                x = Main.getTrig().coth(x);
+                break;
+
+            // Inverse Trig
+            case "asin":
+                x = Main.getTrig().asin(x);
+                break;
+            case "acos":
+                x = Main.getTrig().acos(x);
+                break;
+            case "atan":
+                x = Main.getTrig().atan(x);
+                break;
+
+            case "acsc":
+                x = Main.getTrig().acsc(x);
+                break;
+            case "asec":
+                x = Main.getTrig().asec(x);
+                break;
+            case "acot":
+                x = Main.getTrig().acot(x);
+                break;
+
+            // Inverse & Hyperbolic Trig
+            case "asinh":
+                x = Main.getTrig().asinh(x);
+                break;
+            case "acosh":
+                x = Main.getTrig().acosh(x);
+                break;
+            case "atanh":
+                x = Main.getTrig().atanh(x);
+                break;
+
+            case "acsch":
+                x = Main.getTrig().acsch(x);
+                break;
+            case "asech":
+                x = Main.getTrig().asech(x);
+                break;
+            case "acoth":
+                x = Main.getTrig().acoth(x);
+                break;
+
+            // Logarithmic
+            case "ln":
+                x = Logarithmic.ln(x);
+                break;
+            case "log":
+                x = Logarithmic.log(x);
+                break;
+
+            // Other
+            case "abs":
+                x = Math.abs(x);
+                break;
+
+            default:
+                Main.getLog().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
+                c.sendMessage("Unknown function: " + func).queue();
+                return 0;
+        }
+
+        return x;
     }
 }

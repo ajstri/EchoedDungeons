@@ -30,6 +30,8 @@ import config.Config;
 import core.commands.admin.*;
 import core.commands.dnd.*;
 import core.commands.general.*;
+import core.commands.math.MathCommand;
+import core.commands.math.*;
 import core.commands.music.*;
 
 import core.listeners.*;
@@ -44,6 +46,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import utilities.*;
+import utilities.math.Trigonometry;
 import utilities.music.*;
 
 import javax.security.auth.login.LoginException;
@@ -68,10 +71,12 @@ public class Main {
     private static final DatabaseManager database = new DatabaseManager();
     private static final Logger log = new Logger();
 
+    private static final Trigonometry trig = new Trigonometry();
+
     // LavaPlayer specific
     private static AudioPlayerManager audioManager;
     private static MusicUtilities musicUtils;
-    private static Map<Long, GuildMusicManager> musicManagers = new HashMap<>();
+    private static final Map<Long, GuildMusicManager> musicManagers = new HashMap<>();
 
     public static void main(String[] args) {
         debugOnlyInitialization();
@@ -196,10 +201,14 @@ public class Main {
         // Register database
         registerDNDDatabase();
 
-        // Non-DND commands
+        // Generic Commands
         getApi().addEventListener(help.registerCommand(help));
-        getApi().addEventListener(help.registerCommand(new MathCommand()));
         getApi().addEventListener(help.registerCommand(new InfoCommand()));
+        getApi().addEventListener(help.registerCommand(new PleaseHelpCommand()));
+
+        // Math Commands
+        getApi().addEventListener(help.registerCommand(new MathCommand()));
+        getApi().addEventListener(help.registerCommand(new SetModeCommand()));
 
         // DND commands
         getApi().addEventListener(help.registerCommand(new RollCommand()));
@@ -314,5 +323,9 @@ public class Main {
 
     public static Map<Long, GuildMusicManager> getMusicManagers() {
         return musicManagers;
+    }
+
+    public static Trigonometry getTrig() {
+        return trig;
     }
 }

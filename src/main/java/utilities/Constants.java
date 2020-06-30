@@ -69,5 +69,6 @@ public class Constants {
     public static final String ADMIN = "admin";
     public static final String MUSIC = "music";
     public static final String DND = "dnd";
+    public static final String MATH = "math";
 
 }

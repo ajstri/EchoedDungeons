@@ -42,13 +42,13 @@ public class DiceRoll { // TODO javadoc
     public DiceRoll(String source) throws InvalidNotationException {
         Matcher matcher = ROLL20_REGEX.matcher(source);
         if (!matcher.matches()) throw new InvalidNotationException("No match!");
-        parseCoreStuff(matcher);
+        parseCore(matcher);
         parseDropKeep(matcher);
         parseModifier(matcher);
         parseNegative(matcher);
     }
 
-    private void parseCoreStuff(Matcher matcher) {
+    private void parseCore(Matcher matcher) {
         numDice = Integer.parseInt(matcher.group("numDice"));
         numSides = Integer.parseInt(matcher.group("numSides"));
     }

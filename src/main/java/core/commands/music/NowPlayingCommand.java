@@ -34,7 +34,7 @@ import java.util.List;
  * @author EchoedAJ
  * @since June 2020
  */
-public class NowPlayingCommand extends Command {
+public class    NowPlayingCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         Main.getLog().info("NOW PLAYING");
