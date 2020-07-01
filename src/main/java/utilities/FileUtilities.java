@@ -19,10 +19,7 @@ import core.Main;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * FileUtils class of the EchoedDungeons project
@@ -167,6 +164,11 @@ public class FileUtilities {
         }
 
         return null;
+    }
+
+    public static boolean checkIfFileExists(String directory) {
+        File temp = new File(directory);
+        return temp.exists();
     }
 
 }

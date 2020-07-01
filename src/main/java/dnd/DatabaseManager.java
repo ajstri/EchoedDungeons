@@ -18,10 +18,14 @@ package dnd;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
 import utilities.FileUtilities;
+import utilities.MessageUtilities;
 
+import java.io.File;
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseManager {
 
@@ -30,24 +34,54 @@ public class DatabaseManager {
      */
     private static final String DEFAULT_NAME = "No name provided. Sorry!";
     private static final String DEFAULT_WIKI = "No wiki link provided. Sorry!";
+    private static final String DEFAULT_SOURCE = "No source book provided. Sorry!";
+    private static final String DEFAULT_INFO = "No information provided. Sorry!";
 
     /**
      * File name constants
      */
     private final static String extensionName = "Database/";
     private final static String fileNameClasses = "Database/Classes/classes.json";
-    private final static String fileNameFeatures = "Database/Features/features.json";
     private final static String fileNameBackgrounds = "Database/Backgrounds/backgrounds.json";
     private final static String fileNameRaces = "Database/Races/races.json";
 
     private final static String arrayNameClasses = "class";
-    private final static String arrayNameFeatures = "feature";
     private final static String arrayNameBackgrounds = "background";
     private final static String arrayNameRaces = "race";
 
-    private boolean databaseIsUsable() {
-        return false;
+    // ----- SUPPORTED -----
+
+    public static List<String> getSupportedClasses() {
+        return getSupported(fileNameClasses, arrayNameClasses);
     }
+
+    public static List<String> getSupportedRaces() {
+        return getSupported(fileNameRaces, arrayNameRaces);
+    }
+
+    public static List<String> getSupportedBackgrounds() {
+        return getSupported(fileNameBackgrounds, arrayNameBackgrounds);
+    }
+
+    private static List<String> getSupported(String fileName, String arrayName) {
+        JSONObject object = FileUtilities.getJSONFileObject(fileName);
+        assert object != null;
+        JSONObject innerObject = object.getJSONObject("class");
+        List<String> supported = new ArrayList<>();
+
+        Iterator<String> elementNames = innerObject.keys();
+
+        while (elementNames.hasNext()) {
+            String element = elementNames.next();
+            if (FileUtilities.getValueByKey(fileName, element, arrayName).equals("supported")) {
+                supported.add(element);
+            }
+        }
+
+        return supported;
+    }
+
+    // ----- CLASSES -----
 
     public static EmbedBuilder getClassByName(String classToFind) {
         EmbedBuilder embed = new EmbedBuilder();
@@ -61,40 +95,24 @@ public class DatabaseManager {
         return embed;
     }
 
-    public static List<String> getSupportedClasses() {
-        JSONObject object = FileUtilities.getJSONFileObject(fileNameClasses);
-        assert object != null;
-        JSONObject innerObject = object.getJSONObject("class");
-        List<String> supported = new ArrayList<>();
+    private static void addClassValues(EmbedBuilder embed, String classToFind) {
+        String directory = extensionName + "Classes/" + classToFind.substring(0, 1).toUpperCase() + classToFind.substring(1).toLowerCase() + "/" + classToFind + ".json";
 
-        Iterator<String> elementNames = innerObject.keys();
+        String name = FileUtilities.getValueByKey(directory, "name", classToFind);
+        String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", classToFind);
+        String sourceBook = FileUtilities.getValueByKey(directory, "source book", classToFind);
+        String hitDice = FileUtilities.getValueByKey(directory, "hit dice", classToFind);
+        String hitPoints = FileUtilities.getValueByKey(directory, "hit points", classToFind);
 
-        while (elementNames.hasNext()) {
-            String element = elementNames.next();
-            if (FileUtilities.getValueByKey(fileNameClasses, element, arrayNameClasses).equals("supported")) {
-                supported.add(element);
-            }
-            System.out.println(element);
-        }
+        String armorProf = FileUtilities.getValueByKey(directory, "armor proficiencies", classToFind);
+        String weaponProf = FileUtilities.getValueByKey(directory, "weapon proficiencies", classToFind);
+        String toolProf = FileUtilities.getValueByKey(directory, "tool proficiencies", classToFind);
+        String savingThrows = FileUtilities.getValueByKey(directory, "saving throw proficiencies", classToFind);
+        String skillProf = FileUtilities.getValueByKey(directory, "skill proficiencies", classToFind);
 
-        return supported;
-    }
-
-    public static void addClassValues(EmbedBuilder embed, String classToFind) {
-        String name = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "name", classToFind);
-        String wikiLink = FileUtilities.getValueByKey(extensionName + "/Classes/" + classToFind + ".json", "wiki link", classToFind);
-        String hitDice = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "hit dice", classToFind);
-        String hitPoints = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "hit points", classToFind);
-
-        String armorProf = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "armor proficiencies", classToFind);
-        String weaponProf = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "weapon proficiencies", classToFind);
-        String toolProf = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "tool proficiencies", classToFind);
-        String savingThrows = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "saving throw proficiencies", classToFind);
-        String skillProf = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "skill proficiencies", classToFind);
-
-        String equipment = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "equipment", classToFind);
-        String subClasses = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "subclasses", classToFind);
-        //String featuresList = FileUtilities.getValueByKey(extensionName + "Classes/" + classToFind + ".json", "features", classToFind);
+        String equipment = FileUtilities.getValueByKey(directory, "equipment", classToFind);
+        String subClasses = FileUtilities.getValueByKey(directory, "subclasses", classToFind);
+        //String featuresList = FileUtilities.getValueByKey(directory, "features", classToFind);
 
         String abilityIncrease = "4th, 8th, 12th, 16th, and 19th levels. " +
                                  "Increase one ability score of your choice by 2, two ability scores of your choice by 1. " +
@@ -104,9 +122,10 @@ public class DatabaseManager {
         // Which is just name and wiki link, everything else can be skipped if null.
         if (name == null) name = DEFAULT_NAME;
         if (wikiLink == null) wikiLink = DEFAULT_WIKI;
+        if (sourceBook == null) sourceBook = DEFAULT_SOURCE;
 
         // Build embed, finally
-        embed.setTitle(name);
+        embed.setTitle(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + " (Source: " + sourceBook + ")");
         embed.addField("Wiki Link", wikiLink, false);
 
         // Hit dice
@@ -152,5 +171,111 @@ public class DatabaseManager {
         // TODO features
 
         embed.addField("Ability Score Increases", abilityIncrease, false);
+    }
+
+    // ----- RACES -----
+
+    public static EmbedBuilder getRaceByName(String raceToFind) {
+        EmbedBuilder embed = new EmbedBuilder();
+        String raceValue = FileUtilities.getValueByKey(fileNameRaces, raceToFind, arrayNameRaces);
+
+        if (raceValue.equals("supported")) {
+            addRaceValues(embed, raceToFind);
+        }
+        else embed.addField(raceToFind, raceValue, false);
+
+        return embed;
+    }
+
+    private static void addRaceValues(EmbedBuilder embed, String raceToFind) {
+
+    }
+
+    // ----- BACKGROUNDS -----
+
+    public static EmbedBuilder getBackgroundByName(String backgroundToFind) {
+        EmbedBuilder embed = new EmbedBuilder();
+        String backgroundValue = FileUtilities.getValueByKey(fileNameBackgrounds, backgroundToFind, arrayNameBackgrounds);
+
+        if (backgroundValue.equals("supported")) {
+            addBackgroundValues(embed, backgroundToFind);
+        }
+        else embed.addField(backgroundToFind, backgroundValue, false);
+
+        return embed;
+    }
+
+    private static void addBackgroundValues(EmbedBuilder embed, String backgroundToFind) {
+        String directory = extensionName + "Backgrounds/" + backgroundToFind.substring(0, 1).toUpperCase() + backgroundToFind.substring(1).toLowerCase() + "/" + backgroundToFind + ".json";
+
+        String name = FileUtilities.getValueByKey(directory, "name", backgroundToFind);
+        String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", backgroundToFind);
+
+        String age = FileUtilities.getValueByKey(directory, "age", backgroundToFind);
+        String size = FileUtilities.getValueByKey(directory, "size", backgroundToFind);
+        String alignment = FileUtilities.getValueByKey(directory, "alignment", backgroundToFind);
+        String speed = FileUtilities.getValueByKey(directory, "speed", backgroundToFind);
+
+        String skillProf = FileUtilities.getValueByKey(directory, "skill proficiencies", backgroundToFind);
+        String toolProf = FileUtilities.getValueByKey(directory, "tool proficiencies", backgroundToFind);
+        String languages = FileUtilities.getValueByKey(directory, "languages", backgroundToFind);
+
+        String abilityScoreImprovement = FileUtilities.getValueByKey(directory, "ability score improvement", backgroundToFind);
+        String subRaces = FileUtilities.getValueByKey(directory, "subraces", backgroundToFind);
+    }
+
+    // ----- FEATURES -----
+
+    public static EmbedBuilder getFeatureByName(String featureToFind, String classFrom) {
+        EmbedBuilder embed = new EmbedBuilder();
+
+        addFeatureValues(embed, featureToFind, classFrom);
+
+        return embed;
+    }
+
+    public static EmbedBuilder listClassFeatures(String classFrom) {
+        String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom + ".json";
+        String features;
+
+        EmbedBuilder embed = new EmbedBuilder();
+        MessageUtilities.addEmbedDefaults(embed);
+
+        if (FileUtilities.checkIfFileExists(directory)) {
+            features = FileUtilities.getValueByKey(directory, "features", classFrom.toLowerCase());
+
+            embed.setTitle(classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase());
+            embed.addField("Features", features, false);
+        }
+        else {
+            embed.addField("", "The provided class **" + classFrom + "** does not exist.", false);
+        }
+
+        return embed;
+    }
+
+    private static void addFeatureValues(EmbedBuilder embed, String featureToFind, String classFrom) {
+        String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom.toLowerCase() + "features.json";
+
+        String name = FileUtilities.getValueByKey(directory, "name", featureToFind.toLowerCase());
+        String info = FileUtilities.getValueByKey(directory, "info", featureToFind.toLowerCase());
+        String level = FileUtilities.getValueByKey(directory, "level", featureToFind.toLowerCase());
+
+        if (name == null) name = DEFAULT_NAME;
+        if (info == null) info = DEFAULT_INFO;
+        if (level == null) level = "Not Provided";
+
+        info = info.replace("\n", "");
+
+        embed.setTitle(name + " (Level: " + level + ")");
+
+        BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+        iterator.setText(info);
+        int start = iterator.first();
+        for (int end = iterator.next();
+             end != BreakIterator.DONE;
+             start = end, end = iterator.next()) {
+            embed.addField("", info.substring(start,end), false);
+        }
     }
 }

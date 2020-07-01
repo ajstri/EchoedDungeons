@@ -249,6 +249,7 @@ public class Main {
 
         // Admin commands
         getApi().addEventListener(help.registerCommand(new ShutdownCommand()));
+        getApi().addEventListener(help.registerCommand(new TestCommand()));
     }
 
     /**

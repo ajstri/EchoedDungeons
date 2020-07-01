@@ -17,15 +17,18 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
+import dnd.DatabaseManager;
 import dnd.other.features.Feature;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
+import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -54,8 +57,9 @@ public class FeatureCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        // If arg.length < 2 send classes list.
-        // else find class in list.
+        // If arg.length < 2 send command info.
+        // if arg.length < 3 send features list for a class.
+        // if arg.length < 4 send feature info for the given class and feature.x
         Main.getLog().info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
@@ -100,130 +104,27 @@ public class FeatureCommand extends Command {
      * @param args arguments used to build the message.
      */
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {
-        int page = 1;
-
-        // If arg.length < 2 send classes list.
-        // else find class in list.
-        if (args.length < 2) { // No page number, show first 10
-            EmbedBuilder embed = new EmbedBuilder().setTitle("Features Supported: Page 1").setColor(Color.RED);
-            MessageUtilities.addEmbedDefaults(embed);
-            featuresListByPage(embed, page, channel);
+        if (args.length < 2) {
+            // Command Info
+            channel.sendMessage("In order to use this command, please provide the class name and feature name:\n`" +
+                    Main.getConfig().getPrefix() + "feature [className] [featureName]`").queue();
+        }
+        else if (args.length < 3) {
+            // Features List By Class
+            String className = args[1].toLowerCase();
+            channel.sendMessage(DatabaseManager.listClassFeatures(className).build()).queue();
         }
         else {
-            EmbedBuilder embed = new EmbedBuilder();
-            MessageUtilities.addEmbedDefaults(embed);
+            // Feature Info By Class & Feature Name
+            String className = args[1].toLowerCase();
+            StringBuilder featureName = new StringBuilder();
 
-            try {
-                page = Integer.parseInt(args[1]);
-                embed.setTitle("Features Supported: Page " + page).setColor(Color.RED);
-                featuresListByPage(embed, page, channel);
+            for (int i = 2; i < args.length; i++) {
+                featureName.append(args[i]).append(" ");
             }
-            catch (NumberFormatException nfe) {
-                String command = args[1].toLowerCase();
-                // Check each command. If it is the command searched for, build embed.
-                for (Feature f : features.values()) {
-                    if (f.getName().toLowerCase().split(" ")[0].contains(command)) {
-                        // Define values.
-                        addFeatureValues(embed, f);
 
-                        // Send embed.
-                        channel.sendMessage(embed.build()).queue();
-                        return;
-
-                    }
-                }
-            }
-            // if it reaches this point, it does not exist
-            doesNotExist(channel, args);
+            channel.sendMessage(DatabaseManager.getFeatureByName(featureName.toString().substring(0, featureName.length() - 1), className).build()).queue();
         }
     }
 
-    /**
-     * Sends a message telling the user their search doesn't exist
-     * @param channel channel to send message
-     * @param args arguments to build message
-     */
-    private static void doesNotExist(PrivateChannel channel, String[] args) {
-        // If it reaches this point, the command searched for does not exist.
-        channel.sendMessage(new MessageBuilder()
-                .append("The provided feature '**")
-                .append(args[1])
-                .append("**' does not exist. Use `")
-                .append(Main.getConfig().getPrefix())
-                .append("feature` to list all features.")
-                .build()).queue();
-    }
-
-    /**
-     * Adds feature values to the embed.
-     * @param embed embed to add values to
-     * @param f feature to add
-     */
-    private void addFeatureValues(EmbedBuilder embed, Feature f) {
-        String info;
-        String name;
-
-        embed.addField("Required Class Level", f.getLevel() + "", false);
-
-        if (f.getName() == null) {
-            name = DEFAULT_NAME;
-        }
-        else {
-            name = f.getName();
-        }
-        if (f.getInfo() == null) {
-            info = DEFAULT_INFO;
-            embed.addField(info, "", false);
-        }
-        else {
-            for (String infoPiece : f.getInfo()) {
-                embed.addField("", infoPiece, false);
-            }
-        }
-
-        embed.setTitle("Feature: " + name);
-    }
-
-    /**
-     * Lists features by page.
-     * @param embed embed to build
-     * @param page page to list
-     * @param channel channel to send to
-     */
-    private void featuresListByPage (EmbedBuilder embed, int page, PrivateChannel channel) {
-        boolean sendEmbed = true;
-        String name;
-
-        Set<String> keys = features.keySet();
-        String[] keysAsString = new String[keys.size()];
-
-        int k = 0;
-        for (String i: keys) {
-            keysAsString[k++] = i;
-        }
-
-        for (int i = (page - 1) * 10; i < ((page - 1 ) * 10) + 10; i++) {
-            // For each command, add its values to embed.
-            // Add 9 depending on the page
-            try {
-                if (features.get(keysAsString[i]).getName() == null) {
-                    name = DEFAULT_NAME;
-                }
-                else {
-                    name = features.get(keysAsString[i]).getName();
-                }
-
-                embed.addField(name, "", false);
-            }
-            catch (IndexOutOfBoundsException iobe) {
-                if (i == (page - 1) * 10) {
-                    channel.sendMessage("No features on this page!").queue();
-                    sendEmbed = false;
-                }
-                break;
-            }
-        }
-        // Send embed.
-        if (sendEmbed) channel.sendMessage(embed.build()).queue();
-    }
 }

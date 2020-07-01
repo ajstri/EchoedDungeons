@@ -1,7 +1,17 @@
 {
-"class":{
-"artificer":"supported",
-"barbarian":"unsupported",
-"bard":"unsupported"
-}
+  "class": {
+    "artificer": "supported",
+    "barbarian": "supported",
+    "bard": "supported",
+    "cleric": "unsupported",
+    "druid": "unsupported",
+    "fighter": "unsupported",
+    "monk": "unsupported",
+    "paladin": "unsupported",
+    "ranger": "unsupported",
+    "rogue": "unsupported",
+    "sorcerer":"unsupported",
+    "warlock":"unsupported",
+    "wizard":"unsupported"
+  }
 }

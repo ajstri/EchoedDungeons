@@ -1,0 +1,21 @@
+{
+  "race":{
+    "dragonborn":"unsupported",
+    "dwarf":"unsupported",
+    "el":"unsupported",
+    "gnome":"unsupported",
+    "half elf":"unsupported",
+    "half orc":"unsupported",
+    "halfling":"unsupported",
+    "human":"unsupported",
+    "tiefling":"unsupported",
+    "lizardfolk":"unsupported",
+    "aarokocra":"unsupported",
+    "aasimar":"unsupported",
+    "changeling":"unsupported",
+    "genasai":"unsupported",
+    "goliath":"unsupported",
+    "kenku":"unsupported",
+    "tabaxi":"unsupported"
+  }
+}

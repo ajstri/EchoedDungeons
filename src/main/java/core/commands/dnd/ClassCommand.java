@@ -26,6 +26,7 @@ import utilities.Constants;
 import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;
@@ -81,7 +82,7 @@ public class ClassCommand extends Command {
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
     }
 
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {
@@ -97,8 +98,10 @@ public class ClassCommand extends Command {
 
             // For each command, add its values to embed.
             for (String classSupported : DatabaseManager.getSupportedClasses()) {
-                name = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "name", classSupported);
-                wikiLink = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "wiki link", classSupported);
+                String directory = "Database/Classes/" + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase() + "/" + classSupported + ".json";
+                name = FileUtilities.getValueByKey(directory, "name", classSupported);
+                name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+                wikiLink = FileUtilities.getValueByKey(directory, "wiki link", classSupported);
                 embed.addField(name, wikiLink, false);
             }
 
@@ -106,17 +109,16 @@ public class ClassCommand extends Command {
             channel.sendMessage(embed.build()).queue();
         }
         else {
-            EmbedBuilder embed = new EmbedBuilder();
-
-            MessageUtilities.addEmbedDefaults(embed);
 
             String command = args[1].toLowerCase();
             // Check each command. If it is the command searched for, build embed.
             for (String classSupported : DatabaseManager.getSupportedClasses()) {
-                String name = FileUtilities.getValueByKey("Database/Classes/" + classSupported + ".json", "name", classSupported);
+                String directory = "Database/Classes/" + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase() + "/" + classSupported + ".json";
+
+                String name = FileUtilities.getValueByKey(directory, "name", classSupported);
                 if (name.toLowerCase().contains(command)) {
                     // Define values.
-                    DatabaseManager.addClassValues(embed, name.toLowerCase());
+                    EmbedBuilder embed = DatabaseManager.getClassByName(command);
 
                     // Send embed.
                     channel.sendMessage(embed.build()).queue();
