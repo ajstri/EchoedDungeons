@@ -18,7 +18,6 @@ package core.commands.dnd;
 import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import utilities.Constants;
 import utilities.FileUtilities;

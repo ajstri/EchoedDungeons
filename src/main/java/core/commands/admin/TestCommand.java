@@ -2,7 +2,6 @@ package core.commands.admin;
 
 import core.commands.Command;
 import utilities.dnd.DatabaseManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 import java.util.Collections;

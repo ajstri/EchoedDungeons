@@ -21,10 +21,7 @@ import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
 import java.text.BreakIterator;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  *  DatabaseManager class of the EchoedDungeons project
@@ -63,22 +60,59 @@ public class DatabaseManager {
 
     // ----- SUPPORTED -----
 
+    /**
+     * Returns a list of supported classes.
+     * @return a list of supported classes
+     */
     public static List<String> getSupportedClasses() {
         return getSupported(fileNameClasses, arrayNameClasses);
     }
 
+    /**
+     * Returns a list of supported races.
+     * @return a list of supported races
+     */
     public static List<String> getSupportedRaces() {
         return getSupported(fileNameRaces, arrayNameRaces);
     }
 
+    /**
+     * Returns a list of supported backgrounds.
+     * @return a list of supported backgrounds
+     */
     public static List<String> getSupportedBackgrounds() {
         return getSupported(fileNameBackgrounds, arrayNameBackgrounds);
     }
 
+    /**
+     * Returns a list of supported features for a given class.
+     * @param className class to pull features from
+     * @return a list of supported features
+     */
+    public static List<String> getSupportedFeaturesByClass(String className) {
+        String directory = extensionName + "Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className + "features.json";
+
+        JSONObject object = FileUtilities.getJSONFileObject(directory);
+        assert object != null;
+        Set<String> supported = object.keySet();
+
+        return new ArrayList<>(supported);
+    }
+
+    /**
+     * Returns a list of supported languages.
+     * @return a list of supported languages
+     */
     public static List<String> getSupportedLanguages() {
         return getSupported(fileNameLanguages, arrayNameLanguages);
     }
 
+    /**
+     * Returns a list of supported items based on the given file and array name.
+     * @param fileName file name to check for supported items
+     * @param arrayName array name to check for supported items
+     * @return a list of supported items
+     */
     private static List<String> getSupported(String fileName, String arrayName) {
         JSONObject object = FileUtilities.getJSONFileObject(fileName);
         assert object != null;
@@ -99,6 +133,11 @@ public class DatabaseManager {
 
     // ----- CLASSES -----
 
+    /**
+     * Builds an embed with a class and it's information.
+     * @param classToFind class to build embed for
+     * @return embed of a class's information
+     */
     public static EmbedBuilder getClassByName(String classToFind) {
         EmbedBuilder embed = new EmbedBuilder();
         String classValue = FileUtilities.getValueByKey(fileNameClasses, classToFind, arrayNameClasses);
@@ -111,6 +150,11 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Adds a class's information to an embed.
+     * @param embed embed to add information to
+     * @param classToFind class to add information of
+     */
     private static void addClassValues(EmbedBuilder embed, String classToFind) {
         String directory = extensionName + "Classes/" + classToFind.substring(0, 1).toUpperCase() + classToFind.substring(1).toLowerCase() + "/" + classToFind + ".json";
 
@@ -176,6 +220,11 @@ public class DatabaseManager {
 
     // ----- RACES -----
 
+    /**
+     * Builds an embed with a race and it's information.
+     * @param raceToFind race to build embed for
+     * @return embed of a race's information
+     */
     public static EmbedBuilder getRaceByName(String raceToFind) {
         EmbedBuilder embed = new EmbedBuilder();
         String raceValue = FileUtilities.getValueByKey(fileNameRaces, raceToFind, arrayNameRaces);
@@ -188,12 +237,22 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Adds a race's information to a given embed
+     * @param embed embed to add information to
+     * @param raceToFind race to add
+     */
     private static void addRaceValues(EmbedBuilder embed, String raceToFind) {
-
+        // TODO addRaceValues
     }
 
     // ----- BACKGROUNDS -----
 
+    /**
+     * Builds an embed with a background and it's information.
+     * @param backgroundToFind background to build embed for
+     * @return embed of a backgrounds's information
+     */
     public static EmbedBuilder getBackgroundByName(String backgroundToFind) {
         EmbedBuilder embed = new EmbedBuilder();
         String backgroundValue = FileUtilities.getValueByKey(fileNameBackgrounds, backgroundToFind, arrayNameBackgrounds);
@@ -206,6 +265,11 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Adds a background's information to a given embed
+     * @param embed embed to add information to
+     * @param backgroundToFind background to add
+     */
     private static void addBackgroundValues(EmbedBuilder embed, String backgroundToFind) {
         String directory = extensionName + "Backgrounds/" + backgroundToFind.substring(0, 1).toUpperCase() + backgroundToFind.substring(1).toLowerCase() + "/" + backgroundToFind + ".json";
 
@@ -258,6 +322,12 @@ public class DatabaseManager {
 
     // ----- FEATURES -----
 
+    /**
+     * Builds an embed with a feature and it's information.
+     * @param featureToFind feature to build embed for
+     * @param classFrom class the feature is from
+     * @return embed of a features's information
+     */
     public static EmbedBuilder getFeatureByName(String featureToFind, String classFrom) {
         EmbedBuilder embed = new EmbedBuilder();
 
@@ -266,6 +336,11 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Lists all features from a class.
+     * @param classFrom class to list features for
+     * @return list of features
+     */
     public static EmbedBuilder listClassFeatures(String classFrom) {
         String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom + ".json";
         String features;
@@ -286,6 +361,12 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Adds a feature's information to a given embed
+     * @param embed embed to add information to
+     * @param featureToFind feature to add
+     * @param classFrom class the feature is from
+     */
     private static void addFeatureValues(EmbedBuilder embed, String featureToFind, String classFrom) {
         String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom.toLowerCase() + "features.json";
 
@@ -313,6 +394,11 @@ public class DatabaseManager {
 
     // ----- LANGUAGES -----
 
+    /**
+     * Builds an embed with a language and it's information.
+     * @param languageName language to build embed for
+     * @return embed of a language's information
+     */
     public static EmbedBuilder getLanguageByName(String languageName) {
         EmbedBuilder embed = new EmbedBuilder();
         String languageValue = FileUtilities.getValueByKey(fileNameLanguages, languageName, arrayNameLanguages);
@@ -325,6 +411,10 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Lists all supported languages.
+     * @return embed with all supported languages
+     */
     public static EmbedBuilder listAllLanguages() {
         EmbedBuilder embed = new EmbedBuilder();
         MessageUtilities.addEmbedDefaults(embed);
@@ -335,6 +425,11 @@ public class DatabaseManager {
         return embed;
     }
 
+    /**
+     * Adds a language's information to a given embed
+     * @param embed embed to add information to
+     * @param language language to add
+     */
     private static void addLanguageValues(EmbedBuilder embed, String language) {
         String directory = extensionName + "Languages/" + language.toLowerCase() + ".json";
 
@@ -353,6 +448,13 @@ public class DatabaseManager {
 
     // ----- Other -----
 
+    /**
+     * Add default information for embeds.
+     * @param name name of item
+     * @param wikiLink wikidot link of item
+     * @param sourceBook sourcebook of item
+     * @param embed embed to add information to
+     */
     private static void addDefaults(String name, String wikiLink, String sourceBook, EmbedBuilder embed) {
         // Null checks for the important bits to just define them a default value
         // Which is just name and wiki link, everything else can be skipped if null.

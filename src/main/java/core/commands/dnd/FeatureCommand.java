@@ -17,6 +17,9 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import utilities.FileUtilities;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -39,7 +42,7 @@ public class FeatureCommand extends Command {
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         // If arg.length < 2 send command info.
         // if arg.length < 3 send features list for a class.
-        // if arg.length < 4 send feature info for the given class and feature.x
+        // if arg.length < 4 send feature info for the given class and feature.
         Main.getLog().info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
@@ -103,8 +106,39 @@ public class FeatureCommand extends Command {
                 featureName.append(args[i]).append(" ");
             }
 
-            channel.sendMessage(DatabaseManager.getFeatureByName(featureName.toString().substring(0, featureName.length() - 1), className).build()).queue();
+            for (String featureSupported : DatabaseManager.getSupportedFeaturesByClass(className)) {
+                String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
+
+                String name = FileUtilities.getValueByKey(directory, "name", featureSupported);
+                if (name.toLowerCase().contains(featureName)) {
+                    // Define values.
+                    EmbedBuilder embed = DatabaseManager.getFeatureByName(featureName.toString(), className);
+                    MessageUtilities.addEmbedDefaults(embed);
+
+                    // Send embed.
+                    channel.sendMessage(embed.build()).queue();
+                    return;
+                }
+            }
+            // If it reaches this point, it doesn't exist
+            doesNotExist(channel, featureName.toString());
         }
+    }
+
+    /**
+     * Sends a message telling the user their search doesn't exist
+     * @param channel channel to send message
+     * @param args arguments to build message
+     */
+    private static void doesNotExist(PrivateChannel channel, String args) {
+        // If it reaches this point, the command searched for does not exist.
+        channel.sendMessage(new MessageBuilder()
+                .append("The provided feature '**")
+                .append(args)
+                .append("**' does not exist. Use `")
+                .append(Main.getConfig().getPrefix())
+                .append("feature (ClassName)` to list all features.")
+                .build()).queue();
     }
 
 }

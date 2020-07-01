@@ -1,0 +1,14 @@
+{
+  "facts":{
+    "1":"Finesse weapons can use Dexterity instead of Strength",
+    "2":"AC (while unarmored) is 10 + Dex UNLESS your class states otherwise",
+    "3":"All ranged weapons use Dexterity",
+    "4":"Shields add +1 to your AC",
+    "5":"It's generally a good idea to have Constitution as your second highest stat",
+    "6":"Cantrips do not use spell slots",
+    "7":"Not every situation has to be resolved through combat",
+    "8":"You can spend any amount of hit dice to regain HP during a short rest. They recharge every long rest",
+    "9":"Your proficiency bonus doesn't stack with each new level.",
+    "10":"Don't meta too much! Keep most of the puzzle solving and interactions in-character. Don't do stuff in-game that your characters wouldn't realistically know"
+  }
+}

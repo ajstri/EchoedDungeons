@@ -18,7 +18,6 @@ package core.commands.dnd;
 import core.Main;
 import core.commands.Command;
 import utilities.FileUtilities;
-import utilities.dnd.DNDConstants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -40,33 +39,6 @@ import java.util.List;
  * @since June 2020
  */
 public class LanguageCommand extends Command {
-
-    private static final String[] common = new String[] { DNDConstants.COMMON, "Humans", DNDConstants.COMMON_SCRIPT };
-    private static final String[] dwarvish = new String[] { DNDConstants.DWARVISH, "Dwarves", DNDConstants.ELVISH_SCRIPT };
-    private static final String[] elvish = new String[] { DNDConstants.ELVISH, "Elves", DNDConstants.COMMON_SCRIPT };
-    private static final String[] giant = new String[] { DNDConstants.GIANT, "Ogres, Giants", DNDConstants.DWARVISH_SCRIPT };
-    private static final String[] gnomish = new String[] { DNDConstants.GNOMISH, "Gnomes", DNDConstants.DWARVISH_SCRIPT };
-    private static final String[] goblin = new String[] { DNDConstants.GOBLIN, "Goblinoids", DNDConstants.DWARVISH_SCRIPT };
-    private static final String[] halfling = new String[] { DNDConstants.HALFLING, "Halflings", DNDConstants.COMMON_SCRIPT };
-    private static final String[] orc = new String[] { DNDConstants.ORC, "Orcs", DNDConstants.DWARVISH_SCRIPT };
-
-    private static final String[] abyssal = new String[] { DNDConstants.ABYSSAL, "Demons", DNDConstants.INFERNAL_SCRIPT };
-    private static final String[] celestial = new String[] { DNDConstants.CELESTIAL, "Celestials", DNDConstants.CELESTIAL_SCRIPT };
-    private static final String[] draconic = new String[] { DNDConstants.DRACONIC, "Dragons, Dragonborn", DNDConstants.DRACONIC_SCRIPT };
-    private static final String[] deep_speech = new String[] { DNDConstants.DEEP_SPEECH, "Aboleths, Cloakers", "N/A" };
-    private static final String[] infernal = new String[] { DNDConstants.INFERNAL, "Devils", DNDConstants.INFERNAL_SCRIPT };
-    private static final String[] primordial = new String[] { DNDConstants.PRIMORDIAL, "Elementals", DNDConstants.DWARVISH_SCRIPT };
-    private static final String[] sylvan = new String[] { DNDConstants.SYLVAN, "Fey", DNDConstants.ELVISH_SCRIPT };
-    private static final String[] undercommon = new String[] { DNDConstants.UNDERCOMMON, "Underworld Traders", DNDConstants.ELVISH_SCRIPT };
-
-    private static final String[][] languages = new String[][] {
-            common, dwarvish, elvish,
-            giant, gnomish, goblin,
-            halfling, orc, abyssal,
-            celestial, draconic, deep_speech,
-            infernal, primordial, sylvan,
-            undercommon
-    };
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
