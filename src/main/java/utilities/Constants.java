@@ -38,12 +38,14 @@ public class Constants {
     public static final String PREFIX_KEY = "prefix";
     public static final String GAME_STATUS_KEY = "game_status";
     public static final String SHARDS_KEY = "shards";
+    public static final String MATHMODE_KEY = "math mode";
 
     public static final String DEBUG_VALUE = "true";
     public static final String TOKEN_VALUE = "Place your bot's token here";
     public static final String PREFIX_VALUE = "/";
     public static final String GAME_STATUS_VALUE = "with my friends";
     public static final String SHARDS_VALUE = "0";
+    public static final String MATHMODE_VALUE = "degrees";
 
     public static final String VERSION = "2";
     public static final String BUILD_NUMBER = "0.2S";

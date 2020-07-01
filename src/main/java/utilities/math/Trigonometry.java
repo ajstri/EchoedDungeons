@@ -15,63 +15,19 @@
  */
 package utilities.math;
 
+import core.Main;
+
 /**
  * Trigonometry Class of the EchoedMath Project
  *
  * @author EcheodAJ
  * @since April 2020
  *
- * @version 2.0
+ * @version 3.0
  */
 public class Trigonometry {
 
-    // if not degrees, is radians
-    private boolean inDegrees;
-
-    private final double THRESHOLD = 1 * Math.pow(10, -8);
-
-    /**
-     * Constructor for the Trigonometry Class
-     * Use defined isDegrees value
-     *
-     * @param isDegrees if the instance is using degrees
-     */
-    public Trigonometry (boolean isDegrees) {
-        inDegrees = isDegrees;
-    }
-
-    /**
-     * Constructor for the Trigonometry Class
-     * Default to Radians (inDegrees = false)
-     */
-    public Trigonometry () {
-        inDegrees = false;
-    }
-
-    // ------ Set Radians / Degrees ------
-    //     2 methods for intuitive use
-
-    /**
-     * Toggles to use Degrees
-     */
-    public void setDegrees() {
-        inDegrees = true;
-    }
-
-    /**
-     * Toggles to use Radians
-     */
-    public void setRadians() {
-        inDegrees = false;
-    }
-
-    /**
-     * Returns if the instance is using Degrees
-     * @return true if using degrees, false if using radians
-     */
-    public boolean isDegrees() {
-        return inDegrees;
-    }
+    private static final double THRESHOLD = 1 * Math.pow(10, -8);
 
     /**
      * Sine Function
@@ -83,10 +39,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return sin(x)
      */
-    public double sin(double x) {
+    public static double sin(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.sin(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return rawResult;
@@ -103,10 +59,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return cos(x)
      */
-    public double cos(double x) {
+    public static double cos(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.cos(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -124,10 +80,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return tan(x)
      */
-    public double tan(double x) {
+    public static double tan(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.tan(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -141,7 +97,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return csc(x)
      */
-    public double csc(double x) {
+    public static double csc(double x) {
         return  1 / sin(x);
     }
 
@@ -151,7 +107,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return sec(x)
      */
-    public double sec(double x) {
+    public static double sec(double x) {
         return 1 / cos(x);
     }
 
@@ -161,7 +117,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return cot(x)
      */
-    public double cot(double x) {
+    public static double cot(double x) {
         return 1 / tan(x);
     }
 
@@ -175,10 +131,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return asin(x)
      */
-    public double asin(double x) {
+    public static double asin(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.asin(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -195,10 +151,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acos(x)
      */
-    public double acos(double x) {
+    public static double acos(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.acos(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -216,10 +172,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return atan(x)
      */
-    public double atan(double x) {
+    public static double atan(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.atan(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -236,7 +192,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acsc(x)
      */
-    public double acsc(double x) {
+    public static double acsc(double x) {
         return asin(1 / x);
     }
 
@@ -249,7 +205,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return asec(x)
      */
-    public double asec(double x) {
+    public static double asec(double x) {
         return acos(1 / x);
     }
 
@@ -262,7 +218,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acot(x)
      */
-    public double acot(double x) {
+    public static double acot(double x) {
         return atan(1 / x);
     }
 
@@ -274,10 +230,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return sinh(x)
      */
-    public double sinh(double x) {
+    public static double sinh(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.sinh(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -293,10 +249,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return cosh(x)
      */
-    public double cosh(double x) {
+    public static double cosh(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.cosh(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -312,10 +268,10 @@ public class Trigonometry {
      * @param x numerical argument
      * @return tanh(x)
      */
-    public double tanh(double x) {
+    public static double tanh(double x) {
         if (Double.isNaN(x)) return Double.NaN;
 
-        if (isDegrees()) x = Math.toRadians(x);
+        if (Main.getConfig().getDegrees()) x = Math.toRadians(x);
         double rawResult = Math.tanh(x);
 
         if (rawResult < THRESHOLD && rawResult > 0) return 0;
@@ -338,7 +294,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return csch(x)
      */
-    public double csch(double x) {
+    public static double csch(double x) {
         return 1 / sinh(x);
     }
 
@@ -355,7 +311,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return sech(x)
      */
-    public double sech(double x) {
+    public static double sech(double x) {
         return 1 / cosh(x);
     }
 
@@ -374,7 +330,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return coth(x)
      */
-    public double coth(double x) {
+    public static double coth(double x) {
         return 1 / tanh(x);
     }
 
@@ -392,7 +348,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return asinh(x)
      */
-    public double asinh(double x) {
+    public static double asinh(double x) {
         return Logarithmic.ln(x + Math.sqrt(Math.pow(x, 2) + 1));
     }
 
@@ -411,7 +367,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acosh(x)
      */
-    public double acosh(double x) {
+    public static double acosh(double x) {
         // Special case 1
         if (Double.isNaN(x) || x < 1) return Double.NaN;
 
@@ -439,7 +395,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return atanh(x)
      */
-    public double atanh(double x) {
+    public static double atanh(double x) {
         // Special case 1
         if (Double.isNaN(x) || Double.isInfinite(x) || Math.abs(x) > 1) return Double.NaN;
 
@@ -469,7 +425,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acsch(x)
      */
-    public double acsch(double x) {
+    public static double acsch(double x) {
         // Special case 1
         if (Double.isNaN(x)) return Double.NaN;
 
@@ -499,7 +455,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return asech(x)
      */
-    public double asech(double x) {
+    public static double asech(double x) {
         // Special case 1
         if (Double.isNaN(x) || x < 0 || x > 1) return Double.NaN;
 
@@ -524,7 +480,7 @@ public class Trigonometry {
      * @param x numerical argument
      * @return acoth(x)
      */
-    public double acoth(double x) {
+    public static double acoth(double x) {
         // Special case 1
         if (Double.isNaN(x) || Math.abs(x) < 1) return Double.NaN;
 

@@ -1,8 +1,8 @@
 {
-  "":{
-    "name":"",
-    "wiki link":"",
-    "source book":"",
+  "druid":{
+    "name":"Druid",
+    "wiki link":"http://dnd5e.wikidot.com/druid",
+    "source book":"Player's Handbook",
     "hit dice":"",
     "hit points":"",
     "armor proficiencies":"",

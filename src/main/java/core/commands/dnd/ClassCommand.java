@@ -19,7 +19,6 @@ import core.Main;
 import core.commands.Command;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
@@ -84,6 +83,11 @@ public class ClassCommand extends Command {
         return true;
     }
 
+    /**
+     * Sends a message to the user's direct message
+     * @param channel channel of the user's direct message
+     * @param args args to pull from
+     */
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {
         // If arg.length < 2 send classes list.
         // else find class in list.
@@ -99,15 +103,14 @@ public class ClassCommand extends Command {
             for (String classSupported : DatabaseManager.getSupportedClasses()) {
                 String directory = "Database/Classes/" + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase() + "/" + classSupported + ".json";
                 name = FileUtilities.getValueByKey(directory, "name", classSupported);
-                name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+                name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
                 wikiLink = FileUtilities.getValueByKey(directory, "wiki link", classSupported);
                 embed.addField(name, wikiLink, false);
             }
 
             // Send embed.
             channel.sendMessage(embed.build()).queue();
-        }
-        else {
+        } else {
 
             String command = args[1].toLowerCase();
             // Check each command. If it is the command searched for, build embed.
@@ -125,23 +128,7 @@ public class ClassCommand extends Command {
                 }
             }
             // If it reaches this point, it does not exist.
-            doesNotExist(channel, args);
+            MessageUtilities.doesNotExist(channel, args[1], "class");
         }
-    }
-
-    /**
-     * Sends a message telling the user their search doesn't e@xexist
-     * @param channel channel to send message
-     * @param args arguments to build message
-     */
-    private static void doesNotExist(PrivateChannel channel, String[] args) {
-        // If it reaches this point, the command searched for does not exist.
-        channel.sendMessage(new MessageBuilder()
-                .append("The provided class '**")
-                .append(args[1])
-                .append("**' does not exist. Use `")
-                .append(Main.getConfig().getPrefix())
-                .append("class` to list all classes.")
-                .build()).queue();
     }
 }

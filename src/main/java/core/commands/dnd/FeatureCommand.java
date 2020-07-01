@@ -18,7 +18,6 @@ package core.commands.dnd;
 import core.Main;
 import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import utilities.FileUtilities;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -121,24 +120,8 @@ public class FeatureCommand extends Command {
                 }
             }
             // If it reaches this point, it doesn't exist
-            doesNotExist(channel, featureName.toString());
+            MessageUtilities.doesNotExist(channel, featureName.toString(), "feature");
         }
-    }
-
-    /**
-     * Sends a message telling the user their search doesn't exist
-     * @param channel channel to send message
-     * @param args arguments to build message
-     */
-    private static void doesNotExist(PrivateChannel channel, String args) {
-        // If it reaches this point, the command searched for does not exist.
-        channel.sendMessage(new MessageBuilder()
-                .append("The provided feature '**")
-                .append(args)
-                .append("**' does not exist. Use `")
-                .append(Main.getConfig().getPrefix())
-                .append("feature (ClassName)` to list all features.")
-                .build()).queue();
     }
 
 }

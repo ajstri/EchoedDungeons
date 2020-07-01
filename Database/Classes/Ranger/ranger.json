@@ -1,8 +1,8 @@
 {
-  "":{
-    "name":"",
-    "wiki link":"",
-    "source book":"",
+  "ranger":{
+    "name":"Ranger",
+    "wiki link":"http://dnd5e.wikidot.com/ranger",
+    "source book":"Player's Handbook",
     "hit dice":"",
     "hit points":"",
     "armor proficiencies":"",

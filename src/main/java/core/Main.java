@@ -41,7 +41,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import utilities.*;
-import utilities.math.Trigonometry;
 import utilities.music.*;
 
 import javax.security.auth.login.LoginException;
@@ -68,7 +67,6 @@ public class Main {
 
     private static final Config config = new Config();
     private static final HelpCommand help = new HelpCommand();
-    private static final Trigonometry trig = new Trigonometry();
     private static final Logger log = new Logger();
 
     // LavaPlayer specific
@@ -250,6 +248,7 @@ public class Main {
 
         // Admin commands
         getApi().addEventListener(help.registerCommand(new ShutdownCommand()));
+        getApi().addEventListener(help.registerCommand(new UpdateConfigCommand()));
         getApi().addEventListener(help.registerCommand(new TestCommand()));
     }
 
@@ -365,13 +364,5 @@ public class Main {
      */
     public static Map<Long, GuildMusicManager> getMusicManagers() {
         return musicManagers;
-    }
-
-    /**
-     * Returns the Trigonometry Instance
-     * @return the Trigonometry Instance
-     */
-    public static Trigonometry getTrig() {
-        return trig;
     }
 }

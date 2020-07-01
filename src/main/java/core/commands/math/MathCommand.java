@@ -27,6 +27,7 @@ import utilities.MessageUtilities;
 import utilities.exceptions.UnhandledMathException;
 import utilities.math.Logarithmic;
 import utilities.math.MathConstants;
+import utilities.math.Trigonometry;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -116,7 +117,7 @@ public class MathCommand extends Command {
             EmbedBuilder embed = new EmbedBuilder();
             MessageUtilities.addEmbedDefaults(embed);
 
-            String mode = Main.getTrig().isDegrees() ? "Degrees" : "Radians";
+            String mode = Main.getConfig().getDegrees() ? "Degrees" : "Radians";
 
             embed.setTitle("Mode: " + mode);
             embed.addField(finalExpression + ("" + result).replace("E", " * 10^"), "",false);
@@ -128,7 +129,7 @@ public class MathCommand extends Command {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("math", "eval", "m");
+        return Arrays.asList("eval", "m");
     }
 
     @Override
@@ -296,86 +297,86 @@ public class MathCommand extends Command {
 
             // Basic Trig
             case "sin":
-                x = Main.getTrig().sin(x);
+                x = Trigonometry.sin(x);
                 break;
             case "cos":
-                x = Main.getTrig().cos(x);
+                x = Trigonometry.cos(x);
                 break;
             case "tan":
-                x = Main.getTrig().tan(x);
+                x = Trigonometry.tan(x);
                 break;
 
             case "csc":
-                x = Main.getTrig().csc(x);
+                x = Trigonometry.csc(x);
                 break;
             case "sec":
-                x = Main.getTrig().sec(x);
+                x = Trigonometry.sec(x);
                 break;
             case "cot":
-                x = Main.getTrig().cot(x);
+                x = Trigonometry.cot(x);
                 break;
 
             // Hyperbolic Trig
             case "sinh":
-                x = Main.getTrig().sinh(x);
+                x = Trigonometry.sinh(x);
                 break;
             case "cosh":
-                x = Main.getTrig().cosh(x);
+                x = Trigonometry.cosh(x);
                 break;
             case "tanh":
-                x = Main.getTrig().tanh(x);
+                x = Trigonometry.tanh(x);
                 break;
 
             case "csch":
-                x = Main.getTrig().csch(x);
+                x = Trigonometry.csch(x);
                 break;
             case "sech":
-                x = Main.getTrig().sech(x);
+                x = Trigonometry.sech(x);
                 break;
             case "coth":
-                x = Main.getTrig().coth(x);
+                x = Trigonometry.coth(x);
                 break;
 
             // Inverse Trig
             case "asin":
-                x = Main.getTrig().asin(x);
+                x = Trigonometry.asin(x);
                 break;
             case "acos":
-                x = Main.getTrig().acos(x);
+                x = Trigonometry.acos(x);
                 break;
             case "atan":
-                x = Main.getTrig().atan(x);
+                x = Trigonometry.atan(x);
                 break;
 
             case "acsc":
-                x = Main.getTrig().acsc(x);
+                x = Trigonometry.acsc(x);
                 break;
             case "asec":
-                x = Main.getTrig().asec(x);
+                x = Trigonometry.asec(x);
                 break;
             case "acot":
-                x = Main.getTrig().acot(x);
+                x = Trigonometry.acot(x);
                 break;
 
             // Inverse & Hyperbolic Trig
             case "asinh":
-                x = Main.getTrig().asinh(x);
+                x = Trigonometry.asinh(x);
                 break;
             case "acosh":
-                x = Main.getTrig().acosh(x);
+                x = Trigonometry.acosh(x);
                 break;
             case "atanh":
-                x = Main.getTrig().atanh(x);
+                x = Trigonometry.atanh(x);
                 break;
 
             case "acsch":
-                x = Main.getTrig().acsch(x);
+                x = Trigonometry.acsch(x);
                 break;
             case "asech":
-                x = Main.getTrig().asech(x);
+                x = Trigonometry.asech(x);
                 break;
             case "acoth":
-                x = Main.getTrig().acoth(x);
+                x = Trigonometry.acoth(x);
                 break;
 
             // Logarithmic

@@ -26,15 +26,14 @@ public class SetModeCommand extends Command {
             case "degree":
             case "deg":
             case "d":
-                Main.getTrig().setDegrees();
+                Main.getConfig().setDegrees(true);
                 mre.getChannel().sendMessage("Set math mode to degrees.").queue();
                 break;
             case "radians":
             case "radian":
             case "rad":
             case "r":
-                Main.getTrig().setRadians();
-                Main.getTrig().setDegrees();
+                Main.getConfig().setDegrees(false);
                 mre.getChannel().sendMessage("Set math mode to radians.").queue();
                 break;
         }

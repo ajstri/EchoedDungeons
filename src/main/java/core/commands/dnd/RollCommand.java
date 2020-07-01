@@ -206,27 +206,6 @@ public class RollCommand extends Command {
             System.out.println("Final Result: " + total);
         }
 
-        // Build & send message.
-        /*StringBuilder builder = new StringBuilder();
-
-        builder.append("```");
-        builder.append(mre.getAuthor().getAsTag());
-        builder.append(" is rolling ").append(rolled.toString()).replace(builder.length() - 2, builder.length(), "");
-        builder.append("\n");
-        if (!nat20Expression.toLowerCase().contains("no")) {
-            builder.append("They rolled a nat 20 on ").append(nat20Expression).append("!");
-            builder.append("\n");
-        }
-        if (!nat1Expression.toLowerCase().contains("no")) {
-            builder.append("They rolled a nat 1 on ").append(nat1Expression);
-            builder.append("\n");
-        }
-        builder.append("They rolled a total of ").append(total);
-        builder.append("```");
-
-        mre.getChannel().sendMessage(builder.toString()).queue();
-        mre.getMessage().delete().queue();*/
-
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("@" + mre.getAuthor().getAsTag() + "'s roll");
         embed.setThumbnail(mre.getAuthor().getAvatarUrl());

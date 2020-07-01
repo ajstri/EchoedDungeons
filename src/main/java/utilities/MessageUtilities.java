@@ -19,6 +19,7 @@ import core.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.text.SimpleDateFormat;
@@ -68,5 +69,25 @@ public class MessageUtilities {
         embed.addField("Special Thanks To", "Moisty McMoisterson\nBrad G.\nNoah", false);
 
         return embed;
+    }
+
+    /**
+     * Sends a message telling the user their search doesn't exist
+     * @param channel channel to send message
+     * @param args arguments to build message
+     */
+    public static void doesNotExist(PrivateChannel channel, String args, String doesntExist) {
+        // If it reaches this point, the command searched for does not exist.
+        channel.sendMessage(new MessageBuilder()
+                .append("The provided ")
+                .append(doesntExist)
+                .append(" '**")
+                .append(args)
+                .append("**' does not exist. Use `")
+                .append(Main.getConfig().getPrefix())
+                .append(doesntExist)
+                .append("` to list all ")
+                .append(doesntExist).append(".")
+                .build()).queue();
     }
 }

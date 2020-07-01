@@ -58,15 +58,15 @@ public class FileUtilities {
 
     /**
      * Adds a JSON Array to the Configuration File.
-     * @param object JSONObject to add to file
+     * @param array JSONArray to add to file
      */
     @SuppressWarnings("Duplicates")
-    public static int writeToFile(JSONArray object, String fileName) {
+    public static int writeToFile(JSONArray array, String fileName) {
         // Write to the file.
         try {
             FileWriter fileWriter = new FileWriter(fileName);
             fileWriter.write(
-                    object.toString()
+                    array.toString()
                             .replace("[", "[\n")
                             .replace("{", "{\n")
                             .replace(",", ",\n")
@@ -106,8 +106,8 @@ public class FileUtilities {
     }
 
     /**
-     * Retrieves the JSONObject to read the JSON File.
-     * @return JSONObject
+     * Retrieves the JSONArray to read the JSON File.
+     * @return JSONArray
      */
     public static JSONArray getJSONFileArray(String fileName) {
         JSONObject obj;
@@ -138,6 +138,10 @@ public class FileUtilities {
 
     }
 
+    /**
+     * Retrieves the JSONObject to read the JSON File.
+     * @return JSONObject
+     */
     public static JSONObject getJSONFileObject(String fileName) {
         JSONObject obj;
         StringBuilder sb = new StringBuilder();
@@ -166,6 +170,11 @@ public class FileUtilities {
         return null;
     }
 
+    /**
+     * Checks if a given file exists
+     * @param directory directory of file
+     * @return true if it exists, false if not
+     */
     public static boolean checkIfFileExists(String directory) {
         File temp = new File(directory);
         return temp.exists();

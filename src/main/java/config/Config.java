@@ -138,6 +138,21 @@ public class Config {
     }
 
     /**
+     * Sets a new prefix for the Bot to use.
+     * @param newPrefix new prefix for the Bot to use
+     */
+    public void setPrefix(String newPrefix) {
+        JSONArray jsonArray = FileUtilities.getJSONFileArray(fileName);
+        JSONObject object =  jsonArray.getJSONObject(0).getJSONObject(arrayName);
+        object.put(Constants.PREFIX_KEY, newPrefix);
+
+        JSONArray array = new JSONArray().put(object);
+
+        JSONObject bot = new JSONObject().put(arrayName, array);
+        writeToFile(bot);
+    }
+
+    /**
      * Retrieves token for the Bot.
      * @return token from Configuration.
      */
@@ -167,6 +182,56 @@ public class Config {
         }
 
         return debug.toLowerCase().contains("true");
+    }
+
+    /**
+     * Sets a new debug value for the Bot.
+     * @param debug true if debug is on, false if not
+     */
+    public void setDebug(boolean debug) {
+        JSONArray jsonArray = FileUtilities.getJSONFileArray(fileName);
+        JSONObject object =  jsonArray.getJSONObject(0).getJSONObject(arrayName);
+        object.put(Constants.DEBUG_KEY, debug);
+
+        JSONArray array = new JSONArray().put(object);
+
+        JSONObject bot = new JSONObject().put(arrayName, array);
+        writeToFile(bot);
+    }
+
+    /**
+     * Returns if the math mode is degrees or radians.
+     * @return true if degrees, false if radians
+     */
+    public boolean getDegrees() {
+        String debug = FileUtilities.getValueByKey(fileName, Constants.MATHMODE_KEY, arrayName);
+
+        if (debug.contains("" + Constants.STATUS_NO_CONFIG)) {
+            Main.getLog().info("Failed to grab degrees. Using default.");
+            return Constants.MATHMODE_VALUE.toLowerCase().contains("degrees");
+        }
+
+        return debug.toLowerCase().contains("degrees");
+    }
+
+    /**
+     * Sets a new math mode value for the Bot.
+     * @param degrees true if degrees, false if not
+     */
+    public void setDegrees(boolean degrees) {
+        JSONArray jsonArray = FileUtilities.getJSONFileArray(fileName);
+        JSONObject object =  jsonArray.getJSONObject(0).getJSONObject(arrayName);
+
+        String degreesString;
+        if (degrees) degreesString = "degrees";
+        else degreesString = "radians";
+
+        object.put(Constants.MATHMODE_KEY, degreesString);
+
+        JSONArray array = new JSONArray().put(object);
+
+        JSONObject bot = new JSONObject().put(arrayName, array);
+        writeToFile(bot);
     }
 
 }

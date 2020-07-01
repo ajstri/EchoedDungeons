@@ -19,7 +19,6 @@ import core.Main;
 import core.commands.Command;
 import utilities.FileUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
@@ -48,6 +47,36 @@ public class LanguageCommand extends Command {
         MessageUtilities.sendIfNotPrivate(mre);
         // Send help message
         sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Arrays.asList("language", "lang", "languages");
+    }
+
+    @Override
+    public String getModule() {
+        return Constants.DND;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Displays a list of supported languages";
+    }
+
+    @Override
+    public String getName() {
+        return "Language Command";
+    }
+
+    @Override
+    public List<String> getUsage() {
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "language [language name]");
+    }
+
+    @Override
+    public boolean getDefaultPermission() {
+        return true;
     }
 
     /**
@@ -81,53 +110,7 @@ public class LanguageCommand extends Command {
                 }
             }
             // If it reaches this point, it doesn't exist
-            doesNotExist(channel, args);
+            MessageUtilities.doesNotExist(channel, args[1], "language");
         }
-    }
-
-    /**
-     * Sends a message telling the user their search doesn't exist
-     * @param channel channel to send message
-     * @param args arguments to build message
-     */
-    private static void doesNotExist(PrivateChannel channel, String[] args) {
-        // If it reaches this point, the command searched for does not exist.
-        channel.sendMessage(new MessageBuilder()
-                .append("The provided language '**")
-                .append(args[1])
-                .append("**' does not exist. Use `")
-                .append(Main.getConfig().getPrefix())
-                .append("language` to list all languages.")
-                .build()).queue();
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return Arrays.asList("language", "lang", "languages");
-    }
-
-    @Override
-    public String getModule() {
-        return Constants.DND;
-    }
-
-    @Override
-    public String getDescription() {
-        return "Displays a list of supported languages";
-    }
-
-    @Override
-    public String getName() {
-        return "Language Command";
-    }
-
-    @Override
-    public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "language [language name]");
-    }
-
-    @Override
-    public boolean getDefaultPermission() {
-        return true;
     }
 }

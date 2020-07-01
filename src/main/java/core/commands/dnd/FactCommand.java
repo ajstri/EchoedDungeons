@@ -49,6 +49,7 @@ public class FactCommand extends Command {
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         Main.getLog().info("FACT (called by " + mre.getAuthor().getAsTag() + ")");
 
+        // Get length of fact file
         JSONObject object = FileUtilities.getJSONFileObject(fileName);
         assert object != null;
         JSONObject innerObject = object.getJSONObject(arrayName);
@@ -56,7 +57,7 @@ public class FactCommand extends Command {
 
         File f = new File(fileName);
         if(!f.exists() || f.isDirectory()) {
-            // Create file.
+            // File does not exist
             mre.getChannel().sendMessage("Fact list doesn't exist.").queue();
             return;
         }
