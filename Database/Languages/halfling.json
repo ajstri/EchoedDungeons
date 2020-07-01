@@ -1,0 +1,7 @@
+{
+  "halfling": {
+    "name": "Halfling",
+    "script": "Common Script",
+    "common speakers": "Halflings"
+  }
+}

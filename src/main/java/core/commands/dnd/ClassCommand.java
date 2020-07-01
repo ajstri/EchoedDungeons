@@ -17,7 +17,7 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dnd.DatabaseManager;
+import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -26,7 +26,6 @@ import utilities.Constants;
 import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collections;

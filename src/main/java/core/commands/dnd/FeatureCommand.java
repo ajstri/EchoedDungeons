@@ -17,20 +17,13 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dnd.DatabaseManager;
-import dnd.other.features.Feature;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
+import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
-import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
-import java.awt.*;
-import java.io.File;
 import java.util.*;
-import java.util.List;
 
 /**
  *  FeatureCommand class of the EchoedDungeons project
@@ -41,19 +34,6 @@ import java.util.List;
  * @since April 2020
  */
 public class FeatureCommand extends Command {
-
-    private static final String DEFAULT_NAME = "No name has been provided. Sorry!";
-    private static final String DEFAULT_INFO = "No information has been provided. Sorry!";
-
-    public final TreeMap<String, Feature> features;
-
-    public FeatureCommand() {
-        features = new TreeMap<>();
-    }
-
-    public void registerFeature(Feature feature) {
-        features.put(feature.getName(), feature);
-    }
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {

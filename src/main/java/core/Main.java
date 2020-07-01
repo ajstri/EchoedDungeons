@@ -63,10 +63,11 @@ public class Main {
     private static String id;
 
     // bot specific
-    private static final Config config = new Config();
     private static ChatterBotSession chatSession;
-    private static final HelpCommand help = new HelpCommand();
     private static long time = System.currentTimeMillis();
+
+    private static final Config config = new Config();
+    private static final HelpCommand help = new HelpCommand();
     private static final Trigonometry trig = new Trigonometry();
     private static final Logger log = new Logger();
 

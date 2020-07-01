@@ -3,15 +3,15 @@
     "artificer": "supported",
     "barbarian": "supported",
     "bard": "supported",
-    "cleric": "unsupported",
-    "druid": "unsupported",
-    "fighter": "unsupported",
-    "monk": "unsupported",
-    "paladin": "unsupported",
-    "ranger": "unsupported",
-    "rogue": "unsupported",
-    "sorcerer":"unsupported",
-    "warlock":"unsupported",
-    "wizard":"unsupported"
+    "cleric": "supported",
+    "druid": "supported",
+    "fighter": "supported",
+    "monk": "supported",
+    "paladin": "supported",
+    "ranger": "supported",
+    "rogue": "supported",
+    "sorcerer":"supported",
+    "warlock":"supported",
+    "wizard":"supported"
   }
 }

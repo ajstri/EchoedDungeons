@@ -1,0 +1,20 @@
+{
+  "language": {
+    "abyssal" : "supported",
+    "celestial" : "supported",
+    "common" : "supported",
+    "deep speech" : "supported",
+    "draconic" : "supported",
+    "dwarvish" : "supported",
+    "elvish" : "supported",
+    "giant" : "supported",
+    "gnomish" : "supported",
+    "goblin" : "supported",
+    "halfling" : "supported",
+    "infernal" : "supported",
+    "orc" : "supported",
+    "primordial" : "supported",
+    "sylvan" : "supported",
+    "undercommon" : "supported"
+  }
+}

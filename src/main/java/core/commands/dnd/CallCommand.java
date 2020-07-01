@@ -17,7 +17,7 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dnd.DNDConstants;
+import utilities.dnd.DNDConstants;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;

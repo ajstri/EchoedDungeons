@@ -13,20 +13,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package dnd;
+package utilities.dnd;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
 import utilities.FileUtilities;
 import utilities.MessageUtilities;
 
-import java.io.File;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ *  DatabaseManager class of the EchoedDungeons project
+ *
+ *  Includes methods to handle data provided in the Database directory.
+ *
+ * @author EchoedAJ
+ * @since June 2020
+ */
 public class DatabaseManager {
 
     /**
@@ -36,6 +43,9 @@ public class DatabaseManager {
     private static final String DEFAULT_WIKI = "No wiki link provided. Sorry!";
     private static final String DEFAULT_SOURCE = "No source book provided. Sorry!";
     private static final String DEFAULT_INFO = "No information provided. Sorry!";
+    private static final String DEFAULT_LEVEL = "None Provided";
+    private static final String DEFAULT_SCRIPT = "No script provided";
+    private static final String DEFAULT_COMMON = "No common speakers provided";
 
     /**
      * File name constants
@@ -44,10 +54,12 @@ public class DatabaseManager {
     private final static String fileNameClasses = "Database/Classes/classes.json";
     private final static String fileNameBackgrounds = "Database/Backgrounds/backgrounds.json";
     private final static String fileNameRaces = "Database/Races/races.json";
+    private final static String fileNameLanguages = "Database/Languages/languages.json";
 
     private final static String arrayNameClasses = "class";
     private final static String arrayNameBackgrounds = "background";
     private final static String arrayNameRaces = "race";
+    private final static String arrayNameLanguages = "language";
 
     // ----- SUPPORTED -----
 
@@ -63,10 +75,14 @@ public class DatabaseManager {
         return getSupported(fileNameBackgrounds, arrayNameBackgrounds);
     }
 
+    public static List<String> getSupportedLanguages() {
+        return getSupported(fileNameLanguages, arrayNameLanguages);
+    }
+
     private static List<String> getSupported(String fileName, String arrayName) {
         JSONObject object = FileUtilities.getJSONFileObject(fileName);
         assert object != null;
-        JSONObject innerObject = object.getJSONObject("class");
+        JSONObject innerObject = object.getJSONObject(arrayName);
         List<String> supported = new ArrayList<>();
 
         Iterator<String> elementNames = innerObject.keys();
@@ -112,21 +128,13 @@ public class DatabaseManager {
 
         String equipment = FileUtilities.getValueByKey(directory, "equipment", classToFind);
         String subClasses = FileUtilities.getValueByKey(directory, "subclasses", classToFind);
-        //String featuresList = FileUtilities.getValueByKey(directory, "features", classToFind);
+        String featuresList = FileUtilities.getValueByKey(directory, "features", classToFind);
 
         String abilityIncrease = "4th, 8th, 12th, 16th, and 19th levels. " +
                                  "Increase one ability score of your choice by 2, two ability scores of your choice by 1. " +
                                  "Cannot exceed 20.";
 
-        // Null checks for the important bits to just define them a default value
-        // Which is just name and wiki link, everything else can be skipped if null.
-        if (name == null) name = DEFAULT_NAME;
-        if (wikiLink == null) wikiLink = DEFAULT_WIKI;
-        if (sourceBook == null) sourceBook = DEFAULT_SOURCE;
-
-        // Build embed, finally
-        embed.setTitle(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + " (Source: " + sourceBook + ")");
-        embed.addField("Wiki Link", wikiLink, false);
+        addDefaults(name, wikiLink, sourceBook, embed);
 
         // Hit dice
         if (hitDice != null) {
@@ -159,16 +167,9 @@ public class DatabaseManager {
         if (subClasses != null) { // sub classes
             embed.addField("Sub Classes", subClasses, true);
         }
-        /*
         if (featuresList != null) { // features
-            StringBuilder listFull = new StringBuilder();
-            for (Feature listItem : featuresList) {
-                String temp = listItem.getName();
-                listFull.append(temp).append("\n");
-            }
-            embed.addField("Features", listFull.toString(), true);
-        }*/
-        // TODO features
+            embed.addField("Features", featuresList, false);
+        }
 
         embed.addField("Ability Score Increases", abilityIncrease, false);
     }
@@ -210,6 +211,7 @@ public class DatabaseManager {
 
         String name = FileUtilities.getValueByKey(directory, "name", backgroundToFind);
         String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", backgroundToFind);
+        String sourceBook = FileUtilities.getValueByKey(directory, "source book", backgroundToFind);
 
         String age = FileUtilities.getValueByKey(directory, "age", backgroundToFind);
         String size = FileUtilities.getValueByKey(directory, "size", backgroundToFind);
@@ -222,6 +224,36 @@ public class DatabaseManager {
 
         String abilityScoreImprovement = FileUtilities.getValueByKey(directory, "ability score improvement", backgroundToFind);
         String subRaces = FileUtilities.getValueByKey(directory, "subraces", backgroundToFind);
+
+        addDefaults(name, wikiLink, sourceBook, embed);
+
+        if (age != null) { // age
+            embed.addField( "Age", age, true);
+        }
+        if (size != null) { // size
+            embed.addField( "Size", size, true);
+        }
+        if (alignment != null) { // alignment
+            embed.addField( "Alignment", alignment, true);
+        }
+        if (speed != null) { // speed
+            embed.addField( "Speed", speed, true);
+        }
+        if (skillProf != null) { // skills
+            embed.addField( "Skill Proficiencies", skillProf, true);
+        }
+        if (toolProf != null) { // tools
+            embed.addField( "Tool Proficiencies", toolProf, true);
+        }
+        if (languages != null) { // languages
+            embed.addField( "Languages", languages, true);
+        }
+        if (abilityScoreImprovement != null) { // ability score
+            embed.addField( "Ability Score Improvement", abilityScoreImprovement, true);
+        }
+        if (subRaces != null) { // sub races
+            embed.addField( "Subraces", subRaces, true);
+        }
     }
 
     // ----- FEATURES -----
@@ -263,7 +295,7 @@ public class DatabaseManager {
 
         if (name == null) name = DEFAULT_NAME;
         if (info == null) info = DEFAULT_INFO;
-        if (level == null) level = "Not Provided";
+        if (level == null) level = DEFAULT_LEVEL;
 
         info = info.replace("\n", "");
 
@@ -277,5 +309,59 @@ public class DatabaseManager {
              start = end, end = iterator.next()) {
             embed.addField("", info.substring(start,end), false);
         }
+    }
+
+    // ----- LANGUAGES -----
+
+    public static EmbedBuilder getLanguageByName(String languageName) {
+        EmbedBuilder embed = new EmbedBuilder();
+        String languageValue = FileUtilities.getValueByKey(fileNameLanguages, languageName, arrayNameLanguages);
+
+        if (languageValue.equals("supported")) {
+            addLanguageValues(embed, languageName);
+        }
+        else embed.addField(languageName, languageValue, false);
+
+        return embed;
+    }
+
+    public static EmbedBuilder listAllLanguages() {
+        EmbedBuilder embed = new EmbedBuilder();
+        MessageUtilities.addEmbedDefaults(embed);
+        embed.setTitle("Languages Supported");
+        for (String language: getSupported(fileNameLanguages, arrayNameLanguages)) {
+            embed.addField("", language.substring(0, 1).toUpperCase() + language.substring(1).toLowerCase(), true);
+        }
+        return embed;
+    }
+
+    private static void addLanguageValues(EmbedBuilder embed, String language) {
+        String directory = extensionName + "Languages/" + language.toLowerCase() + ".json";
+
+        String name = FileUtilities.getValueByKey(directory, "name", language);
+        String commonlySpoken = FileUtilities.getValueByKey(directory, "common speakers", language);
+        String script = FileUtilities.getValueByKey(directory, "script", language);
+
+        if (name == null) name = DEFAULT_NAME;
+        if (commonlySpoken == null) commonlySpoken = DEFAULT_COMMON;
+        if (script == null) script = DEFAULT_SCRIPT;
+
+        embed.addField("Language", name, true);
+        embed.addField("Commonly Spoken By", commonlySpoken, true);
+        embed.addField("Script", script, true);
+    }
+
+    // ----- Other -----
+
+    private static void addDefaults(String name, String wikiLink, String sourceBook, EmbedBuilder embed) {
+        // Null checks for the important bits to just define them a default value
+        // Which is just name and wiki link, everything else can be skipped if null.
+        if (name == null) name = DEFAULT_NAME;
+        if (wikiLink == null) wikiLink = DEFAULT_WIKI;
+        if (sourceBook == null ) sourceBook = DEFAULT_SOURCE;
+
+        // Build embed, finally
+        embed.setTitle(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + " (Source: " + sourceBook + ")");
+        embed.addField("Wiki Link", wikiLink, false);
     }
 }

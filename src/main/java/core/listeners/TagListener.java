@@ -16,7 +16,6 @@
 package core.listeners;
 
 import core.Main;
-import core.commands.Command;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

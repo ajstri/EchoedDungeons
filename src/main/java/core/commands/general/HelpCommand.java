@@ -68,7 +68,9 @@ public class HelpCommand extends Command {
                 Constants.ADMIN,
                 Constants.DND,
                 Constants.GENERIC,
-                Constants.MUSIC
+                Constants.MUSIC,
+                Constants.MATH,
+                Constants.UTILITY
         );
     }
 

@@ -42,35 +42,24 @@ public class FactCommand extends Command {
     /**
      * File constants
      */
-    private static final String fileName = "facts.json";
+    private static final String fileName = "Database/facts.json";
     private static final String arrayName = "facts";
     private static int factLength;
-
-    public static final String[] facts = new String[]{
-            "Add your Dexterity modifier to your Initiative",
-            "Finesse weapons can use Dexterity instead of Strength",
-            "AC (while unarmored) is 10 + Dex UNLESS your class states otherwise",
-            "All ranged weapons use Dexterity",
-            "Shields add +1 to your AC",
-            "It's generally a good idea to have Constitution as your second highest stat",
-            "Cantrips do not use spell slots",
-            "Not every situation has to be resolved through combat",
-            "You can spend any amount of hit dice to regain HP during a short rest. They recharge every long rest",
-            "Your proficiency bonus doesn't stack with each new level.",
-            "Don't meta too much! Keep most of the puzzle solving and interactions in-character. Don't do stuff in-game that your characters wouldn't realistically know"
-    };
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         Main.getLog().info("FACT (called by " + mre.getAuthor().getAsTag() + ")");
 
-        factLength = facts.length;
+        JSONObject object = FileUtilities.getJSONFileObject(fileName);
+        assert object != null;
+        JSONObject innerObject = object.getJSONObject(arrayName);
+        factLength = innerObject.length();
 
         File f = new File(fileName);
         if(!f.exists() || f.isDirectory()) {
             // Create file.
-            mre.getChannel().sendMessage("Please hold on! I need to recreate my fact file.").queue();
-            createRandomFactFile();
+            mre.getChannel().sendMessage("Fact list doesn't exist.").queue();
+            return;
         }
 
         mre.getChannel().sendMessage(getRandomFact()).queue();
@@ -107,30 +96,6 @@ public class FactCommand extends Command {
     }
 
     /**
-     * Creates .json file for the Random Facts
-     */
-    private void createRandomFactFile() {
-        // Create Bot config options.
-        JSONObject object = new JSONObject();
-        JSONArray array = new JSONArray();
-
-        // Put default keys and values into the object.
-        for (int i = 1; i < facts.length; i++) {
-            object.put("" + i, facts[i]);
-        }
-
-        array.put(object);
-
-        JSONObject obj2 = new JSONObject();
-        obj2.put(arrayName, object);
-
-        // Write to the file.
-        if(writeToFile(obj2) == Constants.WRITE_TO_FILE_FAIL) {
-            Main.getLog().error("Unable to create Random Fact File.", new Exception());
-        }
-    }
-
-    /**
      * Gets a random fact from the Fact File
      * @return a random fact
      */
@@ -139,15 +104,5 @@ public class FactCommand extends Command {
         int result = r.nextInt(factLength - 1) + 1;
 
         return FileUtilities.getValueByKey(fileName, "" + result, arrayName);
-    }
-
-    /**
-     * Writes to .json file
-     * Accesses {@link FileUtilities#writeToFile(JSONObject obj, String fileName)}
-     * @param obj Object to write to file
-     * @return Success or fail calls
-     */
-    private int writeToFile(JSONObject obj) {
-        return FileUtilities.writeToFile(obj, fileName);
     }
 }

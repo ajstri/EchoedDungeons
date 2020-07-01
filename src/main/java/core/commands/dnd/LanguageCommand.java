@@ -17,13 +17,15 @@ package core.commands.dnd;
 
 import core.Main;
 import core.commands.Command;
-import dnd.DNDConstants;
+import utilities.FileUtilities;
+import utilities.dnd.DNDConstants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
 import utilities.MessageUtilities;
+import utilities.dnd.DatabaseManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,43 +41,32 @@ import java.util.List;
  */
 public class LanguageCommand extends Command {
 
-    private static String[][] languages;
+    private static final String[] common = new String[] { DNDConstants.COMMON, "Humans", DNDConstants.COMMON_SCRIPT };
+    private static final String[] dwarvish = new String[] { DNDConstants.DWARVISH, "Dwarves", DNDConstants.ELVISH_SCRIPT };
+    private static final String[] elvish = new String[] { DNDConstants.ELVISH, "Elves", DNDConstants.COMMON_SCRIPT };
+    private static final String[] giant = new String[] { DNDConstants.GIANT, "Ogres, Giants", DNDConstants.DWARVISH_SCRIPT };
+    private static final String[] gnomish = new String[] { DNDConstants.GNOMISH, "Gnomes", DNDConstants.DWARVISH_SCRIPT };
+    private static final String[] goblin = new String[] { DNDConstants.GOBLIN, "Goblinoids", DNDConstants.DWARVISH_SCRIPT };
+    private static final String[] halfling = new String[] { DNDConstants.HALFLING, "Halflings", DNDConstants.COMMON_SCRIPT };
+    private static final String[] orc = new String[] { DNDConstants.ORC, "Orcs", DNDConstants.DWARVISH_SCRIPT };
 
-    public LanguageCommand () {
-        registerLanguages();
-    }
+    private static final String[] abyssal = new String[] { DNDConstants.ABYSSAL, "Demons", DNDConstants.INFERNAL_SCRIPT };
+    private static final String[] celestial = new String[] { DNDConstants.CELESTIAL, "Celestials", DNDConstants.CELESTIAL_SCRIPT };
+    private static final String[] draconic = new String[] { DNDConstants.DRACONIC, "Dragons, Dragonborn", DNDConstants.DRACONIC_SCRIPT };
+    private static final String[] deep_speech = new String[] { DNDConstants.DEEP_SPEECH, "Aboleths, Cloakers", "N/A" };
+    private static final String[] infernal = new String[] { DNDConstants.INFERNAL, "Devils", DNDConstants.INFERNAL_SCRIPT };
+    private static final String[] primordial = new String[] { DNDConstants.PRIMORDIAL, "Elementals", DNDConstants.DWARVISH_SCRIPT };
+    private static final String[] sylvan = new String[] { DNDConstants.SYLVAN, "Fey", DNDConstants.ELVISH_SCRIPT };
+    private static final String[] undercommon = new String[] { DNDConstants.UNDERCOMMON, "Underworld Traders", DNDConstants.ELVISH_SCRIPT };
 
-    /**
-     * Adds languages to an array for easy access.
-     */
-    private static void registerLanguages() {
-        String[] common = new String[] { DNDConstants.COMMON, "Humans", DNDConstants.COMMON_SCRIPT };
-        String[] dwarvish = new String[] { DNDConstants.DWARVISH, "Dwarves", DNDConstants.ELVISH_SCRIPT };
-        String[] elvish = new String[] { DNDConstants.ELVISH, "Elves", DNDConstants.COMMON_SCRIPT };
-        String[] giant = new String[] { DNDConstants.GIANT, "Ogres, Giants", DNDConstants.DWARVISH_SCRIPT };
-        String[] gnomish = new String[] { DNDConstants.GNOMISH, "Gnomes", DNDConstants.DWARVISH_SCRIPT };
-        String[] goblin = new String[] { DNDConstants.GOBLIN, "Goblinoids", DNDConstants.DWARVISH_SCRIPT };
-        String[] halfling = new String[] { DNDConstants.HALFLING, "Halflings", DNDConstants.COMMON_SCRIPT };
-        String[] orc = new String[] { DNDConstants.ORC, "Orcs", DNDConstants.DWARVISH_SCRIPT };
-
-        String[] abyssal = new String[] { DNDConstants.ABYSSAL, "Demons", DNDConstants.INFERNAL_SCRIPT };
-        String[] celestial = new String[] { DNDConstants.CELESTIAL, "Celestials", DNDConstants.CELESTIAL_SCRIPT };
-        String[] draconic = new String[] { DNDConstants.DRACONIC, "Dragons, Dragonborn", DNDConstants.DRACONIC_SCRIPT };
-        String[] deep_speech = new String[] { DNDConstants.DEEP_SPEECH, "Aboleths, Cloakers", "N/A" };
-        String[] infernal = new String[] { DNDConstants.INFERNAL, "Devils", DNDConstants.INFERNAL_SCRIPT };
-        String[] primordial = new String[] { DNDConstants.PRIMORDIAL, "Elementals", DNDConstants.DWARVISH_SCRIPT };
-        String[] sylvan = new String[] { DNDConstants.SYLVAN, "Fey", DNDConstants.ELVISH_SCRIPT };
-        String[] undercommon = new String[] { DNDConstants.UNDERCOMMON, "Underworld Traders", DNDConstants.ELVISH_SCRIPT };
-
-        languages = new String[][] {
-                common, dwarvish, elvish,
-                giant, gnomish, goblin,
-                halfling, orc, abyssal,
-                celestial, draconic, deep_speech,
-                infernal, primordial, sylvan,
-                undercommon
-        };
-    }
+    private static final String[][] languages = new String[][] {
+            common, dwarvish, elvish,
+            giant, gnomish, goblin,
+            halfling, orc, abyssal,
+            celestial, draconic, deep_speech,
+            infernal, primordial, sylvan,
+            undercommon
+    };
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
@@ -96,33 +87,28 @@ public class LanguageCommand extends Command {
         if (args.length < 2) {
             // ie. just language, no args
             // list languages
-            EmbedBuilder embed = new EmbedBuilder();
-
-            MessageUtilities.addEmbedDefaults(embed);
-
-            for (String[] language : languages) {
-                embed.addField(language[0], language[2], true);
-            }
+            EmbedBuilder embed = DatabaseManager.listAllLanguages();
             channel.sendMessage(embed.build()).queue();
         }
         else {
             // Asking for specific language?
-            EmbedBuilder embed = new EmbedBuilder();
+            String lang = args[1].toLowerCase();
 
-            MessageUtilities.addEmbedDefaults(embed);
-            MessageUtilities.setTimestamp(embed);
+            for (String languageSupported : DatabaseManager.getSupportedLanguages()) {
+                String directory = "Database/Languages/" + languageSupported.toLowerCase().replace(" ", "") + ".json";
 
-            String lang = args[1];
-            for (String[] language : languages) {
-                if (language[0].toLowerCase().contains(lang)) {
-                    embed.addField("Language", language[0], true);
-                    embed.addField("Commonly Spoken By", language[1], true);
-                    embed.addField("Script", language[2], true);
+                String name = FileUtilities.getValueByKey(directory, "name", languageSupported);
+                if (name.toLowerCase().contains(lang)) {
+                    // Define values.
+                    EmbedBuilder embed = DatabaseManager.getLanguageByName(lang);
+                    MessageUtilities.addEmbedDefaults(embed);
+
+                    // Send embed.
                     channel.sendMessage(embed.build()).queue();
                     return;
                 }
             }
-            // if it reaches this point, it does not exist
+            // If it reaches this point, it doesn't exist
             doesNotExist(channel, args);
         }
     }

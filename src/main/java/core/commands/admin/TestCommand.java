@@ -1,7 +1,7 @@
 package core.commands.admin;
 
 import core.commands.Command;
-import dnd.DatabaseManager;
+import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
@@ -11,9 +11,7 @@ import java.util.List;
 public class TestCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        EmbedBuilder embed = DatabaseManager.getFeatureByName("Infuse Item", "Artificer");
-
-        mre.getChannel().sendMessage(embed.build()).queue();
+        mre.getChannel().sendMessage(DatabaseManager.listAllLanguages().build()).queue();
     }
 
     @Override

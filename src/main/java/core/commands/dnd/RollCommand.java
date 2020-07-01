@@ -20,7 +20,7 @@ import core.commands.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
-import utilities.DiceRoll;
+import utilities.dnd.DiceRoll;
 import utilities.MessageUtilities;
 import utilities.exceptions.InvalidNotationException;
 
