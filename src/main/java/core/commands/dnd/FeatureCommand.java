@@ -102,8 +102,13 @@ public class FeatureCommand extends Command {
             StringBuilder featureName = new StringBuilder();
 
             for (int i = 2; i < args.length; i++) {
-                featureName.append(args[i]).append(" ");
+                if (i == args.length - 1) {
+                    featureName.append(args[i]);
+                }
+                else featureName.append(args[i]).append(" ");
             }
+
+
 
             for (String featureSupported : DatabaseManager.getSupportedFeaturesByClass(className)) {
                 String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
