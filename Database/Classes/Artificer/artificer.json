@@ -1,17 +1,18 @@
 {
-  "artificer":{
-    "name":"Artificer",
-    "wiki link":"http://dnd5e.wikidot.com/artificer",
-    "source book":"Player's Handbook",
-    "hit dice":"1d8 per Artificer Level",
-    "hit points":"First Level: 8 + Constitution Modifier\nAfter First: 1d8 (or 5) + your Constitution Modifier per Artificer Level",
-    "armor proficiencies":"Light Armor\nMedium Armor\nHeavy Armor",
-    "weapon proficiencies":"Simple Weapons\nHand Crossbows\n Heavy Crossbows",
-    "tool proficiencies":"Thieves Tools\nTinkers Tools\nArtisans Tools",
-    "saving throw proficiencies":"Constitution\nIntelligence",
-    "skill proficiencies":"Choose two from:\nArcana\nHistory\nInvestigation\nMedicine\nNature\nPerception\nSleight of Hand",
-    "equipment":"any two simple weapons\na light crossbow and 20 bolts\n(a) studded leather armor or (b) scale mail\nthieves tools\ndungeoneers pack",
-    "subclasses":"Alchemist\nArmorer(UA)\nArtillerist\nBattle Smith",
-    "features":"Magical Tinkering\nSpellcasting\nInfuse Item\nArtificer Specialist\nThe Right Tool for the Job\nTool Expertise\nMagic Item Adept\nSpell-Storing Item\nMagic Item Savant\nMagic Item Master\nSoul of Artifice"
+  "artificer": {
+    "name": "Artificer",
+    "wiki link": "http://dnd5e.wikidot.com/artificer",
+    "source book": "Player's Handbook",
+    "hit dice": "1d8 per Artificer Level",
+    "hit points": "First Level: 8 + Constitution Modifier\nAfter First: 1d8 (or 5) + your Constitution Modifier per Artificer Level",
+    "armor proficiencies": "Light Armor\nMedium Armor\nHeavy Armor",
+    "weapon proficiencies": "Simple Weapons\nHand Crossbows\n Heavy Crossbows",
+    "tool proficiencies": "Thieves Tools\nTinkers Tools\nArtisans Tools",
+    "saving throw proficiencies": "Constitution\nIntelligence",
+    "skill proficiencies": "Choose two from:\nArcana\nHistory\nInvestigation\nMedicine\nNature\nPerception\nSleight of Hand",
+    "equipment": "any two simple weapons\na light crossbow and 20 bolts\n(a) studded leather armor or (b) scale mail\nthieves tools\ndungeoneers pack",
+    "subclasses": "Alchemist\nArmorer(UA)\nArtillerist\nBattle Smith",
+    "subclass level": "3rd",
+    "features": "Magical Tinkering\nSpellcasting\nInfuse Item\nArtificer Specialist\nThe Right Tool for the Job\nTool Expertise\nMagic Item Adept\nSpell-Storing Item\nMagic Item Savant\nMagic Item Master\nSoul of Artifice"
   }
 }

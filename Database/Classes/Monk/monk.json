@@ -1,17 +1,18 @@
 {
   "monk":{
-    "name":"Monk",
-    "wiki link":"http://dnd5e.wikidot.com/monk",
-    "source book":"",
-    "hit dice":"",
-    "hit points":"",
-    "armor proficiencies":"",
-    "weapon proficiencies":"",
-    "tool proficiencies":"",
-    "saving throw proficiencies":"",
-    "skill proficiencies":"",
-    "equipment":"",
-    "subclasses":"",
-    "features":""
+    "name": "Monk",
+    "wiki link": "http://dnd5e.wikidot.com/monk",
+    "source book": "Player's Handbook",
+    "hit dice": "1d8 per monk level",
+    "hit points": "First Level: 8 + Constitution Modifier\nAfter First: 1d8 (or 5) + your Constitution modifier per Monk level",
+    "armor proficiencies": "None",
+    "weapon proficiencies": "Simple Weapons\nShortswords",
+    "tool proficiencies": "Choose one type of artisan's tools or one musical instrument",
+    "saving throw proficiencies": "Strength, Dexterity",
+    "skill proficiencies": "Choose two from:\nAcrobatics\nAthletics\nHistory\nInsight\nReligion\nStealth",
+    "equipment": "(a) a shortsword or (b) any simple weapon\n(a) a dungeoneer's pack or (b) an explorer's pack\n10 darts",
+    "subclasses": "Way of Mercy (UA)\nWay of the Astral Self (UA)\nWay of the Drunken Master\nWay of the Four Elements\nWay of the Kensei\nWay of the Long Death\nWay of the Open Hand\nWay of Shadow\nWay of the Soul Knife (UA)\nWay of the Sun Soul\nWay of Tranquility (UA)",
+    "subclass level": "3rd",
+    "features": "Unarmored Defense\nMartial Arts\nKi\nUnarmored Movement\nMonastic Tradition\nDeflect Missiles\nSlow Fall\nExtra Attack\nStunning Strike\nKi-Empowered Strikes\nEvasion\nStillness of Mind\nPurity of Body\nTongue of the Sun and Moon\nDiamond Soul\nTimeless Body\nEmpty Body\nPerfect Self"
   }
 }

@@ -1,17 +1,18 @@
 {
   "druid": {
-    "name":"Druid",
-    "wiki link":"http://dnd5e.wikidot.com/druid",
-    "source book":"Player's Handbook",
-    "hit dice":"1d8 per Druid level",
-    "hit points":"First Level: 8 + Constitution modifier\nAfter First: 1d8 (or 5) + your Constitution modifier per Druid level",
-    "armor proficiencies":"Light armor\nMedium armor\nShields",
-    "weapon proficiencies":"Clubs\nDaggers\nDarts\nJavelins\nMaces\nQuarterstaffs\nScimitars\nSickles\nSlings\nSpears",
-    "tool proficiencies":"Herbalism kit",
-    "saving throw proficiencies":"Intelligence\nWisdom",
-    "skill proficiencies":"Choose two from:\nArcana\nAnimal Handling\nInsight\nMedicine\nNature\nPerception\nReligion\nSurvival",
-    "equipment":"(a) a wooden shield or (b) any simple weapon\n(a) a scimitar or (b) any simple melee weapon\nLeather armor, an explorer's pack, and a druidic focus",
-    "subclasses":"Circle of Dreams\nCircle of the Land\nCircle of the Moon\nCircle of the Shepherd\nCircle of Spores\nCircle of Stars (UA)\nCircle of Twilight (UA)\nCircle of Wildfire (UA)",
-    "features":"Druidic\nSpellcasting\nWild Shape\nDruid Circle\nTimeless Body\nBeast Shapes\nArchdruid"
+    "name": "Druid",
+    "wiki link": "http://dnd5e.wikidot.com/druid",
+    "source book": "Player's Handbook",
+    "hit dice": "1d8 per Druid level",
+    "hit points": "First Level: 8 + Constitution modifier\nAfter First: 1d8 (or 5) + your Constitution modifier per Druid level",
+    "armor proficiencies": "Light Armor\nMedium Armor\nShields",
+    "weapon proficiencies": "Clubs\nDaggers\nDarts\nJavelins\nMaces\nQuarterstaffs\nScimitars\nSickles\nSlings\nSpears",
+    "tool proficiencies": "Herbalism Kit",
+    "saving throw proficiencies": "Intelligence\nWisdom",
+    "skill proficiencies": "Choose two from:\nArcana\nAnimal Handling\nInsight\nMedicine\nNature\nPerception\nReligion\nSurvival",
+    "equipment": "(a) a wooden shield or (b) any simple weapon\n(a) a scimitar or (b) any simple melee weapon\nLeather armor, an explorer's pack, and a druidic focus",
+    "subclasses": "Circle of Dreams\nCircle of the Land\nCircle of the Moon\nCircle of the Shepherd\nCircle of Spores\nCircle of Stars (UA)\nCircle of Twilight (UA)\nCircle of Wildfire (UA)",
+    "subclass level": "2nd",
+    "features": "Druidic\nSpellcasting\nWild Shape\nDruid Circle\nTimeless Body\nBeast Shapes\nArchdruid"
   }
 }

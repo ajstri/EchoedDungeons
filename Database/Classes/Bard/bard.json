@@ -1,17 +1,18 @@
 {
   "bard":{
-    "name":"Bard",
-    "wiki link":"",
-    "source book":"Player's Handbook",
-    "hit dice":"1d8 per Bard level",
-    "hit points":"First Level: 8 + Constitution Modifier\nAfter First:1d8 (or 5) + your Constitution Modifier per Bard level",
-    "armor proficiencies":"Light armor",
-    "weapon proficiencies":"Simple weapons\nHand crossbows\nLongswords\nShortswords\nRapiers",
-    "tool proficiencies":"Three musical instruments of your choice",
-    "saving throw proficiencies":"Dexterity\nCharisma",
-    "skill proficiencies":"Choose any three",
-    "equipment":"(a) a rapier, (b) a longsword, or (c) any simple weapon\n(a) a diplomat's pack or (b) an entertainer's pack\n(a) a lute or (b) any other musical instrument\nLeather armor and a dagger",
-    "subclasses":"Creation (UA)\nEloquence (UA)\nGlamour\nLore\nSatire (UA)\nSwords\nValor\nWhispers",
-    "features":"Spellcasting\nBardic Inspiration\nJack of All Trades\nSong of Rest\nBard College\nExpertise\nFont of Inspiration\nCountercharm\nMagical Secrets\nSuperior Inspiration"
+    "name": "Bard",
+    "wiki link": "http://dnd5e.wikidot.com/bard",
+    "source book": "Player's Handbook",
+    "hit dice": "1d8 per Bard level",
+    "hit points": "First Level: 8 + Constitution Modifier\nAfter First:1d8 (or 5) + your Constitution Modifier per Bard level",
+    "armor proficiencies": "Light armor",
+    "weapon proficiencies": "Simple Weapons\nHand Crossbows\nLongswords\nShortswords\nRapiers",
+    "tool proficiencies": "Three musical instruments of your choice",
+    "saving throw proficiencies": "Dexterity\nCharisma",
+    "skill proficiencies": "Choose any three",
+    "equipment": "(a) a rapier, (b) a longsword, or (c) any simple weapon\n(a) a diplomat's pack or (b) an entertainer's pack\n(a) a lute or (b) any other musical instrument\nLeather armor and a dagger",
+    "subclasses": "Creation (UA)\nEloquence (UA)\nGlamour\nLore\nSatire (UA)\nSwords\nValor\nWhispers",
+    "subclass level": "3rd",
+    "features": "Spellcasting\nBardic Inspiration\nJack of All Trades\nSong of Rest\nBard College\nExpertise\nFont of Inspiration\nCountercharm\nMagical Secrets\nSuperior Inspiration"
   }
 }

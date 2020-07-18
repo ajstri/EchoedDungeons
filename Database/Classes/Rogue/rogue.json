@@ -1,17 +1,18 @@
 {
   "rogue":{
-    "name":"Rogue",
-    "wiki link":"http://dnd5e.wikidot.com/rogue",
-    "source book":"Player's Handbook",
-    "hit dice":"",
-    "hit points":"",
-    "armor proficiencies":"",
-    "weapon proficiencies":"",
-    "tool proficiencies":"",
-    "saving throw proficiencies":"",
-    "skill proficiencies":"",
-    "equipment":"",
-    "subclasses":"",
-    "features":""
+    "name": "Rogue",
+    "wiki link": "http://dnd5e.wikidot.com/rogue",
+    "source book": "Player's Handbook",
+    "hit dice": "",
+    "hit points": "",
+    "armor proficiencies": "",
+    "weapon proficiencies": "",
+    "tool proficiencies": "",
+    "saving throw proficiencies": "",
+    "skill proficiencies": "",
+    "equipment": "",
+    "subclasses": "",
+    "subclass level": "3rd",
+    "features": ""
   }
 }

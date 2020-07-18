@@ -47,13 +47,13 @@ public class DatabaseManager {
     /**
      * File name constants
      */
-    private final static String extensionName = "Database/";
     private final static String fileNameClasses = "Database/Classes/classes.json";
     private final static String fileNameBackgrounds = "Database/Backgrounds/backgrounds.json";
     private final static String fileNameRaces = "Database/Races/races.json";
     private final static String fileNameLanguages = "Database/Languages/languages.json";
 
     private final static String arrayNameClasses = "class";
+    private final static String arrayNameSubclasses = "subclass";
     private final static String arrayNameBackgrounds = "background";
     private final static String arrayNameRaces = "race";
     private final static String arrayNameLanguages = "language";
@@ -66,6 +66,15 @@ public class DatabaseManager {
      */
     public static List<String> getSupportedClasses() {
         return getSupported(fileNameClasses, arrayNameClasses);
+    }
+
+    /**
+     * Returns a list of supported subclasses by class.
+     * @return a list of supported subclasses
+     */
+    public static List<String> getSupportedSubclassesByClass(String className) {
+        String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/Subclasses/" + className + "subclasses.json";
+        return getSupported(directory, arrayNameSubclasses);
     }
 
     /**
@@ -90,7 +99,22 @@ public class DatabaseManager {
      * @return a list of supported features
      */
     public static List<String> getSupportedFeaturesByClass(String className) {
-        String directory = extensionName + "Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className + "features.json";
+        String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className + "features.json";
+
+        JSONObject object = FileUtilities.getJSONFileObject(directory);
+        assert object != null;
+        Set<String> supported = object.keySet();
+
+        return new ArrayList<>(supported);
+    }
+
+    /**
+     * Returns a list of supported features for a given subclass.
+     * @param subclassName class to pull features from
+     * @return a list of supported features
+     */
+    public static List<String> getSupportedFeaturesBySubclass(String className, String subclassName) {
+        String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/Subclasses/" + subclassName.substring(0, 1).toUpperCase() + subclassName.substring(1).toLowerCase() + "/" + subclassName + "features.json";
 
         JSONObject object = FileUtilities.getJSONFileObject(directory);
         assert object != null;
@@ -156,7 +180,7 @@ public class DatabaseManager {
      * @param classToFind class to add information of
      */
     private static void addClassValues(EmbedBuilder embed, String classToFind) {
-        String directory = extensionName + "Classes/" + classToFind.substring(0, 1).toUpperCase() + classToFind.substring(1).toLowerCase() + "/" + classToFind + ".json";
+        String directory = "Database/Classes/" + classToFind.substring(0, 1).toUpperCase() + classToFind.substring(1).toLowerCase() + "/" + classToFind + ".json";
 
         String name = FileUtilities.getValueByKey(directory, "name", classToFind);
         String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", classToFind);
@@ -173,6 +197,7 @@ public class DatabaseManager {
         String equipment = FileUtilities.getValueByKey(directory, "equipment", classToFind);
         String subClasses = FileUtilities.getValueByKey(directory, "subclasses", classToFind);
         String featuresList = FileUtilities.getValueByKey(directory, "features", classToFind);
+        String subclassLevel = FileUtilities.getValueByKey(directory, "subclass level", classToFind);
 
         String abilityIncrease = "4th, 8th, 12th, 16th, and 19th levels. " +
                                  "Increase one ability score of your choice by 2, two ability scores of your choice by 1. " +
@@ -208,8 +233,8 @@ public class DatabaseManager {
         if (equipment != null) { // equipment
             embed.addField( "Equipment", equipment, true);
         }
-        if (subClasses != null) { // sub classes
-            embed.addField("Sub Classes", subClasses, true);
+        if (subClasses != null && subclassLevel != null) { // sub classes
+            embed.addField("Sub Classes (Level Unlocked: " + subclassLevel + ")", subClasses, true);
         }
         if (featuresList != null) { // features
             embed.addField("Features", featuresList, false);
@@ -271,7 +296,7 @@ public class DatabaseManager {
      * @param backgroundToFind background to add
      */
     private static void addBackgroundValues(EmbedBuilder embed, String backgroundToFind) {
-        String directory = extensionName + "Backgrounds/" + backgroundToFind.substring(0, 1).toUpperCase() + backgroundToFind.substring(1).toLowerCase() + "/" + backgroundToFind + ".json";
+        String directory = "Database/Backgrounds/" + backgroundToFind.substring(0, 1).toUpperCase() + backgroundToFind.substring(1).toLowerCase() + "/" + backgroundToFind + ".json";
 
         String name = FileUtilities.getValueByKey(directory, "name", backgroundToFind);
         String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", backgroundToFind);
@@ -342,7 +367,7 @@ public class DatabaseManager {
      * @return list of features
      */
     public static EmbedBuilder listClassFeatures(String classFrom) {
-        String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom + ".json";
+        String directory = "Database/Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom + ".json";
         String features;
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -368,7 +393,7 @@ public class DatabaseManager {
      * @param classFrom class the feature is from
      */
     private static void addFeatureValues(EmbedBuilder embed, String featureToFind, String classFrom) {
-        String directory = extensionName + "Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom.toLowerCase() + "features.json";
+        String directory = "Database/Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom.toLowerCase() + "features.json";
 
         String name = FileUtilities.getValueByKey(directory, "name", featureToFind.toLowerCase());
         String info = FileUtilities.getValueByKey(directory, "info", featureToFind.toLowerCase());
@@ -380,7 +405,7 @@ public class DatabaseManager {
 
         info = info.replace("\n", "");
 
-        embed.setTitle(name + " (Level: " + level + ")");
+        embed.setTitle(name + " (Level: " + level + ", Class: " + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + ")");
 
         BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
         iterator.setText(info);
@@ -431,7 +456,7 @@ public class DatabaseManager {
      * @param language language to add
      */
     private static void addLanguageValues(EmbedBuilder embed, String language) {
-        String directory = extensionName + "Languages/" + language.toLowerCase() + ".json";
+        String directory = "Database/Languages/" + language.toLowerCase() + ".json";
 
         String name = FileUtilities.getValueByKey(directory, "name", language);
         String commonlySpoken = FileUtilities.getValueByKey(directory, "common speakers", language);

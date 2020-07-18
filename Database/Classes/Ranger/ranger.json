@@ -1,17 +1,18 @@
 {
-  "ranger":{
-    "name":"Ranger",
-    "wiki link":"http://dnd5e.wikidot.com/ranger",
-    "source book":"Player's Handbook",
-    "hit dice":"",
-    "hit points":"",
-    "armor proficiencies":"",
-    "weapon proficiencies":"",
-    "tool proficiencies":"",
-    "saving throw proficiencies":"",
-    "skill proficiencies":"",
-    "equipment":"",
-    "subclasses":"",
-    "features":""
+  "ranger": {
+    "name": "Ranger",
+    "wiki link": "http://dnd5e.wikidot.com/ranger",
+    "source book": "Player's Handbook",
+    "hit dice": "1d10 per ranger level",
+    "hit points": "First Level: 10 + Constitution Modifier\nAfter First: 1d10 (or 6) + your Constitution modifier per Ranger level",
+    "armor proficiencies": "Light Armor\nMedium Armor\nShields",
+    "weapon proficiencies": "Simple Weapons\nMartial Weapons",
+    "tool proficiencies": "None",
+    "saving throw proficiencies": "Strength\nDexterity",
+    "skill proficiencies": "Choose three from:\nAnimal Handling Athletics\nInsight\nInvestigation\nNature\nPerception\nStealth\nSurvival",
+    "equipment": "(a) scale mail or (b) leather armor\n(a) two shortswords or (b) two simple melee weapons\n(a) a dungeoneer's pack or (b) an explorer's pack\nA longbow and a quiver of 20 arrows",
+    "subclasses": "Beast Master Conclave\nFey Wanderer (UA)\nGloom Stalker Conclave\nHorizon Walker Conclave\nHunter Conclave\nMonster Slayer Conclave\nPrimeval Guardian Conclave (UA)\nSwarmkeeper (UA)",
+    "subclass level": "Fighting Style: 2nd, Ranger Conclave: 3rd",
+    "features": "Favored Enemy\nNatural Explorer\nFighting Style\nSpellcasting\nPrimeval Awareness\nRanger Conclave\nGreater Favored Enemy\nFleet of Foot\nHide in Plain Sight\nVanish\nFeral Senses\nFoe Slayer"
   }
 }

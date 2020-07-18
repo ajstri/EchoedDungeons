@@ -1,7 +1,52 @@
 {
-  "": {
-    "name":"",
-    "level":"",
-    "info":""
+  "divine sense": {
+    "name": "Divine Sense",
+    "level": "1st",
+    "info": "The presence of strong evil registers on your Senses like a noxious odor, and powerful good rings like heavenly music in your ears. As an action, you can open your awareness to detect such forces. Until the end of your next turn, you know the location of any Celestial, fiend, or Undead within 60 feet of you that is not behind total cover. You know the type (celestial, fiend, or undead) of any being whose presence you sense, but not its identity (the Vampire Count Strahd von Zarovich, for instance). Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the Hallow spell. You can use this feature a number of times equal to 1 + your Charisma modifier. When you finish a Long Rest, you regain all expended uses. Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus. At 18th level, the range of this aura increases to 30 feet."
+  },
+  "lay on hands": {
+    "name": "Lay on Hands",
+    "level": "1st",
+    "info": "Your blessed touch can heal wounds. You have a pool of Healing power that replenishes when you take a Long Rest. With that pool, you can restore a total number of Hit Points equal to your Paladin level x 5. As an action, you can touch a creature and draw power from the pool to restore a number of Hit Points to that creature, up to the maximum amount remaining in your pool. Alternatively, you can expend 5 Hit Points from your pool of Healing to cure the target of one disease or neutralize one poison affecting it. You can cure multiple Diseases and neutralize multiple Poisons with a single use of Lay on Hands, expending Hit Points separately for each one. This feature has no effect on Undead and Constructs."
+  },
+  "fighting style": {
+    "name": "Fighting Style",
+    "level": "2nd",
+    "info": "At 2nd Level, you adopt a style of fighting as your specialty. Choose one of the following options. You can’t take a Fighting Style option more than once, even if you later get to choose again. Defense: While you are wearing armor, you gain a +1 bonus to AC. Dueling: When you are wielding a melee weapon in one hand and no other Weapons, you gain a +2 bonus to Damage Rolls with that weapon. Great Weapon Fighting: When you roll a 1 or 2 on a damage die for an Attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll. The weapon must have the Two-Handed or Versatile property for you to gain this benefit. Protection: When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your Reaction to impose disadvantage on the Attack roll. You must be wielding a Shield."
+  },
+  "divine smite": {
+    "name": "Divine Smite",
+    "level": "2rd",
+    "info": "Starting at 2nd Level, when you hit a creature with a melee weapon Attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon's damage. The extra damage is 2d8 for a 1st-level spell slot, plus 1d8 for each Spell Level higher than 1st, to a maximum of 5d8. The damage increases by 1d8 if the target is an Undead or a fiend."
+  },
+  "divine health": {
+    "name": "Divine Health",
+    "level": "3rd",
+    "info": "By 3rd Level, the Divine Magic flowing through you makes you immune to disease."
+  },
+  "sacred oath": {
+    "name": "Sacred Oath",
+    "level": "3rd",
+    "info": "When you reach 3rd Level, you swear the oath that binds you as a Paladin forever. Up to this time you have been in a preparatory stage, committed to the path but not yet sworn to it. Now you choose an oath, such as the Oath of Devotion. Your choice grants you features at 3rd Level and again at 7th, 15th, and 20th level. Those features include Oath Spells and the Channel Divinity feature. Each oath has a list of associated Spells. You gain access to these Spells at the levels specified in the oath description. Once you gain access to an oath spell, you always have it prepared. Oath Spells don’t count against the number of Spells you can prepare each day. If you gain an oath spell that doesn’t appear on the Paladin spell list, the spell is nonetheless a Paladin spell for you."
+  },
+  "extra attack": {
+    "name": "Extra Attack",
+    "level": "5th",
+    "info": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn."
+  },
+  "aura of protection": {
+    "name": "Aura of Protection",
+    "level": "6th",
+    "info": "Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (with a minimum bonus of +1). You must be conscious to grant this bonus. At 18th level, the range of this aura increases to 30 feet. "
+  },
+  "aura of courage": {
+    "name": "Aura of Courage",
+    "level": "10th",
+    "info": "Starting at 10th level, you and friendly creatures within 10 feet of you can't be Frightened while you are conscious. At 18th level, the range of this aura increases to 30 feet."
+  },
+  "cleansing touch": {
+    "name": "Cleansing Touch",
+    "level": "14th",
+    "info": "Beginning at 14th level, you can use your action to end one spell on yourself or on one willing creature that you touch. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain expended uses when you finish a Long Rest."
   }
 }
