@@ -1,17 +1,18 @@
 {
   "paladin":{
-    "name":"Paladin",
-    "wiki link":"http://dnd5e.wikidot.com/paladin",
-    "source book":"Player's Handbook",
-    "hit dice":"",
-    "hit points":"",
-    "armor proficiencies":"",
-    "weapon proficiencies":"",
-    "tool proficiencies":"",
-    "saving throw proficiencies":"",
-    "skill proficiencies":"",
-    "equipment":"",
-    "subclasses":"",
-    "features":""
+    "name": "Paladin",
+    "wiki link": "http://dnd5e.wikidot.com/paladin",
+    "source book": "Player's Handbook",
+    "hit dice": "1d10 per paladin level",
+    "hit points": "First Level: 10 + Constitution Modifier\nAfter First: 1d10 (or 6) + your Constitution modifier per Paladin level",
+    "armor proficiencies": "Light Armor\nHeavy Armor\nMedium Armor\n Shields",
+    "weapon proficiencies": "Simple Weapons\nMartial Weapons",
+    "tool proficiencies": "None",
+    "saving throw proficiencies": "Wisdom, Charisma",
+    "skill proficiencies": "Choose two from:\nAthletics\nInsight\nIntimidation\nMedicine\nPersuasion\nReligion",
+    "equipment": "(a) a martial weapon and a Shield or (b) two Martial Weapons\n(a) five javelins or (b) any simple melee weapon\n(a) a Priest's Pack or (b) an Explorer's Pack\nChain Mail and a holy Symbol\n",
+    "subclasses": "",
+    "subclass level": "Fighting Style: 1st, Sacred Oath: 3rd",
+    "features": "Divine Sense\nLay on Hands\nFighting Style\nDivine Smite\nDivine Health\nSacred Oath\nExtra Attack\nAura of Protection\nAura of Courage\nCleansing Touch"
   }
 }

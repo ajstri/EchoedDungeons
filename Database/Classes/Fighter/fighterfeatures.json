@@ -1,7 +1,32 @@
 {
-  "": {
-    "name":"",
-    "level":"",
-    "info":""
+  "fighting style": {
+    "name": "Fighting Style",
+    "level": "1st",
+    "info": "You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. Archery: You gain a +2 bonus to attack rolls you make with ranged weapons. Close Quarters Shooter (UA): When making a ranged attack while you are within 5 feet of a hostile creature, you do not have disadvantage on the attack roll. Your ranged attacks ignore half cover and three-quarters cover against targets within 30 feet of you. You have a +1 bonus to attack rolls on ranged attacks. Defense: While you are wearing armor, you gain a +1 bonus to AC. Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon. Great Weapon Fighting: When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit. Mariner (UA): As long as you not wearing heavy armor or using a shield, you have a swimming speed and a climbing speed equal to your normal speed, and you gain a +1 bonus to armor class. Protection: When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield. Tunnel Fighter (UA): As a bonus action, you can enter a defensive stance that lasts until the start of your next turn. While in your defensive stance, you can make opportunity attacks without using your reaction, and you can use your reaction to make a melee attack against a creature that moves more than 5 feet while within your reach. Two-Weapon Fighting: When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack. Blinding Fighting (UA): Being unable to see a creature doesn’t impose disadvantage on your attack rolls against it, provided the creature isn’t hidden from you. Interception(UA): When a creature you can see hits a target that is within 5 feet of you with an attack, you can use your reaction to reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage). You must be wielding a shield or a simple or martial weapon to use this reaction. Thrown Weapon Fighting (UA): You can draw a weapon that has the thrown property as part of the attack you make with the weapon. In addition, when you hit with a ranged attack using a thrown weapon, you gain a +1 bonus to the damage roll. Unarmed Fighting (UA): Your unarmed strikes can deal bludgeoning damage equal to 1d6 + your Strength modifier. If you strike with two free hands, the d6 becomes a d8.When you successfully start a grapple, you can deal 1d4 bludgeoning damage to the grappled creature. Until the grapple ends, you can also deal this damage to the creature whenever you hit it with a melee attack."
+  },
+  "second wind": {
+    "name": "Second Wind",
+    "level": "1st",
+    "info": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again."
+  },
+  "action surge": {
+    "name": "Action Surge",
+    "level": "2nd",
+    "info": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn."
+  },
+  "martial archetype": {
+    "name": "Martial Archetype",
+    "level": "3rd",
+    "info": "At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level. "
+  },
+  "extra attack": {
+    "name": "Extra Attack",
+    "level": "5th",
+    "info": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn. The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class."
+  },
+  "indomitable": {
+    "name": "Indomitable",
+    "level": "9th",
+    "info": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest. You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level."
   }
 }
