@@ -28,7 +28,9 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import config.Config;
 
 import core.commands.admin.*;
-import core.commands.dnd.*;
+import core.commands.dnd.database.character.*;
+import core.commands.dnd.database.other.*;
+import core.commands.dnd.utility.*;
 import core.commands.general.*;
 import core.commands.math.*;
 import core.commands.music.*;
@@ -221,11 +223,9 @@ public class Main {
         // Generic Commands
         getApi().addEventListener(help.registerCommand(help));
         getApi().addEventListener(help.registerCommand(new InfoCommand()));
-        getApi().addEventListener(help.registerCommand(new PleaseHelpCommand()));
 
         // Math Commands
         getApi().addEventListener(help.registerCommand(new MathCommand()));
-        getApi().addEventListener(help.registerCommand(new SetModeCommand()));
 
         // DND commands
         getApi().addEventListener(help.registerCommand(new RollCommand()));
@@ -234,6 +234,9 @@ public class Main {
 
         // DND Database commands
         getApi().addEventListener(help.registerCommand(new ClassCommand()));
+        getApi().addEventListener(help.registerCommand(new SubclassCommand()));
+        getApi().addEventListener(help.registerCommand(new RaceCommand()));
+        getApi().addEventListener(help.registerCommand(new BackgroundCommand()));
         getApi().addEventListener(help.registerCommand(new FeatureCommand()));
         getApi().addEventListener(help.registerCommand(new LanguageCommand()));
 

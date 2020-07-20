@@ -85,6 +85,31 @@ public class MathCommand extends Command {
             // Send embed
             mre.getAuthor().openPrivateChannel().complete().sendMessage(embed.build()).queue();
         }
+        else if (args[1].contains("mode")) {
+            if (args.length < 3) {
+                mre.getChannel().sendMessage("Please choose `radians` or `degrees`.").queue();
+            }
+            else {
+                switch (args[2].toLowerCase()) {
+                    case "degrees":
+                    case "degree":
+                    case "deg":
+                    case "d":
+                        Main.getConfig().setDegrees(true);
+                        mre.getChannel().sendMessage("Set math mode to degrees.").queue();
+                        break;
+                    case "radians":
+                    case "radian":
+                    case "rad":
+                    case "r":
+                        Main.getConfig().setDegrees(false);
+                        mre.getChannel().sendMessage("Set math mode to radians.").queue();
+                        break;
+                    default:
+                        mre.getChannel().sendMessage("Please choose `radians` or `degrees`.").queue();
+                }
+            }
+        }
         else {
             String finalExpression;
             // Prepare the arguments for parsing

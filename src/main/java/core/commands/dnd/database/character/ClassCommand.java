@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package core.commands.dnd;
+package core.commands.dnd.database.character;
 
 import core.Main;
 import core.commands.Command;
@@ -42,15 +42,15 @@ public class ClassCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
+        Main.getLog().info("CLASS (called by " + mre.getAuthor().getAsTag() + ")");
+
         // If arg.length < 2 send classes list.
         // else find class in list.
-        Main.getLog().info("CLASS (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
         MessageUtilities.sendIfNotPrivate(mre);
         // Send help message
         sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
-
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ClassCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "class [class name]`");
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [class name]`");
     }
 
     @Override
@@ -91,26 +91,23 @@ public class ClassCommand extends Command {
     private void sendPrivateMessage (PrivateChannel channel, String[] args) {
         // If arg.length < 2 send classes list.
         // else find class in list.
+
         if (args.length < 2) {
             EmbedBuilder embed = new EmbedBuilder().setTitle("Classes Supported").setColor(Color.RED);
 
             MessageUtilities.addEmbedDefaults(embed);
 
-            String name;
-            String wikiLink;
-
             // For each command, add its values to embed.
             for (String classSupported : DatabaseManager.getSupportedClasses()) {
                 String directory = "Database/Classes/" + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase() + "/" + classSupported + ".json";
-                name = FileUtilities.getValueByKey(directory, "name", classSupported);
-                name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-                wikiLink = FileUtilities.getValueByKey(directory, "wiki link", classSupported);
-                embed.addField(name, wikiLink, false);
+
+                DatabaseManager.addBasicInformation(embed, classSupported, directory);
             }
 
             // Send embed.
             channel.sendMessage(embed.build()).queue();
-        } else {
+        }
+        else {
 
             String command = args[1].toLowerCase();
             // Check each command. If it is the command searched for, build embed.

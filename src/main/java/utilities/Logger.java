@@ -28,18 +28,10 @@ public class Logger {
     private static final PrintStream err = System.err;
     private static final PrintStream other = System.out;
 
-    private static String title = "[EchoedCore";
-    private static boolean log = true;
+    private static final String title = "[EchoedCore";
+    private boolean log = true;
 
     public Logger() { }
-
-    public Logger (String newTitle) {
-        title = "[" + newTitle;
-    }
-
-    public void setTitle(String newTitle) {
-        title = "[" + newTitle;
-    }
 
     /**
      * Welcomes user to the Core
@@ -80,7 +72,7 @@ public class Logger {
         log = logging;
     }
 
-    public static boolean isLogging() {
+    public boolean isLogging() {
         return log;
     }
 

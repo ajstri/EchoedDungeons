@@ -13,70 +13,75 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package core.commands.admin;
+package core.commands.dnd.database.character;
 
 import core.Main;
 import core.commands.Command;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import utilities.Constants;
+import utilities.MessageUtilities;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- *  ShutdownCommand class of the EchoedDungeons project
+ *  SubclassCommand class of the EchoedDungeons project
  *
  *  All methods are explained in {@link Command}
  *
  * @author EchoedAJ
- * @since April 2020
+ * @since July 2020
  */
-public class ShutdownCommand extends Command {
+public class SubclassCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("SHUTDOWN (called by " + mre.getAuthor().getAsTag() + ")");
+        // TODO Subclass Framework
+        Main.getLog().info("SUBCLASS (called by " + mre.getAuthor().getAsTag() + ")");
 
-        // Determine if the message came from the Owner, EchoedAJ#1840
-        String id = mre.getAuthor().getId();
-        if (id.contains(Constants.OWNER_ID)) {
-            // Shutdown
-            mre.getChannel().sendMessage("Okay, AJ.").complete();
-            Main.shutdown(Constants.STATUS_FRIENDLY);
-        }
-        else {
-            // Be offended, it's not AJ
-            mre.getChannel().sendMessage("How dare you?").queue();
-        }
+        // Bypass sending message if it is already in a private message.
+        MessageUtilities.sendIfNotPrivate(mre);
+        // Send help message
+        sendPrivateMessage(mre.getAuthor().openPrivateChannel().complete(), args);
     }
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("shutdown", "sd", "rest");
+        return Arrays.asList("subclass", "sc", "sub");
     }
 
     @Override
     public String getModule() {
-        return Constants.ADMIN;
+        return Constants.DND;
     }
 
     @Override
     public String getDescription() {
-        return "Shuts down the Bot.";
+        return "Returns information about a class's subclass.";
     }
 
     @Override
     public String getName() {
-        return "Shutdown Command";
+        return "Subclass Command";
     }
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "sd`");
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [className] [subclassName]`");
     }
 
     @Override
     public boolean getDefaultPermission() {
-        return false;
+        return true;
+    }
+
+    /**
+     * Sends a message to the user's direct message
+     * @param channel channel of the user's direct message
+     * @param args args to pull from
+     */
+    private void sendPrivateMessage(PrivateChannel channel, String[] args) {
+
     }
 }

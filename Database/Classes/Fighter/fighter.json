@@ -3,15 +3,15 @@
     "name":"Fighter",
     "wiki link":"http://dnd5e.wikidot.com/fighter",
     "source book":"Player's Handbook",
-    "hit dice":"",
-    "hit points":"",
-    "armor proficiencies":"",
-    "weapon proficiencies":"",
-    "tool proficiencies":"",
-    "saving throw proficiencies":"",
-    "skill proficiencies":"",
-    "equipment":"",
-    "subclasses":"",
-    "features":""
+    "hit dice":"1d10 per Fighter level",
+    "hit points":"First level: 10 + Con\nAfter first: 1d10 (or 6) + your Constitution modifier per Fighter level",
+    "armor proficiencies":"All armor\nShields",
+    "weapon proficiencies":"Simple weapons\nMartial weapons",
+    "tool proficiencies":"N/A",
+    "saving throw proficiencies":"Strength\nConstitution",
+    "skill proficiencies":"Choose two skills from: Acrobatics\nAnimal Handling\nAthletics\nHistory\nInsight\nIntimidation\nPerception\nSurvival",
+    "equipment":"(a) chain mail or (b) leather, longbow, and 20 arrows\n(a) a martial weapon and a shield or (b) two martial weapons\n(a) a light crossbow and 20 bolts or (b) two handaxes\n(a) a dungeoneer's pack or (b) an explorer's pack",
+    "subclasses":"Arcane Archer\nBanneret\nBrute (UA)\nBattle Master\nCavalier\nChampion\nEldritch Knight\nMonster Hunter (UA)\nRune Knight (UA)\nSamurai\nScout (UA)\nSharpshooter (UA)",
+    "features":"Fighting Style\nSecond Wind\nAction Surge\nMartial Archetype\nExtra Attack\nIndomitable"
   }
 }

@@ -100,6 +100,21 @@ public class DatabaseManager {
     }
 
     /**
+     * Returns a list of supported subclasses for a given class.
+     * @param className class to pull subclasses from
+     * @return a list of supported subclasses
+     */
+    public static List<String> getSupportedSubclassesByClass(String className) {
+        String directory = extensionName + "Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className + "subclasses.json";
+
+        JSONObject object = FileUtilities.getJSONFileObject(directory);
+        assert object != null;
+        Set<String> supported = object.keySet();
+
+        return new ArrayList<>(supported);
+    }
+
+    /**
      * Returns a list of supported languages.
      * @return a list of supported languages
      */
@@ -277,32 +292,16 @@ public class DatabaseManager {
         String wikiLink = FileUtilities.getValueByKey(directory, "wiki link", backgroundToFind);
         String sourceBook = FileUtilities.getValueByKey(directory, "source book", backgroundToFind);
 
-        String age = FileUtilities.getValueByKey(directory, "age", backgroundToFind);
-        String size = FileUtilities.getValueByKey(directory, "size", backgroundToFind);
-        String alignment = FileUtilities.getValueByKey(directory, "alignment", backgroundToFind);
-        String speed = FileUtilities.getValueByKey(directory, "speed", backgroundToFind);
-
         String skillProf = FileUtilities.getValueByKey(directory, "skill proficiencies", backgroundToFind);
         String toolProf = FileUtilities.getValueByKey(directory, "tool proficiencies", backgroundToFind);
         String languages = FileUtilities.getValueByKey(directory, "languages", backgroundToFind);
 
-        String abilityScoreImprovement = FileUtilities.getValueByKey(directory, "ability score improvement", backgroundToFind);
-        String subRaces = FileUtilities.getValueByKey(directory, "subraces", backgroundToFind);
+        String equipment = FileUtilities.getValueByKey(directory, "equipment", backgroundToFind);
+        String features = FileUtilities.getValueByKey(directory, "features", backgroundToFind);
+        String variants = FileUtilities.getValueByKey(directory, "variants", backgroundToFind);
 
         addDefaults(name, wikiLink, sourceBook, embed);
 
-        if (age != null) { // age
-            embed.addField( "Age", age, true);
-        }
-        if (size != null) { // size
-            embed.addField( "Size", size, true);
-        }
-        if (alignment != null) { // alignment
-            embed.addField( "Alignment", alignment, true);
-        }
-        if (speed != null) { // speed
-            embed.addField( "Speed", speed, true);
-        }
         if (skillProf != null) { // skills
             embed.addField( "Skill Proficiencies", skillProf, true);
         }
@@ -312,11 +311,14 @@ public class DatabaseManager {
         if (languages != null) { // languages
             embed.addField( "Languages", languages, true);
         }
-        if (abilityScoreImprovement != null) { // ability score
-            embed.addField( "Ability Score Improvement", abilityScoreImprovement, true);
+        if (equipment != null) { // equipment
+            embed.addField( "Equipment", equipment, true);
         }
-        if (subRaces != null) { // sub races
-            embed.addField( "Subraces", subRaces, true);
+        if (features != null) { // features
+            embed.addField( "Features", features, true);
+        }
+        if (variants != null) { // variants
+            embed.addField( "Variants", variants, true);
         }
     }
 
@@ -465,5 +467,22 @@ public class DatabaseManager {
         // Build embed, finally
         embed.setTitle(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase() + " (Source: " + sourceBook + ")");
         embed.addField("Wiki Link", wikiLink, false);
+    }
+
+    /**
+     * Adds basic information about a given object.
+     * @param embed embed to add to
+     * @param supported supported object to add information of
+     * @param directory directory to pull information from
+     */
+    public static void addBasicInformation(EmbedBuilder embed, String supported, String directory) {
+        String name;
+        String wikiLink;
+        if (FileUtilities.checkIfFileExists(directory)) {
+            name = FileUtilities.getValueByKey(directory, "name", supported);
+            name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+            wikiLink = FileUtilities.getValueByKey(directory, "wiki link", supported);
+            embed.addField(name, wikiLink, false);
+        }
     }
 }

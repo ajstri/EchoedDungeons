@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package core.commands.dnd;
+package core.commands.dnd.database.other;
 
 import core.Main;
 import core.commands.Command;

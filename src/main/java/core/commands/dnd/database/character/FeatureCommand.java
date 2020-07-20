@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package core.commands.dnd;
+package core.commands.dnd.database.character;
 
 import core.Main;
 import core.commands.Command;
@@ -39,10 +39,13 @@ public class FeatureCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        // If arg.length < 2 send command info.
-        // if arg.length < 3 send features list for a class.
-        // if arg.length < 4 send feature info for the given class and feature.
         Main.getLog().info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
+
+        /*
+         * If arg.length < 2 send command info.
+         * if arg.length < 3 send features list for a class.
+         * if arg.length < 4 send feature info for the given class and feature.
+         */
 
         // Bypass sending message if it is already in a private message.
         MessageUtilities.sendIfNotPrivate(mre);
@@ -72,7 +75,7 @@ public class FeatureCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "feature [feature name]");
+        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [feature name]");
     }
 
     @Override
@@ -101,6 +104,7 @@ public class FeatureCommand extends Command {
             String className = args[1].toLowerCase();
             StringBuilder featureName = new StringBuilder();
 
+            // Put together the feature name into one string object
             for (int i = 2; i < args.length; i++) {
                 if (i == args.length - 1) {
                     featureName.append(args[i]);
@@ -108,20 +112,22 @@ public class FeatureCommand extends Command {
                 else featureName.append(args[i]).append(" ");
             }
 
-
-
+            // Check each supported feature
             for (String featureSupported : DatabaseManager.getSupportedFeaturesByClass(className)) {
                 String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
 
-                String name = FileUtilities.getValueByKey(directory, "name", featureSupported);
-                if (name.toLowerCase().contains(featureName)) {
-                    // Define values.
-                    EmbedBuilder embed = DatabaseManager.getFeatureByName(featureName.toString(), className);
-                    MessageUtilities.addEmbedDefaults(embed);
+                if (FileUtilities.checkIfFileExists(directory)) {
+                    String name = FileUtilities.getValueByKey(directory, "name", featureSupported);
 
-                    // Send embed.
-                    channel.sendMessage(embed.build()).queue();
-                    return;
+                    if (name.toLowerCase().contains(featureName)) { // It exists
+                        // Define values.
+                        EmbedBuilder embed = DatabaseManager.getFeatureByName(featureName.toString(), className);
+                        MessageUtilities.addEmbedDefaults(embed);
+
+                        // Send embed.
+                        channel.sendMessage(embed.build()).queue();
+                        return;
+                    }
                 }
             }
             // If it reaches this point, it doesn't exist
