@@ -10,7 +10,9 @@ import java.util.List;
 public class TestCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        mre.getChannel().sendMessage(DatabaseManager.listAllLanguages().build()).queue();
+        for (String feature : DatabaseManager.getSupportedFeaturesBySubclass("artificer", "alchemist")) {
+            mre.getChannel().sendMessage(feature).queue();
+        }
     }
 
     @Override

@@ -124,21 +124,6 @@ public class DatabaseManager {
     }
 
     /**
-     * Returns a list of supported subclasses for a given class.
-     * @param className class to pull subclasses from
-     * @return a list of supported subclasses
-     */
-    public static List<String> getSupportedSubclassesByClass(String className) {
-        String directory = extensionName + "Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className + "subclasses.json";
-
-        JSONObject object = FileUtilities.getJSONFileObject(directory);
-        assert object != null;
-        Set<String> supported = object.keySet();
-
-        return new ArrayList<>(supported);
-    }
-
-    /**
      * Returns a list of supported languages.
      * @return a list of supported languages
      */
@@ -355,10 +340,10 @@ public class DatabaseManager {
      * @param classFrom class the feature is from
      * @return embed of a features's information
      */
-    public static EmbedBuilder getFeatureByName(String featureToFind, String classFrom) {
+    public static EmbedBuilder getClassFeatureByName(String featureToFind, String classFrom) {
         EmbedBuilder embed = new EmbedBuilder();
 
-        addFeatureValues(embed, featureToFind, classFrom);
+        addClassFeatureValues(embed, featureToFind, classFrom);
 
         return embed;
     }
@@ -394,9 +379,49 @@ public class DatabaseManager {
      * @param featureToFind feature to add
      * @param classFrom class the feature is from
      */
-    private static void addFeatureValues(EmbedBuilder embed, String featureToFind, String classFrom) {
+    private static void addClassFeatureValues(EmbedBuilder embed, String featureToFind, String classFrom) {
         String directory = "Database/Classes/" + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + "/" + classFrom.toLowerCase() + "features.json";
 
+        addFeatureValues(embed, featureToFind, classFrom, directory);
+    }
+
+    /**
+     * Builds an embed with a feature and it's information.
+     * @param featureToFind feature to build embed for
+     * @param subclassFrom class the feature is from
+     * @return embed of a features's information
+     */
+    public static EmbedBuilder getSubclassFeatureByName(String featureToFind, String subclassFrom, String classFrom) {
+        EmbedBuilder embed = new EmbedBuilder();
+
+        addSubclassFeatureValues(embed, featureToFind, subclassFrom, classFrom);
+
+        return embed;
+    }
+
+    /**
+     * Adds a feature's information to a given embed
+     * @param embed embed to add information to
+     * @param featureToFind feature to add
+     * @param subclassFrom class the feature is from
+     */
+    private static void addSubclassFeatureValues(EmbedBuilder embed, String featureToFind, String subclassFrom, String classFrom) {
+        String directory = "Database/Classes/"
+                + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase()
+                + "/Subclasses/" + subclassFrom.substring(0, 1).toUpperCase() + subclassFrom.substring(1).toLowerCase()
+                + "/" + subclassFrom.toLowerCase() + "features.json";
+
+        addFeatureValues(embed, featureToFind, subclassFrom, directory);
+    }
+
+    /**
+     * Adds a feature to an embed
+     * @param embed embed to add to
+     * @param featureToFind feature to add
+     * @param subclassFrom class or subclass the feature is from
+     * @param directory directory of the file
+     */
+    private static void addFeatureValues(EmbedBuilder embed, String featureToFind, String subclassFrom, String directory) {
         String name = FileUtilities.getValueByKey(directory, "name", featureToFind.toLowerCase());
         String info = FileUtilities.getValueByKey(directory, "info", featureToFind.toLowerCase());
         String level = FileUtilities.getValueByKey(directory, "level", featureToFind.toLowerCase());
@@ -407,7 +432,7 @@ public class DatabaseManager {
 
         info = info.replace("\n", "");
 
-        embed.setTitle(name + " (Level: " + level + ", Class: " + classFrom.substring(0, 1).toUpperCase() + classFrom.substring(1).toLowerCase() + ")");
+        embed.setTitle(name + " (Level: " + level + ", Class: " + subclassFrom.substring(0, 1).toUpperCase() + subclassFrom.substring(1).toLowerCase() + ")");
 
         BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
         iterator.setText(info);

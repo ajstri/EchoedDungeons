@@ -85,19 +85,22 @@ public class FeatureCommand extends Command {
 
     /**
      * Sends a message to a private channel.
+     *
      * @param channel channel to send to
-     * @param args arguments used to build the message.
+     * @param args    arguments used to build the message.
      */
-    private void sendPrivateMessage (PrivateChannel channel, String[] args) {
+    private void sendPrivateMessage(PrivateChannel channel, String[] args) {
         if (args.length < 2) {
             // Command Info
+            Main.getLog().info("Command Information sent.");
             channel.sendMessage("In order to use this command, please provide the class name and feature name:\n`" +
                     Main.getConfig().getPrefix() + "feature [className] [featureName]`").queue();
         }
         else if (args.length < 3) {
             // Features List By Class
-            String className = args[1].toLowerCase();
-            channel.sendMessage(DatabaseManager.listClassFeatures(className).build()).queue();
+            // TODO add subclass support
+            Main.getLog().info("Sending list of features for: " + args[1]);
+            channel.sendMessage(DatabaseManager.listClassFeatures(args[1].toLowerCase()).build()).queue();
         }
         else {
             // Feature Info By Class & Feature Name
@@ -112,27 +115,93 @@ public class FeatureCommand extends Command {
                 else featureName.append(args[i]).append(" ");
             }
 
-            // Check each supported feature
-            for (String featureSupported : DatabaseManager.getSupportedFeaturesByClass(className)) {
-                String directory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
+            Main.getLog().info("Sending information for a specific feature. Class name given is " + className + " and the feature given is " + featureName.toString());
 
-                if (FileUtilities.checkIfFileExists(directory)) {
-                    String name = FileUtilities.getValueByKey(directory, "name", featureSupported);
+            // TODO add background feature support
+            // Check each class for given class name. If match command, find feature
+            // If fail: Check each class's subclass for given class name. If match command, find feature
+            // If fail: does not exist
 
-                    if (name.toLowerCase().contains(featureName)) { // It exists
-                        // Define values.
-                        EmbedBuilder embed = DatabaseManager.getFeatureByName(featureName.toString(), className);
-                        MessageUtilities.addEmbedDefaults(embed);
+            // Check if file exists as a class.
+            String directoryAsClass = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + ".json";
+            if (FileUtilities.checkIfFileExists(directoryAsClass)) {
+                Main.getLog().debug("Found the class file.", Constants.stageCommand);
+                // Class file exists, get supported features
+                String featureDirectory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
 
-                        // Send embed.
-                        channel.sendMessage(embed.build()).queue();
-                        return;
+                // Loop through supported features
+                for (String featureSupported : DatabaseManager.getSupportedFeaturesByClass(className)) {
+                    if (FileUtilities.checkIfFileExists(featureDirectory)) {
+                        String name = FileUtilities.getValueByKey(featureDirectory, "name", featureSupported);
+
+                        // It exists as a feature of Class:
+                        if (name.toLowerCase().contains(featureName)) { // It exists
+                            // Define values.
+                            Main.getLog().debug("Found the feature.", Constants.stageCommand);
+                            EmbedBuilder embed = DatabaseManager.getClassFeatureByName(featureName.toString(), className);
+                            MessageUtilities.addEmbedDefaults(embed);
+
+                            Main.getLog().info("Sending embed.");
+                            // Send embed.
+                            channel.sendMessage(embed.build()).queue();
+                            return;
+                        }
                     }
                 }
+                Main.getLog().debug("Scanning all subclasses of the given class.", Constants.stageCommand);
+                // Loop through subclasses of className
+                // It might exists as a feature of a subclass of Class:
+                if (checkSubclass(channel, featureName, className)) return;
             }
-            // If it reaches this point, it doesn't exist
+
+            // Check all class' subclasses
+            Main.getLog().debug("Scanning all subclasses of every class.", Constants.stageCommand);
+            for (String classSupported : DatabaseManager.getSupportedClasses()) {
+                // loop through subclasses
+                if (checkSubclass(channel, featureName, classSupported)) return;
+            }
+
+            // if it reaches this point, it doesn't exist
+            Main.getLog().debug("The given feature/class combination did not exist.", Constants.stageCommand);
             MessageUtilities.doesNotExist(channel, featureName.toString(), "feature");
         }
     }
 
+    /**
+     * Checks all subclasses for a given class
+     * @param channel channel to send embed to
+     * @param featureName name of feature to search for
+     * @param classSupported root class to search subclasses of
+     * @return true if sent, false if not
+     */
+    private boolean checkSubclass(PrivateChannel channel, StringBuilder featureName, String classSupported) {
+        for (String subclassSupported : DatabaseManager.getSupportedSubclassesByClass(classSupported)) {
+            String subclassFeatureDirectory = "Database/Classes/"
+                    + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase()
+                    + "/Subclasses/" + subclassSupported.substring(0, 1).toUpperCase() + subclassSupported.substring(1).toLowerCase()
+                    + "/" + subclassSupported.toLowerCase() + "features.json";
+            Main.getLog().debug("Scanning subclass: " + subclassSupported, Constants.stageCommand);
+            Main.getLog().debug("The directory is:\n" + subclassFeatureDirectory, Constants.stageCommand);
+            // check features
+            for (String subclassFeature : DatabaseManager.getSupportedFeaturesBySubclass(classSupported, subclassSupported)) {
+                if (FileUtilities.checkIfFileExists(subclassFeatureDirectory)) {
+                    String name = FileUtilities.getValueByKey(subclassFeatureDirectory, "name", subclassFeature);
+
+                    // It exists as a feature of Class:
+                    if (name.toLowerCase().contains(featureName)) { // It exists
+                        Main.getLog().debug("The feature exists.", Constants.stageCommand);
+                        // Define values.
+                        EmbedBuilder embed = DatabaseManager.getSubclassFeatureByName(featureName.toString(), subclassSupported, classSupported);
+                        MessageUtilities.addEmbedDefaults(embed);
+
+                        Main.getLog().info("Sending embed.");
+                        // Send embed.
+                        channel.sendMessage(embed.build()).queue();
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
