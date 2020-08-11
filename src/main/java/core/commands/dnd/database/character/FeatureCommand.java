@@ -55,7 +55,7 @@ public class FeatureCommand extends Command {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("feature", "featureinfo", "finfo");
+        return Arrays.asList("feature", "featureinfo", "finfo", "feat");
     }
 
     @Override
@@ -98,7 +98,6 @@ public class FeatureCommand extends Command {
         }
         else if (args.length < 3) {
             // Features List By Class
-            // TODO add subclass support
             Main.getLog().info("Sending list of features for: " + args[1]);
             channel.sendMessage(DatabaseManager.listClassFeatures(args[1].toLowerCase()).build()).queue();
         }
@@ -135,7 +134,7 @@ public class FeatureCommand extends Command {
                         String name = FileUtilities.getValueByKey(featureDirectory, "name", featureSupported);
 
                         // It exists as a feature of Class:
-                        if (name.toLowerCase().contains(featureName)) { // It exists
+                        if (name.toLowerCase().equalsIgnoreCase(featureName.toString())) { // It exists
                             // Define values.
                             Main.getLog().debug("Found the feature.", Constants.stageCommand);
                             EmbedBuilder embed = DatabaseManager.getClassFeatureByName(featureName.toString(), className);
@@ -188,7 +187,7 @@ public class FeatureCommand extends Command {
                     String name = FileUtilities.getValueByKey(subclassFeatureDirectory, "name", subclassFeature);
 
                     // It exists as a feature of Class:
-                    if (name.toLowerCase().contains(featureName)) { // It exists
+                    if (name.toLowerCase().equalsIgnoreCase(featureName.toString())) { // It exists
                         Main.getLog().debug("The feature exists.", Constants.stageCommand);
                         // Define values.
                         EmbedBuilder embed = DatabaseManager.getSubclassFeatureByName(featureName.toString(), subclassSupported, classSupported);

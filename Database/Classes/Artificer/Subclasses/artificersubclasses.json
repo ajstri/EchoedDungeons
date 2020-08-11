@@ -1,5 +1,8 @@
 {
   "subclass": {
-    "alchemist": "supported"
+    "alchemist": "supported",
+    "armorer": "unsupported",
+    "artillerist": "unsupported",
+    "battle smith": "unsupported"
   }
 }

@@ -110,6 +110,40 @@ public class MathCommand extends Command {
                 }
             }
         }
+        else if (args[1].contains("factorial")) {
+            if (args.length < 3) {
+                mre.getChannel().sendMessage("Please input a number to factorialize.").queue();
+            }
+            else {
+                try {
+                    double x = Double.parseDouble(args[2]);
+                    double result = x;
+
+                    while (x > 1) {
+                        x = x - 1;
+                        result = result * x;
+                    }
+
+                    Main.getLog().debug("Result is " + result, Constants.stageCommand);
+
+                    // Prepare embed.
+                    EmbedBuilder embed = new EmbedBuilder();
+                    MessageUtilities.addEmbedDefaults(embed);
+
+                    String mode = Main.getConfig().getDegrees() ? "Degrees" : "Radians";
+
+                    embed.setTitle("Mode: " + mode);
+                    embed.addField(args[2] + "! = " + ("" + result).replace("E", " * 10^"), "",false);
+
+                    mre.getChannel().sendMessage(embed.build()).queue();
+                    mre.getMessage().delete().queue();
+                }
+                catch (NumberFormatException nfe) {
+                    Main.getLog().error("Incorrect input on factorial.", nfe);
+                    mre.getChannel().sendMessage("Please input a number.").queue();
+                }
+            }
+        }
         else {
             String finalExpression;
             // Prepare the arguments for parsing

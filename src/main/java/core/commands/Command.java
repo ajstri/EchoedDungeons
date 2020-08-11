@@ -16,8 +16,6 @@
 package core.commands;
 
 import core.Main;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -125,34 +123,6 @@ public abstract class Command extends ListenerAdapter {
      */
     private String[] commandArgs(String string) {
         return string.split(" ");
-    }
-
-    /**
-     * Sends a message to the given channel the Event was
-     * triggered in.
-     * @param mre Event triggered
-     * @param message Message to send
-     * @return message to send
-     */
-    private Message sendMessage(MessageReceivedEvent mre, Message message) {
-        if(mre.isFromType(ChannelType.PRIVATE)) {
-            return mre.getPrivateChannel().sendMessage(message).complete();
-        }
-        else {
-            return mre.getTextChannel().sendMessage(message).complete();
-        }
-    }
-
-    /**
-     * Sends a message to the given channel the Event was
-     * triggered in.
-     * @param mre Event triggered
-     * @param message Message to send
-     * @return message to send
-     */
-    @SuppressWarnings("unused")
-    Message sendMessage(MessageReceivedEvent mre, String message) {
-        return sendMessage(mre, new MessageBuilder().append(message).build());
     }
 
     /**
