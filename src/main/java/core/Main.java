@@ -67,9 +67,9 @@ public class Main {
     private static ChatterBotSession chatSession;
     private static long time = System.currentTimeMillis();
 
+    private static final Logger log = new Logger();
     private static final Config config = new Config();
     private static final HelpCommand help = new HelpCommand();
-    private static final Logger log = new Logger();
 
     // LavaPlayer specific
     private static AudioPlayerManager audioManager;

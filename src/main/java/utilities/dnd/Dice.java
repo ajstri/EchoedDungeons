@@ -20,7 +20,7 @@ import utilities.exceptions.InvalidNotationException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DiceRoll { // TODO javadoc
+public class Dice { // TODO javadoc
 
     private int numDice;
     private int numSides;
@@ -39,7 +39,7 @@ public class DiceRoll { // TODO javadoc
                     "\\s*$"
     );
 
-    public DiceRoll(String source) throws InvalidNotationException {
+    public Dice(String source) throws InvalidNotationException {
         Matcher matcher = ROLL20_REGEX.matcher(source);
         if (!matcher.matches()) throw new InvalidNotationException("No match!");
         parseCore(matcher);
