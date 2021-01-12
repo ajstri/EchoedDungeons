@@ -16,14 +16,15 @@
 package core.commands.dnd.database.character;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.EchoedCore;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
+import utilities.EchoedDungeonsConstants;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.FileUtilities;
-import utilities.MessageUtilities;
+import echoedcore.utilities.FileUtilities;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class ClassCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("CLASS (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("CLASS (called by " + mre.getAuthor().getAsTag() + ")");
 
         // If arg.length < 2 send classes list.
         // else find class in list.
@@ -60,7 +61,7 @@ public class ClassCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ClassCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [class name]`");
+        return Collections.singletonList("`" + EchoedCore.getConfig().getPrefix() + getAliases().get(0) + " [class name]`");
     }
 
     @Override

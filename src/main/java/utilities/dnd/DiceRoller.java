@@ -36,7 +36,7 @@ public class DiceRoller {
         // an expression ""
         input = input.replace("roll ", "").replace("r ", "");
 
-        Main.getLog().info("Rolling: " + input);
+        Main.getBotLogging().info("Rolling: " + input);
 
         // Split into dice expressions
         String[] diceExpressions = input.split(" ");
@@ -195,7 +195,7 @@ public class DiceRoller {
             die = new Dice(singleDie);
         }
         catch (InvalidNotationException e) {
-            Main.getLog().error("Invalid dice notation.", e);
+            Main.getBotLogging().error("Invalid dice notation.", e);
         }
         return die;
     }

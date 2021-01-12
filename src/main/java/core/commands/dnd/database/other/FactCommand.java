@@ -16,11 +16,11 @@
 package core.commands.dnd.database.other;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
-import utilities.Constants;
-import utilities.FileUtilities;
+import echoedcore.utilities.FileUtilities;
+import utilities.EchoedDungeonsConstants;
 
 import java.io.File;
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public class FactCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("FACT (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("FACT (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Get length of fact file
         JSONObject object = FileUtilities.getJSONFileObject(fileName);
@@ -72,7 +72,7 @@ public class FactCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override

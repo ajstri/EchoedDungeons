@@ -16,13 +16,13 @@
 package core.commands.dnd.database.other;
 
 import core.Main;
-import core.commands.Command;
-import utilities.FileUtilities;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.FileUtilities;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.MessageUtilities;
+import utilities.EchoedDungeonsConstants;
 import utilities.dnd.DatabaseManager;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class LanguageCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("LANGUAGE (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("LANGUAGE (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
         MessageUtilities.sendIfNotPrivate(mre);
@@ -56,7 +56,7 @@ public class LanguageCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override

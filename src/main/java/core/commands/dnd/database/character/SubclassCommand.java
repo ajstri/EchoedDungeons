@@ -16,11 +16,11 @@
 package core.commands.dnd.database.character;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.MessageUtilities;
+import utilities.EchoedDungeonsConstants;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +38,7 @@ public class SubclassCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
         // TODO Subclass Framework
-        Main.getLog().info("SUBCLASS (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("SUBCLASS (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
         MessageUtilities.sendIfNotPrivate(mre);
@@ -53,7 +53,7 @@ public class SubclassCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override
@@ -82,6 +82,6 @@ public class SubclassCommand extends Command {
      * @param args args to pull from
      */
     private void sendPrivateMessage(PrivateChannel channel, String[] args) {
-
+        channel.sendMessage("This utility is a work in progress.").queue();
     }
 }

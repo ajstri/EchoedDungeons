@@ -16,10 +16,10 @@
 package core.commands.general;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.commands.Command;
+import echoedcore.core.commands.Modules;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.MessageUtilities;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +35,9 @@ import java.util.List;
 public class InfoCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("INFO (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("INFO (called by " + mre.getAuthor().getAsTag() + ")");
 
-        mre.getChannel().sendMessage(MessageUtilities.embedBotInfo().build()).queue();
+        mre.getChannel().sendMessage(MessageUtilities.embedCoreInfo().build()).queue();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class InfoCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.MUSIC;
+        return Modules.GENERIC;
     }
 
     @Override

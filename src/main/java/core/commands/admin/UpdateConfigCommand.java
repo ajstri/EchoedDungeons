@@ -16,9 +16,12 @@
 package core.commands.admin;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.EchoedCore;
+import echoedcore.core.commands.Command;
+import echoedcore.core.commands.Modules;
+import echoedcore.utilities.Logger;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
+import echoedcore.utilities.Constants;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,39 +53,39 @@ public class UpdateConfigCommand extends Command {
             // Supported: Prefix and Debug and Log
             switch (args[1].toLowerCase()) {
                 case "prefix":
-                    mre.getChannel().sendMessage("Prefix is currently: " + Main.getConfig().getPrefix()).queue();
+                    mre.getChannel().sendMessage("Prefix is currently: " + EchoedCore.getConfig().getPrefix()).queue();
                     break;
                 case "debug":
-                    mre.getChannel().sendMessage("Debug is currently: " + Main.getConfig().getDebug()).queue();
+                    mre.getChannel().sendMessage("Debug is currently: " + EchoedCore.getConfig().getDebug()).queue();
                     break;
                 case "log":
-                    mre.getChannel().sendMessage("Logging is currently: " + Main.getLog().isLogging()).queue();
+                    mre.getChannel().sendMessage("Logging is currently: " + Logger.isLogging()).queue();
                     break;
             }
         }
         else {
             switch (args[1].toLowerCase()) {
                 case "prefix":
-                    Main.getConfig().setPrefix(args[2]);
+                    EchoedCore.getConfig().setPrefix(args[2]);
                     mre.getChannel().sendMessage("Prefix updated to: **" + args[2] + "**").queue();
                     break;
                 case "debug":
-                    if (args[2].toLowerCase().equals("true")) {
-                        Main.getConfig().setDebug(true);
+                    if (args[2].equalsIgnoreCase("true")) {
+                        EchoedCore.getConfig().setDebug(true);
                         mre.getChannel().sendMessage("Debug updated to: **" + args[2] + "**").queue();
-                    } else if (args[2].toLowerCase().equals("false")) {
-                        Main.getConfig().setDebug(false);
+                    } else if (args[2].equalsIgnoreCase("false")) {
+                        EchoedCore.getConfig().setDebug(false);
                         mre.getChannel().sendMessage("Debug updated to: **" + args[2] + "**").queue();
                     } else {
                         mre.getChannel().sendMessage("Please only use **true** or **false**.").queue();
                     }
                     break;
                 case "log":
-                    if (args[2].toLowerCase().equals("true")) {
-                        Main.getLog().setLogging(true);
+                    if (args[2].equalsIgnoreCase("true")) {
+                        Main.getBotLogging().setLogging(true);
                         mre.getChannel().sendMessage("Logging updated to: **" + args[2] + "**").queue();
-                    } else if (args[2].toLowerCase().equals("false")) {
-                        Main.getLog().setLogging(false);
+                    } else if (args[2].equalsIgnoreCase("false")) {
+                        Main.getBotLogging().setLogging(false);
                         mre.getChannel().sendMessage("Logging updated to: **" + args[2] + "**").queue();
                     } else {
                         mre.getChannel().sendMessage("Please only use **true** or **false**.").queue();
@@ -99,7 +102,7 @@ public class UpdateConfigCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.ADMIN;
+        return Modules.ADMIN;
     }
 
     @Override
@@ -114,7 +117,7 @@ public class UpdateConfigCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "update [key] [newValue]`");
+        return Collections.singletonList("`" + EchoedCore.getConfig().getPrefix() + "update [key] [newValue]`");
     }
 
     @Override

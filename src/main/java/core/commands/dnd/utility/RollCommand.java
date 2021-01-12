@@ -16,17 +16,14 @@
 package core.commands.dnd.utility;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.dnd.Dice;
-import utilities.MessageUtilities;
+import utilities.EchoedDungeonsConstants;
 import utilities.dnd.DiceRoller;
-import utilities.exceptions.InvalidNotationException;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *  RollCommand class of the EchoedDungeons project
@@ -39,11 +36,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RollCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("ROLL (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("ROLL (called by " + mre.getAuthor().getAsTag() + ")");
         // *rolls into oblivion*
 
         DiceRoller roller;
-        if (args[1].toLowerCase().equals("stats")) {
+        if (args[1].equalsIgnoreCase("stats")) {
             roller = new DiceRoller("4d6dl 4d6dl 4d6dl 4d6dl 4d6dl 4d6dl".split(" "));
         }
         else {
@@ -94,7 +91,7 @@ public class RollCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override

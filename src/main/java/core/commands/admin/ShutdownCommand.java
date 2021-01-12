@@ -16,9 +16,12 @@
 package core.commands.admin;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.EchoedCore;
+import echoedcore.core.commands.Modules;
+import echoedcore.utilities.Constants;
+import echoedcore.core.commands.Command;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
+import utilities.EchoedDungeonsConstants;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,14 +38,14 @@ import java.util.List;
 public class ShutdownCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("SHUTDOWN (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("SHUTDOWN (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Determine if the message came from the Owner, EchoedAJ#1840
         String id = mre.getAuthor().getId();
-        if (id.contains(Constants.OWNER_ID)) {
+        if (id.contains(EchoedDungeonsConstants.OWNER_ID)) {
             // Shutdown
             mre.getChannel().sendMessage("Okay, AJ.").complete();
-            Main.shutdown(Constants.STATUS_FRIENDLY);
+            EchoedCore.shutdown(Constants.STATUS_FRIENDLY);
         }
         else {
             // Be offended, it's not AJ
@@ -57,7 +60,7 @@ public class ShutdownCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.ADMIN;
+        return Modules.ADMIN;
     }
 
     @Override
@@ -72,7 +75,7 @@ public class ShutdownCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + "sd`");
+        return Collections.singletonList("`" + EchoedCore.getConfig().getPrefix() + "sd`");
     }
 
     @Override

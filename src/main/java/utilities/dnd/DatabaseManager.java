@@ -15,10 +15,10 @@
  */
 package utilities.dnd;
 
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
-import utilities.FileUtilities;
-import utilities.MessageUtilities;
+import echoedcore.utilities.FileUtilities;
 
 import java.text.BreakIterator;
 import java.util.*;
@@ -276,7 +276,7 @@ public class DatabaseManager {
     /**
      * Builds an embed with a background and it's information.
      * @param backgroundToFind background to build embed for
-     * @return embed of a backgrounds's information
+     * @return embed of a background's information
      */
     public static EmbedBuilder getBackgroundByName(String backgroundToFind) {
         EmbedBuilder embed = new EmbedBuilder();
@@ -338,7 +338,7 @@ public class DatabaseManager {
      * Builds an embed with a feature and it's information.
      * @param featureToFind feature to build embed for
      * @param classFrom class the feature is from
-     * @return embed of a features's information
+     * @return embed of a feature's information
      */
     public static EmbedBuilder getClassFeatureByName(String featureToFind, String classFrom) {
         EmbedBuilder embed = new EmbedBuilder();
@@ -389,7 +389,7 @@ public class DatabaseManager {
      * Builds an embed with a feature and it's information.
      * @param featureToFind feature to build embed for
      * @param subclassFrom class the feature is from
-     * @return embed of a features's information
+     * @return embed of a feature's information
      */
     public static EmbedBuilder getSubclassFeatureByName(String featureToFind, String subclassFrom, String classFrom) {
         EmbedBuilder embed = new EmbedBuilder();

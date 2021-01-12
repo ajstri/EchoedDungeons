@@ -16,17 +16,17 @@
 package core.commands.math;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.MessageUtilities;
+import echoedcore.utilities.Constants;
+import utilities.EchoedDungeonsConstants;
 import utilities.exceptions.UnhandledMathException;
 import utilities.math.Logarithmic;
-import utilities.math.MathConstants;
 import utilities.math.Trigonometry;
 
 import java.awt.*;
@@ -45,12 +45,12 @@ import java.util.List;
 public class MathCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("MATH (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("MATH (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Check if they're asking for what functions it can handle
         if (args[1].contains("supported") || args[1].contains("functions")) {
             // Make the functions embed
-            Main.getLog().debug("User asked for supported functions.", Constants.stageCommand);
+            Main.getBotLogging().debug("User asked for supported functions.", Constants.stageCommand);
 
             EmbedBuilder embed = new EmbedBuilder().setTitle("Functions Supported").setColor(Color.RED);
             MessageUtilities.addEmbedDefaults(embed);
@@ -124,7 +124,7 @@ public class MathCommand extends Command {
                         result = result * x;
                     }
 
-                    Main.getLog().debug("Result is " + result, Constants.stageCommand);
+                    Main.getBotLogging().debug("Result is " + result, Constants.stageCommand);
 
                     // Prepare embed.
                     EmbedBuilder embed = new EmbedBuilder();
@@ -139,7 +139,7 @@ public class MathCommand extends Command {
                     mre.getMessage().delete().queue();
                 }
                 catch (NumberFormatException nfe) {
-                    Main.getLog().error("Incorrect input on factorial.", nfe);
+                    Main.getBotLogging().error("Incorrect input on factorial.", nfe);
                     mre.getChannel().sendMessage("Please input a number.").queue();
                 }
             }
@@ -166,11 +166,11 @@ public class MathCommand extends Command {
             finalExpression = input + " = ";
 
             // Replace "pi" with constant, Pi
-            input = input.replace("pi", "" + MathConstants.PI);
+            input = input.replace("pi", "" + EchoedDungeonsConstants.PI);
 
             // Evaluate and send the result
             double result = eval(input, mre.getChannel());
-            Main.getLog().debug("Result is " + (result + "").replace("E", " * 10^"), Constants.stageCommand);
+            Main.getBotLogging().debug("Result is " + (result + "").replace("E", " * 10^"), Constants.stageCommand);
 
             // Prepare embed.
             EmbedBuilder embed = new EmbedBuilder();
@@ -188,12 +188,12 @@ public class MathCommand extends Command {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("eval", "m");
+        return Arrays.asList("eval", "m", "math");
     }
 
     @Override
     public String getModule() {
-        return Constants.MATH;
+        return EchoedDungeonsConstants.MATH;
     }
 
     @Override
@@ -234,7 +234,7 @@ public class MathCommand extends Command {
      * @return the answer to the expression.
      */
     public static double eval(String str, MessageChannel c) {
-        Main.getLog().debug("Parsing: " + str, Constants.stageCommand);
+        Main.getBotLogging().debug("Parsing: " + str, Constants.stageCommand);
         return new Object() {
             int pos = -1, ch;
 
@@ -255,7 +255,7 @@ public class MathCommand extends Command {
                 nextChar();
                 double x = parseExpression();
                 if (pos < str.length()) {
-                    Main.getLog().error("Unexpected: " + (char)ch, new RuntimeException("Unexpected: " + (char)ch));
+                    Main.getBotLogging().error("Unexpected: " + (char)ch, new RuntimeException("Unexpected: " + (char)ch));
                     c.sendMessage("Unexpected: " + (char)ch).queue();
                     return 0;
                 }
@@ -303,7 +303,7 @@ public class MathCommand extends Command {
                 if (eat('(')) { // parentheses
                     x = parseExpression();
                     if (!eat(')')) {
-                        Main.getLog().error("Missing closing parenthesis", new UnhandledMathException("Missing closing parenthesis"));
+                        Main.getBotLogging().error("Missing closing parenthesis", new UnhandledMathException("Missing closing parenthesis"));
                         c.sendMessage("Missing closing parenthesis").queue();
                         return 0;
                     }
@@ -323,7 +323,7 @@ public class MathCommand extends Command {
                     if (x == -99999) return 0;
                 }
                 else {
-                    Main.getLog().error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
+                    Main.getBotLogging().error("Unexpected: " + (char)ch, new UnhandledMathException("Unexpected: " + (char)ch));
                     c.sendMessage("Unexpected: " + (char)ch).queue();
                     return 0;
                 }
@@ -452,7 +452,7 @@ public class MathCommand extends Command {
                 break;
 
             default:
-                Main.getLog().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
+                Main.getBotLogging().error("Unknown function: " + func, new UnhandledMathException("Unknown function: " + func));
                 c.sendMessage("Unknown function: " + func).queue();
                 return -99999;
         }

@@ -1,9 +1,9 @@
 package core.commands.admin;
 
-import core.commands.Command;
+import echoedcore.core.commands.Command;
+import echoedcore.core.commands.Modules;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class TestCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.ADMIN;
+        return Modules.ADMIN;
     }
 
     @Override

@@ -16,13 +16,14 @@
 package core.commands.dnd.database.character;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.EchoedCore;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.FileUtilities;
-import utilities.MessageUtilities;
+import echoedcore.utilities.FileUtilities;
+import utilities.EchoedDungeonsConstants;
 import utilities.dnd.DatabaseManager;
 
 import java.awt.*;
@@ -41,7 +42,7 @@ import java.util.List;
 public class BackgroundCommand extends Command {
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("BACKGROUND (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("BACKGROUND (called by " + mre.getAuthor().getAsTag() + ")");
 
         // Bypass sending message if it is already in a private message.
         MessageUtilities.sendIfNotPrivate(mre);
@@ -56,7 +57,7 @@ public class BackgroundCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override
@@ -71,7 +72,7 @@ public class BackgroundCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [backgroundName]`");
+        return Collections.singletonList("`" + EchoedCore.getConfig().getPrefix() + getAliases().get(0) + " [backgroundName]`");
     }
 
     @Override

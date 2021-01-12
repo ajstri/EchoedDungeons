@@ -16,14 +16,16 @@
 package core.commands.dnd.database.character;
 
 import core.Main;
-import core.commands.Command;
+import echoedcore.core.EchoedCore;
+import echoedcore.core.commands.Command;
+import echoedcore.utilities.MessageUtilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import utilities.FileUtilities;
+import echoedcore.utilities.FileUtilities;
+import utilities.EchoedDungeonsConstants;
 import utilities.dnd.DatabaseManager;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import utilities.Constants;
-import utilities.MessageUtilities;
+import echoedcore.utilities.Constants;
 
 import java.util.*;
 
@@ -39,7 +41,7 @@ public class FeatureCommand extends Command {
 
     @Override
     protected void onCommand(MessageReceivedEvent mre, String[] args) {
-        Main.getLog().info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
+        Main.getBotLogging().info("FEATURE (called by " + mre.getAuthor().getAsTag() + ")");
 
         /*
          * If arg.length < 2 send command info.
@@ -60,7 +62,7 @@ public class FeatureCommand extends Command {
 
     @Override
     public String getModule() {
-        return Constants.DND;
+        return EchoedDungeonsConstants.DND;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class FeatureCommand extends Command {
 
     @Override
     public List<String> getUsage() {
-        return Collections.singletonList("`" + Main.getConfig().getPrefix() + getAliases().get(0) + " [feature name]");
+        return Collections.singletonList("`" + EchoedCore.getConfig().getPrefix() + getAliases().get(0) + " [feature name]");
     }
 
     @Override
@@ -92,13 +94,13 @@ public class FeatureCommand extends Command {
     private void sendPrivateMessage(PrivateChannel channel, String[] args) {
         if (args.length < 2) {
             // Command Info
-            Main.getLog().info("Command Information sent.");
+            Main.getBotLogging().info("Command Information sent.");
             channel.sendMessage("In order to use this command, please provide the class name and feature name:\n`" +
-                    Main.getConfig().getPrefix() + "feature [className] [featureName]`").queue();
+                    EchoedCore.getConfig().getPrefix() + "feature [className] [featureName]`").queue();
         }
         else if (args.length < 3) {
             // Features List By Class
-            Main.getLog().info("Sending list of features for: " + args[1]);
+            Main.getBotLogging().info("Sending list of features for: " + args[1]);
             channel.sendMessage(DatabaseManager.listClassFeatures(args[1].toLowerCase()).build()).queue();
         }
         else {
@@ -114,7 +116,7 @@ public class FeatureCommand extends Command {
                 else featureName.append(args[i]).append(" ");
             }
 
-            Main.getLog().info("Sending information for a specific feature. Class name given is " + className + " and the feature given is " + featureName.toString());
+            Main.getBotLogging().info("Sending information for a specific feature. Class name given is " + className + " and the feature given is " + featureName.toString());
 
             // TODO add background feature support
             // Check each class for given class name. If match command, find feature
@@ -124,7 +126,7 @@ public class FeatureCommand extends Command {
             // Check if file exists as a class.
             String directoryAsClass = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + ".json";
             if (FileUtilities.checkIfFileExists(directoryAsClass)) {
-                Main.getLog().debug("Found the class file.", Constants.stageCommand);
+                Main.getBotLogging().debug("Found the class file.", Constants.stageCommand);
                 // Class file exists, get supported features
                 String featureDirectory = "Database/Classes/" + className.substring(0, 1).toUpperCase() + className.substring(1).toLowerCase() + "/" + className.toLowerCase().replace(" ", "") + "features.json";
 
@@ -136,32 +138,32 @@ public class FeatureCommand extends Command {
                         // It exists as a feature of Class:
                         if (name.toLowerCase().equalsIgnoreCase(featureName.toString())) { // It exists
                             // Define values.
-                            Main.getLog().debug("Found the feature.", Constants.stageCommand);
+                            Main.getBotLogging().debug("Found the feature.", Constants.stageCommand);
                             EmbedBuilder embed = DatabaseManager.getClassFeatureByName(featureName.toString(), className);
                             MessageUtilities.addEmbedDefaults(embed);
 
-                            Main.getLog().info("Sending embed.");
+                            Main.getBotLogging().info("Sending embed.");
                             // Send embed.
                             channel.sendMessage(embed.build()).queue();
                             return;
                         }
                     }
                 }
-                Main.getLog().debug("Scanning all subclasses of the given class.", Constants.stageCommand);
+                Main.getBotLogging().debug("Scanning all subclasses of the given class.", Constants.stageCommand);
                 // Loop through subclasses of className
                 // It might exists as a feature of a subclass of Class:
                 if (checkSubclass(channel, featureName, className)) return;
             }
 
             // Check all class' subclasses
-            Main.getLog().debug("Scanning all subclasses of every class.", Constants.stageCommand);
+            Main.getBotLogging().debug("Scanning all subclasses of every class.", Constants.stageCommand);
             for (String classSupported : DatabaseManager.getSupportedClasses()) {
                 // loop through subclasses
                 if (checkSubclass(channel, featureName, classSupported)) return;
             }
 
             // if it reaches this point, it doesn't exist
-            Main.getLog().debug("The given feature/class combination did not exist.", Constants.stageCommand);
+            Main.getBotLogging().debug("The given feature/class combination did not exist.", Constants.stageCommand);
             MessageUtilities.doesNotExist(channel, featureName.toString(), "feature");
         }
     }
@@ -179,8 +181,8 @@ public class FeatureCommand extends Command {
                     + classSupported.substring(0, 1).toUpperCase() + classSupported.substring(1).toLowerCase()
                     + "/Subclasses/" + subclassSupported.substring(0, 1).toUpperCase() + subclassSupported.substring(1).toLowerCase()
                     + "/" + subclassSupported.toLowerCase() + "features.json";
-            Main.getLog().debug("Scanning subclass: " + subclassSupported, Constants.stageCommand);
-            Main.getLog().debug("The directory is:\n" + subclassFeatureDirectory, Constants.stageCommand);
+            Main.getBotLogging().debug("Scanning subclass: " + subclassSupported, Constants.stageCommand);
+            Main.getBotLogging().debug("The directory is:\n" + subclassFeatureDirectory, Constants.stageCommand);
             // check features
             for (String subclassFeature : DatabaseManager.getSupportedFeaturesBySubclass(classSupported, subclassSupported)) {
                 if (FileUtilities.checkIfFileExists(subclassFeatureDirectory)) {
@@ -188,12 +190,12 @@ public class FeatureCommand extends Command {
 
                     // It exists as a feature of Class:
                     if (name.toLowerCase().equalsIgnoreCase(featureName.toString())) { // It exists
-                        Main.getLog().debug("The feature exists.", Constants.stageCommand);
+                        Main.getBotLogging().debug("The feature exists.", Constants.stageCommand);
                         // Define values.
                         EmbedBuilder embed = DatabaseManager.getSubclassFeatureByName(featureName.toString(), subclassSupported, classSupported);
                         MessageUtilities.addEmbedDefaults(embed);
 
-                        Main.getLog().info("Sending embed.");
+                        Main.getBotLogging().info("Sending embed.");
                         // Send embed.
                         channel.sendMessage(embed.build()).queue();
                         return true;

@@ -13,10 +13,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package utilities.dnd;
+package utilities;
 
 @SuppressWarnings("unused")
-public class DNDConstants {
+public class EchoedDungeonsConstants {
 
     /*
      * Constants for D&D -
@@ -55,4 +55,26 @@ public class DNDConstants {
     public static final String sleight = "Sleight of Hand";
     public static final String stealth = "Stealth";
     public static final String survival = "Survival";
+
+    /*
+     * Modules
+     */
+    public static final String DND = "dungeons and dragons";
+    public static final String MATH = "math";
+
+    /*
+     * Owner ID
+     */
+    public static final String OWNER_ID = "202422697173581824";
+
+    /*
+     * New Constant Keys
+     */
+    public static final String MATHMODE_KEY = "math mode";
+    public static final String MATHMODE_VALUE = "degrees";
+
+    /*
+     * Math Constants
+     */
+    public static final double PI = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342;
 }
